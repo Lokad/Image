@@ -6,6 +6,7 @@ This is an incremental update. Nearest resizing and PNG composition use the
 completed-row package; rectangle copies use the shared-self-row package. Current
 font loading and complete text integrations use the mapping-validation package;
 ordinary/clipped drawing retains the source-valid scan-band-coordinate package.
+JPEG stream probes and complete headers use the pending-publication package.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing
@@ -281,39 +282,27 @@ full/live checks** per OS, focused normal/scalar copy-ownership checks and the
 **same actual Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 
-[Probe owner completion](../benchmarks/PROBE-OWNER-COMPLETION.md) avoids the
-outer async wrapper for immediate completion and transfers pending work with its
-owner. Independent complete async-probe pairs save
-**3.55% /
-8.01 ns**;
-paired and all-actual intervals separate. These scoped effects are not added to
-earlier gains or described as FFmpeg parity. That stage refreshed all four dimension
-probes; unchanged PNG/WebP pass and stop. Source-valid
-[Original-loop interleaving](../benchmarks/JPEG-PROBE-ORIGINAL-LOOP-REFERENCE.md)
-keeps JPEG sync uncertain at **0.196 µs,
-upper 1.017**. The exact generated
-workload loop and original unit counts remain; no production gain or extra
-statistical units are inferred. Async remains a gap at
-**0.220 µs,
-upper 1.134**.
-The async cost uses the current stuffed-pair package above, including its small
-measured regression; other cases retain their original source-valid producers.
-Filtered results and all-actual statistics remain separate;the displayed upper
-takes the worse view. Original inputs,callbacks,native brackets and exact
-descriptor/owner gates stay fixed. Unchanged PNG-header costs retain their
-[source-valid producer](../benchmarks/REFILL-CALL-INLINING.md);
-[JPEG grammar/header evidence](../benchmarks/JPEG-INSPECTION-DRIVER.md) remains.
-Immediate GC stays **568 B/probe**. One-gated-read allocation diagnostics add
-**8 B/probe**,with unchanged full-header diagnostic allocation. Absolute totals
-include equal gated-input/bridge overhead and are not production GC costs.
-Admission remains **512 B dimensions /8,448 B bulk**,with zero added arrays,
-cache or retained workspace;physical/native/JIT peaks are unmeasured.
-Windows/Linux each pass **6,727 full/live checks**, **10 internal/154 public**
-normal/scalar,the SAME actual package and all three examples. Two new stream
-cancellation cases also pass baseline,including unsignaled tokens. Actual pending
-users retain ownership;late I/O failure,cleanup,refusal and recovery checks remain.
-One coherent qualification/pack milestone follows performance reconciliation;
-the accepted timed Linux DLL is never rebuilt. Earlier/adverse evidence remains.
+[JPEG pending publication](../benchmarks/JPEG-PENDING-PUBLICATION.md) keeps typed
+suspension construction outside immediate parsing. Final complete async-probe
+pairs save **2.56% /
+5.57 ns**, without a uniform or cumulative
+gain claim. JPEG sync now passes/stops (upper
+**0.962**); async remains uncertain
+(upper **1.028**).
+Complete headers pass; their slower historical point is retained, while the matched
+original-worker guard is neutral/inconclusive. No favorable recapture follows.
+Immediate probes/header calls allocate **568/8,768 B**. The exact original generated
+loop, unit counts, every observation and descriptor/source/owner gates remain.
+The immediate parser frame shrinks **1,080→472 B**; this is not a whole-operation
+physical peak. Admission stays **512/8,448 B**, with no new retained workspace.
+Gated-read diagnostics stay **1,960/9,984 B**, including equal delivery/bridge/batch
+overhead, not standalone production allocation. Each OS passes **6,844 full/live
+checks**, **11 internal/182 public** normal/scalar checks and the SAME actual
+package/three examples, without rebuilding the timed DLL. Unchanged PNG/WebP
+probes/header and other families retain their identified evidence; the final
+complete package refresh remains pending. [Earlier owner work](../benchmarks/PROBE-OWNER-COMPLETION.md)
+and [reference interleaving](../benchmarks/JPEG-PROBE-ORIGINAL-LOOP-REFERENCE.md)
+retain history.
 [Wide scan CRC](../benchmarks/WIDE-PNG-SCAN-CRC.md) closes resident PNG Identify:
 **6.733 / FFmpeg adapter
 13.068 µs**, conservative upper
@@ -557,9 +546,9 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
 | Probe PNG dimensions, seekable | 0.109 | 0.122 | 0.888 / 0.922 | 568 | Confirmed pass |
-| Probe JPEG dimensions, seekable | 0.196 | 0.196 | 0.999 / 1.017 | 568 | Confidence open |
+| Probe JPEG dimensions, seekable | 0.184 | 0.194 | 0.949 / 0.962 | 568 | Confirmed pass |
 | Probe WebP dimensions, seekable | 0.103 | 0.121 | 0.853 / 0.884 | 568 | Confirmed pass |
-| Probe JPEG dimensions, async nonseekable | 0.220 | 0.201 | 1.096 / 1.134 | 568 | Confirmed gap |
+| Probe JPEG dimensions, async nonseekable | 0.217 | 0.215 | 1.007 / 1.028 | 568 | Confidence open |
 | Validate PNG8, span † | 1,158.656 | 1,377.875 | 0.841 / 0.848 | 240 | Confirmed pass |
 | Validate PNG16, span † | 2,697.838 | 2,960.838 | 0.911 / 0.918 | 240 | Confirmed pass |
 | Validate indexed Adam7 19×17, span † | 1.794 | 3.950 | 0.454 / 0.458 | 792 | Confirmed pass |
@@ -575,7 +564,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Identify PNG8, fresh seekable Stream, adapter reference | 8.802 | 15.951 | 0.552 / 0.555 | 192 | Confirmed pass |
 | Identify PNG8, async nonseekable, adapter reference | 11.801 | 19.297 | 0.612 / 0.621 | 216 | Confirmed pass |
 | JPEG Adobe CMYK horizontal AC / FFmpeg fresh contexts † | 372.151 | 753.216 | 0.494 / 0.498 | 20,944 | Confirmed pass |
-| Complete JPEG headers, fresh source / FFmpeg AVIO adapter (pass) | 1.999 | 2.799 | 0.714 / 0.730193 | 8,768 |
+| Complete JPEG headers, fresh source / FFmpeg AVIO adapter (pass) | 2.188 | 2.813 | 0.778 / 0.844795 | 8,768 |
 | Complete WebP headers, fresh seekable source / FFmpeg AVIO adapter (pass) | 0.142 | 0.310 | 0.458 / 0.471884 | 552 |
 
 [Coverage and current family reports](../benchmarks/WARM-COVERAGE.md) identify

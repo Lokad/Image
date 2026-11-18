@@ -213,7 +213,30 @@ internal static class StreamInspection
         ref JpegInspectionState state, ref JpegPending pending)
     {
         if (operation.IsCompletedSuccessfully) { operation.GetAwaiter().GetResult(); return true; }
+        return SuspendJpegOperation(operation, resume, ref state, ref pending);
+    }
+
+    // Pending values are published only after the existing completion checks.
+    // Keep their typed construction out of every immediate grammar call site.
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
+    private static bool SuspendJpegOperation(ValueTask operation, JpegResume resume,
+        ref JpegInspectionState state, ref JpegPending pending)
+    {
         state.Resume = resume; pending = new JpegPending(operation); return false;
+    }
+
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
+    private static bool SuspendJpegMarker(ValueTask<int> marker,
+        ref JpegInspectionState state, ref JpegPending pending)
+    {
+        state.Resume = JpegResume.Marker; pending = new JpegPending(marker); return false;
+    }
+
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
+    private static bool SuspendJpegExif(ValueTask<ImageOrientation?> exif,
+        ref JpegInspectionState state, ref JpegPending pending)
+    {
+        state.Resume = JpegResume.Exif; pending = new JpegPending(exif); return false;
     }
 
     private static bool AdvanceJpeg(InspectionReader r, ProbeReader? probe, ImageMetadataPolicy metadataPolicy,
@@ -237,7 +260,7 @@ internal static class StreamInspection
         var marker = state.Scan ? r.JpegMarkerAsync(true) : r.JpegHeaderMarkerAsync();
         if (!marker.IsCompletedSuccessfully)
         {
-            state.Resume = JpegResume.Marker; pending = new JpegPending(marker); return false;
+            return SuspendJpegMarker(marker, ref state, ref pending);
         }
         state.Marker = marker.Result;
     Marker:
@@ -320,7 +343,7 @@ internal static class StreamInspection
         var exif = ExifAsync(r, state.Size - 6, false, metadataPolicy);
         if (!exif.IsCompletedSuccessfully)
         {
-            state.Resume = JpegResume.Exif; pending = new JpegPending(exif); return false;
+            return SuspendJpegExif(exif, ref state, ref pending);
         }
         state.Orientation = exif.Result ?? state.Orientation;
     Exif:

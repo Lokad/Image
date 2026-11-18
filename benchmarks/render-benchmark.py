@@ -806,25 +806,46 @@ def stream_reader_stage():
         assert case['managedActuals'] == case['nativeSamplesEachBracket'] == 12
         assert case['allOriginalGatesPassed'] and case['quietGuardsPassed'] and case['allActualsRetained']
         assert case['allocatedBytes'] == 568
-    sync = json.loads((ROOT / 'benchmarks/jpeg-probe-original-loop-reference-evidence.json').read_text(encoding='utf-8'))
-    assert not sync['productionChanged'] and sync['requiredMaterialPaths'] == 289 and sync['newMaterialPaths'] == 0
-    assert sync['raw']['mirrored'] and sync['raw']['allMembersVerified']
-    assert sync['allOriginalGatesPassed'] and sync['quietGuardsPassed'] and sync['allActualsRetained']
-    assert sync['originalGeneratedLoopReused'] and sync['actualInvocationCountChecksPassed']
-    assert sync['initialDirectDriverIsNotCurrentPerformanceEvidence']
-    current = sync['case']
-    assert current['librarySha256'] == owner['producers']['linuxSha256']
-    assert sync['producers']['packageSha256'] == owner['producers']['packageSha256']
-    assert current['managedActuals'] == current['nativeSamplesEachBracket'] == current['allActualStatistics']['N'] == 12
-    assert current['managedOperationsPerUnit'] == 974960 and current['nativeOperationsPerUnitEachBracket'] == 262144
-    assert current['subdivisionsEachStatisticalUnit'] == 16 and current['allocatedBytes'] == 568 and current['rawOverheadIncluded']
-    assert current['upper'] >= current['allActualUpper']
-    assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
-    assert math.isclose(current['ratio'], current['managedUs'] / current['nativeUs'], rel_tol=1e-12)
-    owner['cases']['ProbeDimensionsJpeg'] = current
     owner['cases'] = {**owner['reusedCases'], **owner['cases']}
     return owner
 
+
+def jpeg_pending_publication_stage():
+    stage = json.loads((ROOT / 'benchmarks/jpeg-pending-publication-evidence.json').read_text(encoding='utf-8'))
+    assert stage['productionAccepted'] and stage['allAffectedPerformanceReconciled']
+    assert stage['requiredMaterialPaths'] == 289 and stage['newMaterialPaths'] == 0
+    assert stage['raw']['mirrored'] and stage['raw']['allMembersVerified'] and all(stage['sourceProof'].values())
+    q, producer = stage['qualification'], stage['producers']
+    assert q['windows']['total'] == q['linux']['total'] == q['fullChecksEachOs'] == 6844
+    assert q['package']['sha256'] == q['windowsPackage']['sameActualPackageSha256'] == producer['packageSha256']
+    assert q['package']['librarySha256'] == producer['linuxSha256'] == producer['timedArtifactSha256']
+    assert q['sameActualPackageBothOs'] and q['allThreeUsageExamplesBothOs']
+    assert q['allAffectedPerformanceReconciledBeforeBroad'] and q['productionRebuildsAfterTiming'] == 0
+    assert q['focusedEachMode'] == {'internal': 11, 'public': 182} and q['modes'] == ['normal', 'scalar']
+    assert stage['pairedEffect']['upper'] < 1
+    assert stage['pairedEffect']['baselineAllocatedBytes'] == stage['pairedEffect']['candidateAllocatedBytes'] == 568
+    assert set(stage['cases']) == {'ProbeDimensionsJpeg', 'ProbeDimensionsJpegAsync', 'JpegHeaders'}
+    for name, c in stage['cases'].items():
+        assert c['librarySha256'] == producer['linuxSha256']
+        assert c['allActualsRetained'] and c['quietGuardsPassed']
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+        assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
+        if name.startswith('Probe'):
+            assert c['managedActuals'] == c['nativeSamplesEachBracket'] == c['allActualStatistics']['n'] == 12
+            assert c['allOriginalGatesPassed'] and c['allocatedBytes'] == 568 and c['rawOverheadIncluded']
+            assert c['managedOperationsPerUnit'] == (974960 if name == 'ProbeDimensionsJpeg' else 855040)
+            assert c['nativeOperationsPerUnitEachBracket'] == 262144 and c['subdivisionsEachStatisticalUnit'] == 16
+            assert c['upper'] >= c['allActualUpper']
+        else:
+            assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allocatedBytes'] == 8768
+            assert c['descriptorExact'] and c['independentSurvivingOutputs'] and c['eofChecked'] and c['inputUnchanged']
+    for obs in stage['pendingAllocationDiagnostic']['observations']:
+        assert all(obs[k] for k in ('descriptorExact', 'genuineSuspension', 'independentOutputs', 'callerInputLeftOpen'))
+        assert all(v['bytesPerOperation'] == (1960 if obs['mode'] == 'ProbeAsync' else 9984) for v in obs['batches'])
+    assert stage['codegen']['immediateStackReservationBefore'] == 1080
+    assert stage['codegen']['immediateStackReservationAfter'] == 472
+    assert stage['headerGuard']['lower'] < 1 < stage['headerGuard']['upper']
+    return stage
 
 
 def text_scan_band_stage():
@@ -3006,18 +3027,8 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
     assert jq['originalAndCandidateNewGuardsLinuxNormalScalar'] and jq['sameTimedPackageHeadersWindowsNormalScalar']
     assert jpeg_markers['raw']['mirrored'] and jpeg_markers['raw']['allMembersVerified']
     assert all(jpeg_markers['sourceProof'].values())
-    pair, adverse = jpeg_markers['incremental'], jpeg_markers['asyncProbeTradeoff']
-    assert pair['upper'] < 1 < adverse['lower']
-    assert pair['baselineAllocatedBytes'] == pair['candidateAllocatedBytes'] == 8776
-    assert adverse['baselineAllocatedBytes'] == adverse['candidateAllocatedBytes'] == 568
-    # Only the affected async prefix cost supersedes the prior owner. Other
-    # dimension cases keep their source-valid producers, not a new build identity.
-    current_async = jpeg_markers['cases']['ProbeDimensionsJpegAsync']
-    assert current_async['librarySha256'] == jpeg_markers['producers']['linuxSha256']
-    assert current_async['managedActuals'] == current_async['nativeSamplesEachBracket'] == 12
-    assert current_async['lower'] > 1 and current_async['status'] == 'gap'
-    assert math.isclose(current_async['ratio'], current_async['managedUs'] / current_async['nativeUs'], rel_tol=1e-12)
-    probe_owner['cases']['ProbeDimensionsJpegAsync'] = current_async
+    jpeg_pending = jpeg_pending_publication_stage()
+    probe_owner['cases'].update({name: c for name, c in jpeg_pending['cases'].items() if name.startswith('Probe')})
     for label, (case, observations) in zip(read_labels, reads['cases'].items(), strict=True):
         provider = probe_owner
         if case in provider['cases']:
@@ -3267,8 +3278,8 @@ costs. The complete final-package refresh remains outstanding."""
     assert entropy['case']['status'] == 'pass' and entropy['case']['allocatedBytes'] == 8768
     for case, label in [('JpegHeaders', 'Complete JPEG headers, fresh source / FFmpeg AVIO adapter'),
                         ('WebpHeaders', 'Complete WebP headers, fresh seekable source / FFmpeg AVIO adapter')]:
-        c = entropy['case'] if case == 'JpegHeaders' else header_reference['cases'][case]
-        producer = entropy if case == 'JpegHeaders' else header_reference
+        c = jpeg_pending['cases'][case] if case == 'JpegHeaders' else header_reference['cases'][case]
+        producer = jpeg_pending if case == 'JpegHeaders' else header_reference
         assert c['librarySha256'] == producer['producers']['linuxSha256']
         assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12
         assert all(c[k] for k in ('allActualsRetained', 'quietGuardsPassed', 'descriptorExact', 'eofChecked',
@@ -3369,6 +3380,7 @@ This is an incremental update. Nearest resizing and PNG composition use the
 completed-row package; rectangle copies use the shared-self-row package. Current
 font loading and complete text integrations use the mapping-validation package;
 ordinary/clipped drawing retains the source-valid scan-band-coordinate package.
+JPEG stream probes and complete headers use the pending-publication package.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing
@@ -3581,39 +3593,27 @@ full/live checks** per OS, focused normal/scalar copy-ownership checks and the
 **same actual Release-package consumer / three examples**.
 Unchanged arithmetic/ISA qualification is reused; publication is postponed.
 
-[Probe owner completion](../benchmarks/PROBE-OWNER-COMPLETION.md) avoids the
-outer async wrapper for immediate completion and transfers pending work with its
-owner. Independent complete async-probe pairs save
-**{1-probe_owner['primaryPair']['candidateUs']/probe_owner['primaryPair']['baselineUs']:.2%} /
-{(probe_owner['primaryPair']['baselineUs']-probe_owner['primaryPair']['candidateUs'])*1000:.2f} ns**;
-paired and all-actual intervals separate. These scoped effects are not added to
-earlier gains or described as FFmpeg parity. That stage refreshed all four dimension
-probes; unchanged PNG/WebP pass and stop. Source-valid
-[Original-loop interleaving](../benchmarks/JPEG-PROBE-ORIGINAL-LOOP-REFERENCE.md)
-keeps JPEG sync uncertain at **{probe_owner['cases']['ProbeDimensionsJpeg']['managedUs']:.3f} µs,
-upper {probe_owner['cases']['ProbeDimensionsJpeg']['upper']:.3f}**. The exact generated
-workload loop and original unit counts remain; no production gain or extra
-statistical units are inferred. Async remains a gap at
-**{probe_owner['cases']['ProbeDimensionsJpegAsync']['managedUs']:.3f} µs,
-upper {probe_owner['cases']['ProbeDimensionsJpegAsync']['upper']:.3f}**.
-The async cost uses the current stuffed-pair package above, including its small
-measured regression; other cases retain their original source-valid producers.
-Filtered results and all-actual statistics remain separate;the displayed upper
-takes the worse view. Original inputs,callbacks,native brackets and exact
-descriptor/owner gates stay fixed. Unchanged PNG-header costs retain their
-[source-valid producer](../benchmarks/REFILL-CALL-INLINING.md);
-[JPEG grammar/header evidence](../benchmarks/JPEG-INSPECTION-DRIVER.md) remains.
-Immediate GC stays **568 B/probe**. One-gated-read allocation diagnostics add
-**8 B/probe**,with unchanged full-header diagnostic allocation. Absolute totals
-include equal gated-input/bridge overhead and are not production GC costs.
-Admission remains **512 B dimensions /8,448 B bulk**,with zero added arrays,
-cache or retained workspace;physical/native/JIT peaks are unmeasured.
-Windows/Linux each pass **6,727 full/live checks**, **10 internal/154 public**
-normal/scalar,the SAME actual package and all three examples. Two new stream
-cancellation cases also pass baseline,including unsignaled tokens. Actual pending
-users retain ownership;late I/O failure,cleanup,refusal and recovery checks remain.
-One coherent qualification/pack milestone follows performance reconciliation;
-the accepted timed Linux DLL is never rebuilt. Earlier/adverse evidence remains.
+[JPEG pending publication](../benchmarks/JPEG-PENDING-PUBLICATION.md) keeps typed
+suspension construction outside immediate parsing. Final complete async-probe
+pairs save **{jpeg_pending['pairedEffect']['elapsedReduction']:.2%} /
+{jpeg_pending['pairedEffect']['savedUs']*1000:.2f} ns**, without a uniform or cumulative
+gain claim. JPEG sync now passes/stops (upper
+**{jpeg_pending['cases']['ProbeDimensionsJpeg']['upper']:.3f}**); async remains uncertain
+(upper **{jpeg_pending['cases']['ProbeDimensionsJpegAsync']['upper']:.3f}**).
+Complete headers pass; their slower historical point is retained, while the matched
+original-worker guard is neutral/inconclusive. No favorable recapture follows.
+Immediate probes/header calls allocate **568/8,768 B**. The exact original generated
+loop, unit counts, every observation and descriptor/source/owner gates remain.
+The immediate parser frame shrinks **1,080→472 B**; this is not a whole-operation
+physical peak. Admission stays **512/8,448 B**, with no new retained workspace.
+Gated-read diagnostics stay **1,960/9,984 B**, including equal delivery/bridge/batch
+overhead, not standalone production allocation. Each OS passes **6,844 full/live
+checks**, **11 internal/182 public** normal/scalar checks and the SAME actual
+package/three examples, without rebuilding the timed DLL. Unchanged PNG/WebP
+probes/header and other families retain their identified evidence; the final
+complete package refresh remains pending. [Earlier owner work](../benchmarks/PROBE-OWNER-COMPLETION.md)
+and [reference interleaving](../benchmarks/JPEG-PROBE-ORIGINAL-LOOP-REFERENCE.md)
+retain history.
 [Wide scan CRC](../benchmarks/WIDE-PNG-SCAN-CRC.md) closes resident PNG Identify:
 **{resident_png['cases']['identify/Png8']['managedUs']:.3f} / FFmpeg adapter
 {resident_png['cases']['identify/Png8']['nativeUs']:.3f} µs**, conservative upper
