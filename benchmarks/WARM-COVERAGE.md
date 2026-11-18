@@ -73,13 +73,11 @@ reconciliation. Five useful prefix/lifetime tests remain; both OS pass182focused
 public checks in normal/scalar modes. Qualified production/package and current
 costs remain unchanged; no new broad/package repetition or renderer dependency.
 
-The [prepared-row eight-vector follow-up](EIGHT-VECTOR-COPY-GROUP-TRIAL.md#prepared-row-follow-up)
-is near-neutral/unpromoted, retaining all exact checks and current costs. This
-revised prepared-state trial does not justify confirmation or another group sweep.
-
-The [capacity-getter follow-up](WHOLE-ROW-COPY-PREPARATION-TRIALS.md#capacity-getter-follow-up)
-retains a small uncertain8.77ns point without promotion or cross-family retiming;
-its global setup scope is explicit and qualified production stays unchanged.
+Recent copy leads remain private: [prepared-row grouping](EIGHT-VECTOR-COPY-GROUP-TRIAL.md#prepared-row-follow-up),
+[capacity access](WHOLE-ROW-COPY-PREPARATION-TRIALS.md#capacity-getter-follow-up) and
+[stride preparation](WHOLE-ROW-COPY-PREPARATION-TRIALS.md#stride-preparation-follow-up).
+Their small/inconclusive screens preserve all exact gates and current costs;
+no confirmation, cross-family retiming or renderer dependency follows.
 
 [Direct copy addressing](COPY-DIRECT-ADDRESSING-TRIAL.md) is inconclusive and
 unaccepted;production/package/current costs remain unchanged. The bounded trial

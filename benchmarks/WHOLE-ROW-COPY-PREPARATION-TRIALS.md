@@ -119,3 +119,32 @@ Archived `blc1252-*` recipes retain exact source/modules, codegen, every actual,
 focused checks and unchanged-source pins. The mapping-validation and prepared-copy
 reports retain reused qualified/runtime dependencies. No displayed result or
 renderer dependency is added; three copy gaps remain open.
+
+## Stride preparation follow-up
+
+**Private, unpromoted:** reusing the already established pixel size for two
+checked stride products screens **1.959387→1.957662µs**, interval
+**.956175–1.043994**,0B/op. This near-neutral result does not justify confirmation,
+canonical changes, standalone/passing-path retiming or broad/package repetition.
+
+Only two CopyRegion expressions change. Matching immutable8/16-bit depths and
+array-sized rasters establish equivalence with the old checked products. All
+validation, borrowing, clipping, traversal, checkpoints, kernels and ownership
+remain. No global getter, ABI, field, cache, owner or API changes. Actual code
+removes both stride-getter calls, growing the caller1531→1537B with the225B
+validator unchanged; these observations establish no CPU gain.
+
+Both OSes pass10internal/190public checks per normal/AVX-512-off/scalar mode.
+The original three reversed65,536-operation pairs, complete frozen inputs/frames,
+alpha/hidden-RGB/untouched/source/owner/native gates, optimized CPU0/natural GC
+and idle-v2 guards remain; every actual stays. One private Windows core/embedded
+build, zero other builds or new fixtures. Canonical DLLs/package/current costs
+remain exact; reuse6,839full/live checks each OS and SAMEpackage/threeexamples.
+Allocation and added owned/admitted/retained capacity remain zero; physical peaks
+unmeasured. No neighboring arithmetic/inlining sweep follows.
+
+Mirrored/member-verified `copy-stride-preparation-trial.tar.xz`:2,209,064B,
+56members, SHA256`06fe98f8a2235aca80d336c9c02b96002b3660db753239e28a95ff2b2218b1fd`.
+Archived `sgr1253-*` recipes retain exact source/modules, codegen, every actual,
+checks and unchanged-source pins. The mapping-validation/prepared-copy reports
+retain reused dependencies. No displayed result or renderer dependency is added.
