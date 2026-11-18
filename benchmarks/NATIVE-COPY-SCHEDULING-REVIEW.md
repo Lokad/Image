@@ -107,3 +107,23 @@ Named dependencies retain source recipes, original runtimes and reference proof.
 Production and its 6,844 full/live checks per OS, the same actual package and all
 three usage examples remain unchanged. Preceding `c1408165` passes all three CI jobs
 (run 44258207467). The final actual-package refresh and 289-path objective remain open.
+
+## Header and coding-validation package bindings
+
+Three more frozen comparisons run their correctness checks on development
+package `87f1ae4a`. Complete WebP header inspection reproduces the original
+36-byte descriptor in normal and scalar modes. The original managed and
+FFmpeg AVIO workers reproduce their protocol identities, EOF checks and
+independent descriptor lifetimes on the same 533,100-byte WebP input. No
+sample command is sent.
+
+Baseline and progressive JPEG coding validation share one verified runtime
+with 112 identical non-core files. Both run the original frozen setup, one
+generated workload invocation and cleanup. The original inputs, 36-byte
+descriptors, source and ownership checks, and native worker identities match
+their receipts. The private binding changes only the producer identity in its
+copy of the proof. One check-tool build serves both cases and all preflight
+clocks are discarded.
+
+These checks establish package bindings for the eventual refresh.
+[Commands and member-verified evidence](benchmark-refresh-runtime-preparation-evidence.json)

@@ -732,3 +732,38 @@ The trial ends at the screen. The quiet guard first caught the build server
 before any samples. Shutting it down restored the required idle conditions.
 The production copy gaps remain open.
 [Screen, generated code and verification evidence](copy-vector-width-trials-evidence.json)
+
+## Staging the next source row
+
+An isolated variant loads the next source row's first 256 bytes before
+finishing the current row's tail. It uses checked spans and applies only
+to separate RGBA8 copies with noncancelable tokens. The Linux JIT keeps
+four head vectors live across the tail, with no vector spills. The
+overlapping, portable and live-token routes keep their existing execution.
+
+Twelve independent quiet-VM pairs per case use 65,536 complete operations
+per side. Clipped RGBA8 improves from **1.975373 to 1.953665 µs**
+(**21.7 ns**, interval **0.987635–0.990388**). Separate RGBA8 improves from
+**1.968961 to 1.951165 µs** (**17.8 ns**, interval **0.989123–0.992802**).
+Both allocate **0 B/op** and pass all original pixel, source and ownership
+checks. Windows passes 353 focused tests in normal mode and 353 in scalar
+mode.
+
+The scoped improvements are smaller than the demonstrated FFmpeg gaps.
+The trial stays private. It provides a lead for combining earlier source
+loads with a smaller checked row loop, without adding the gains from
+independent trials.
+[Screen, confirmation and generated-code evidence](copy-vector-width-trials-evidence.json)
+
+The follow-up combines staged head loads with a complete row snapshot. Each
+checked row uses 16 vectors. The 494-byte Linux method keeps the next four
+head loads ahead of the current 16 stores, with no vector spills. An
+independent check covers all 64 eligible byte lengths. The same 353 Windows
+focused tests pass per mode.
+
+The three-pair screen gives **1.969525 → 1.947051 µs** for clipped
+(interval **0.982294–0.994923**) and **1.963342 → 1.941004 µs** for separate
+(interval **0.977524–0.999848**), at **0 B/op** with the same gates. Its
+roughly 22 ns point savings on each control are in the range of the
+simpler staging trial and below both FFmpeg gaps. The follow-up ends at
+screening, with both trials retained.

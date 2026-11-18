@@ -546,5 +546,166 @@
       "allMembersVerified": true,
       "mirrored": true
     }
+  },
+  "stagedNextRowTrial": {
+    "mechanism": "Stage four next-row head vectors before finishing the current tail for distinct noncancelable RGBA8 rows.",
+    "sources": {
+      "src/Lokad.Image/ImageDrawing.cs": {
+        "original": "cb627982dc88a38dff38f561c029fc6a73d6f392d167f49aaa91d2c3a0262adc",
+        "candidate": "43f40cd09f9c53309ce29378901fed1c7a45d08ddf64c3d5b7250f0f44d7b170"
+      },
+      "src/Lokad.Image/Internal/IndependentRowCopy.cs": {
+        "original": "0379fdc65e3abe299a88c4bddaaff40f5b0339efcd155636d509a29ce5a162c1",
+        "candidate": "2a98646317e357e6427b0fe4b4ca66644b79c5851aeafde20766e2f7c8deecad"
+      }
+    },
+    "baseline": {
+      "packageSha256": "87f1ae4a7da155cfe7bd1ec424fc2e667e0c8e6eb68416fb0c23fda0d5e03332",
+      "linuxSha256": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e"
+    },
+    "candidateLibrarySha256": "14d3f94aa92d8f54962129da32975573ebed105e4bfcfbc14b91a3571a175f58",
+    "codegen": {
+      "methodBytes": 752,
+      "sampleCommands": 0,
+      "vectorMoves": 32,
+      "stackVectorMoves": [],
+      "codegenSha256": "c59f71f70665d6721f230efe89f03bb933fe7cd5f14430da3a8566fbd9e564f0",
+      "fourHeadVectorsLiveAcrossCurrentRowTail": true
+    },
+    "phases": {
+      "screen": {
+        "OriginalClippedCopy8": {
+          "actuals": 3,
+          "operationsPerActual": 65536,
+          "ratio": 0.9826628004795105,
+          "lower": 0.6847552228804319,
+          "upper": 1.4101771657678126,
+          "allocatedBytes": 0,
+          "baselineMeanUs": 1.990978251139323,
+          "candidateMeanUs": 1.9560634765625
+        },
+        "DrawingCopy8": {
+          "actuals": 3,
+          "operationsPerActual": 65536,
+          "ratio": 0.9913163616595714,
+          "lower": 0.9827909797615517,
+          "upper": 0.9999156983842061,
+          "allocatedBytes": 0,
+          "baselineMeanUs": 1.9614123840332032,
+          "candidateMeanUs": 1.944380111694336
+        }
+      },
+      "confirm": {
+        "OriginalClippedCopy8": {
+          "actuals": 12,
+          "operationsPerActual": 65536,
+          "ratio": 0.9890100705147624,
+          "lower": 0.9876345561265857,
+          "upper": 0.9903875006316066,
+          "allocatedBytes": 0,
+          "baselineMeanUs": 1.9753730862935384,
+          "candidateMeanUs": 1.9536645965576172
+        },
+        "DrawingCopy8": {
+          "actuals": 12,
+          "operationsPerActual": 65536,
+          "ratio": 0.9909606811322716,
+          "lower": 0.9891230151513187,
+          "upper": 0.9928017612651611,
+          "allocatedBytes": 0,
+          "baselineMeanUs": 1.968961363474528,
+          "candidateMeanUs": 1.9511651458740233
+        }
+      }
+    },
+    "windowsFocused": {
+      "normal": {
+        "passed": 353,
+        "logSha256": "46a379db8afdc87649004b074adc095573b6e57209fcf45ea9d54010ab4981e5"
+      },
+      "scalar": {
+        "passed": 353,
+        "logSha256": "e57748a4cdfd401c1485586d208164604a6a744cbc74ce1e6c414bdd17103d4c"
+      }
+    },
+    "allOriginalGatesPassed": true,
+    "raw": {
+      "file": "staged-next-row-copy-trial.tar.xz",
+      "bytes": 1037384,
+      "sha256": "e3546d27851def4e8f445c934dd7d4efb7abcb074798f1166591f4665e88dfa1",
+      "members": 70,
+      "allMembersVerified": true,
+      "mirrored": true
+    }
+  },
+  "stagedWholeRowTrial": {
+    "mechanism": "Combine the four staged head vectors with the twelve remaining checked row vectors before storing the current row.",
+    "sources": {
+      "src/Lokad.Image/ImageDrawing.cs": {
+        "original": "cb627982dc88a38dff38f561c029fc6a73d6f392d167f49aaa91d2c3a0262adc",
+        "candidate": "1fe9aaa8340702947b2d1e39766dbd65321caf82a3599fff88b1e6127cf42b55"
+      },
+      "src/Lokad.Image/Internal/IndependentRowCopy.cs": {
+        "original": "0379fdc65e3abe299a88c4bddaaff40f5b0339efcd155636d509a29ce5a162c1",
+        "candidate": "2eb2aece967baa1ce5c077b9ac13744fa5f95670f8442a83a741fa6d39128dfc"
+      }
+    },
+    "baseline": {
+      "packageSha256": "87f1ae4a7da155cfe7bd1ec424fc2e667e0c8e6eb68416fb0c23fda0d5e03332",
+      "linuxSha256": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e"
+    },
+    "candidateLibrarySha256": "e6c090f044e48017469282fd479b32cf3b8cd407a47962595200d78400c98335",
+    "codegen": {
+      "methodBytes": 494,
+      "sampleCommands": 0,
+      "vectorMoves": 36,
+      "stackVectorMoves": [],
+      "codegenSha256": "81ede50e293ff2e8de69279fdb7bcee65ab9a45f7a8e4cdd704397b3086a8ac1",
+      "remainingCurrentRowLoads": 12,
+      "nextRowLoads": 4,
+      "currentRowStores": 16
+    },
+    "exactCoverageCheckedByteLengths": 64,
+    "screen": {
+      "OriginalClippedCopy8": {
+        "actuals": 3,
+        "operationsPerActual": 65536,
+        "ratio": 0.9885886219504478,
+        "lower": 0.9822942175839973,
+        "upper": 0.9949233599823311,
+        "allocatedBytes": 0,
+        "baselineMeanUs": 1.9695254770914714,
+        "candidateMeanUs": 1.9470506490071615
+      },
+      "DrawingCopy8": {
+        "actuals": 3,
+        "operationsPerActual": 65536,
+        "ratio": 0.9886227095702276,
+        "lower": 0.9775237352921171,
+        "upper": 0.9998477035300897,
+        "allocatedBytes": 0,
+        "baselineMeanUs": 1.9633415832519532,
+        "candidateMeanUs": 1.941003921508789
+      }
+    },
+    "allOriginalGatesPassed": true,
+    "windowsFocused": {
+      "normal": {
+        "passed": 353,
+        "logSha256": "e57748a4cdfd401c1485586d208164604a6a744cbc74ce1e6c414bdd17103d4c"
+      },
+      "scalar": {
+        "passed": 353,
+        "logSha256": "e57748a4cdfd401c1485586d208164604a6a744cbc74ce1e6c414bdd17103d4c"
+      }
+    },
+    "raw": {
+      "file": "staged-whole-row-copy-trial.tar.xz",
+      "bytes": 1032748,
+      "sha256": "1b3574aecba43126e63a9f4e2fd588d30dcc8171a9d6a638ffd838207eebef97",
+      "members": 54,
+      "allMembersVerified": true,
+      "mirrored": true
+    }
   }
 }

@@ -89,5 +89,92 @@
         "sha256": "31bf4f44f809bc58ea8bbce2d7e3fd0032c83ff5ca4c9766475a8b333660286d"
       }
     ]
+  },
+  "headerAndCodingPackageBindings": {
+    "producer": {
+      "packageSha256": "87f1ae4a7da155cfe7bd1ec424fc2e667e0c8e6eb68416fb0c23fda0d5e03332",
+      "linuxSha256": "9c8653ddabede830ef6fcfb190dfc5905cb54480cbfe945e998ef8c02d05124e"
+    },
+    "scoredCaptures": 0,
+    "productionBuilds": 0,
+    "toolBuilds": 1,
+    "webpHeaders": {
+      "case": {
+        "caseId": "WebpHeaders",
+        "originalRequiredName": "InspectHeaders/WebpLosslessRgba8FreshSeekable",
+        "format": "webp",
+        "input": "artifacts/warm-reference/webp-decode/input.webp",
+        "inputSha256": "a4ed2454404ca6c5798450fff0cfc502fd44a592c284b77e7861128b0c53927f",
+        "expected": {
+          "Format": 2,
+          "Width": 513,
+          "Height": 259,
+          "BitDepth": 8,
+          "HasAlpha": true,
+          "Orientation": 1,
+          "SourceColor": 2,
+          "SourceAlpha": 2,
+          "SourceComponentCount": 4
+        },
+        "inputBytes": 533100
+      },
+      "nativeSha256": "1ed2bf6fa6ae62b19496a93b705092e1477e154368080a43c32bc9c1122e2c8d",
+      "descriptorSha256": "ee76119ca8c5b7c9e1d68c48bab664c4d7edea414425c759e5f9220fbb08997e",
+      "originalManifestSha256": "ae3594a20edd7921e4417a520166f4432f5399732c67de97c5e8baa315495904",
+      "originalScoredReceiptSha256": "c834d181525ae150c035a494cfa33c32fcb94c4afb479a56294235cccb143f97",
+      "frozenWorkerFiles": {
+        "HeaderWorker.runtimeconfig.json": "9950d4583cfc9a106857c0d5b8a75b53e8774852b57b80bc3823a74d44a4d87f",
+        "HeaderWorker.deps.json": "bea4beace53014ee6ea8812a3ace72a76c105220ca192885060cc98a1f06cffe",
+        "HeaderWorker": "4a1feacc6fa32b8cdaa852b6dfa51d4017adadafb849171ccec6d5acb509c716",
+        "HeaderWorker.pdb": "307b80845e1cec60425e2043ac6a0ad09d240c5891d966fc163bd7c8a6f7e5b1",
+        "HeaderWorker.dll": "1c2399c83fe2426d805eed7663760b1547f0b9ad47a5360ec0692266c8c1e297"
+      },
+      "exactAllDescriptors": true,
+      "benchmarkSampleCommands": 0,
+      "normalAndScalarPassed": true,
+      "managedAndNativeProtocolIdentitiesMatched": true,
+      "raw": {
+        "file": "webp-headers-package-binding.tar.xz",
+        "bytes": 6604,
+        "sha256": "1bd2740d12dd6395ace80079dad0bfa2f639aadaf4857fb2ff0151171c112e9c",
+        "members": 15,
+        "allMembersVerified": true,
+        "mirrored": true
+      }
+    },
+    "jpegCoding": {
+      "cases": {
+        "ValidateJpegBaseline420": {
+          "originalReceiptSha256": "1bd0804f10c58beb3486e3912d00947c6d50d0ca41b4f2a9b2b80cabae997970",
+          "validationSha256": "e6e3c36199897da0092b84f646c25792d12a25d4234e5383fb4088ec77c4cbc5",
+          "inputBytes": 65163,
+          "inputSha256": "5d3a88c6287037f759aed58b86ea06bf963f4350fb5af33873de5be2ed8be87c",
+          "descriptorSha256": "c4abd93bcbca23235dc7252bd2893cae77f075bff31c1bc288f15b0e07bbed1b",
+          "exactOutputAndOwnersPassed": true
+        },
+        "ValidateJpegProgressive420": {
+          "originalReceiptSha256": "738aceb39b35a1bdccd672a50358789e3d0e8be69418c40cc93d63fffcc9a4ff",
+          "validationSha256": "21b5c98f7ca1f57abeada6aa7fd9c7bcd20ef31185e83187ceba78c9066f47b7",
+          "inputBytes": 30593,
+          "inputSha256": "1783bc6c4ab705fbd5b3e4db2d94707df0f438f6118563fbc688ab4f1d475af5",
+          "descriptorSha256": "c4abd93bcbca23235dc7252bd2893cae77f075bff31c1bc288f15b0e07bbed1b",
+          "exactOutputAndOwnersPassed": true
+        }
+      },
+      "originalProofSha256": "a7357dffeca335828c4017f670e0a16dd253b14aaa044b64bcb6ea98e4e80e66",
+      "boundProofSha256": "da77f8516c03667c9c1211313ac50fb34869ea6d3923741ffa9b01b9d2dcbcec",
+      "toolSha256": "f63c0cac4947800bfe5cd34ee9f630be85a24803a579b17163b4e98ba8ab796e",
+      "allOriginalGatesPassed": true,
+      "allRuntimeOriginsUnchanged": true,
+      "verifiedSharedNonCoreFiles": 112,
+      "raw": {
+        "file": "jpeg-coding-package-bindings.tar.xz",
+        "bytes": 239964,
+        "sha256": "df44c5fc4cc5d64bd2c317651bd2c044c92a125cb1d98ffe770853d3be82bea3",
+        "members": 17,
+        "allMembersVerified": true,
+        "mirrored": true
+      }
+    }
   }
 }
