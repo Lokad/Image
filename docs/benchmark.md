@@ -25,9 +25,10 @@ current package with their packet and delivery contracts.
 [Async encode measurements](../benchmarks/ASYNC-ENCODE-CURRENT-PACKAGE.md)
 All original pool-affected bicubic controls have current timing evidence.
 Of the 50 additional cases,
-**49 pass**.
-The tight 64×32 RGBA8 reduction remains uncertain at upper
-**1.014632**. Compact horizontal coefficients
+**50 pass**. The tight 64×32 RGBA8 reduction confirms at
+**391.88 / 405.68 µs** against prepared zimg,
+upper **0.976805**, with **112 B/op**.
+Compact horizontal coefficients
 close the tight 128×64 RGBA16 gap at **405.66 /
 448.29 µs**, upper **0.918803**,
 with **112 B/op**. [Bicubic measurements and open cases](../benchmarks/BICUBIC-CURRENT-PACKAGE.md)

@@ -1,14 +1,14 @@
 # Bicubic storage on the current package
 
-Of the 61 original bicubic controls, 56 have valid passing evidence and five
+Of the 61 original bicubic controls, 57 have valid passing evidence and four
 remain uncertain. The actual 0.2.1 package covers all 59 pool-affected
 controls. The two 4,264,104-byte RGBA16 full enlargement outputs exceed the
 unchanged 4 MiB pool cap and retain their source-valid passes.
 [Full word enlargement evidence](BICUBIC-ENLARGEMENT-HORIZONTAL-MODES.md)
 
 The open cases are the default and tight RGBA8 256×129 reductions, tight
-RGBA8 128×64 and 64×32 reductions, and tight RGBA16 width reduction with
-height enlargement. Keep the conservative confidence rule for all five.
+RGBA8 128×64 reduction, and tight RGBA16 width reduction with height
+enlargement. Keep the conservative confidence rule for all four.
 
 ## Original package comparison
 
@@ -206,8 +206,9 @@ guard failure, builds, qualification logs and actual package.
 
 ## Additional current-package cases
 
-Twenty-two of twenty-three additional cases pass on the same actual package. The tight 64×32
-RGBA8 reduction remains uncertain.
+The first batch passed twenty-two of twenty-three cases on the same actual
+package. The [interleaved confirmation](#interleaved-confirmation-for-tight-6432-rgba8-reduction)
+now closes the tight 64×32 RGBA8 reduction. The original measurements follow.
 
 | Complete operation | Lokad.Image µs | Prepared zimg µs | Conservative interval | GC B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
@@ -368,3 +369,26 @@ these outcomes. [Evidence](bicubic-current-package-evidence.json)
 
 The mirrored `bicubic-tight-adjacent-current-package.tar.xz` retains 20 verified members and
 35,664 B, SHA-256 `2194789851b083158d926ae31989564997688434cf380dc4c8b13f80e910834f`.
+
+## Interleaved confirmation for tight 64×32 RGBA8 reduction
+
+The original reference group means were 384.07 and 397.64 µs, a 3.5% spread
+across groups. With interleaving, the tight RGBA8 reduction passes on that
+same package at **391.88 µs / prepared zimg 405.68 µs**, conservative interval
+**0.953692–0.976805**, with **112 B/op**. The separate paired interval is
+0.957786–0.974268. The native group means are 405.73, 405.68 and 405.97 µs.
+The earlier 1.014632 upper and every observation are retained. The cause of
+the variation between sessions remains unverified.
+
+The run keeps 127 frozen non-core files and the original generated workload
+delegates. Each of the twelve units keeps 528 complete managed operations
+and 128 complete native operations per group. Sixteen subdivisions each run
+33 managed calls and three sets of eight native calls. The source, exact
+managed output, original native RGB/alpha bounds, independent ownership and
+both quiet guards pass. One tooling build and the existing package suffice.
+
+The mirrored `tight64x32-bicubic-partitioned-current-package.tar.xz` has
+14 verified members, 146,920 B and SHA-256
+`6d977b7b57513844709c370b65d69f2f659fc377f0d1a00504b8a0fd8dc89259`.
+The [current evidence](bicubic-current-package-evidence.json) pins this
+archive, all actuals, the frozen runtime and the prior receipt.

@@ -3681,6 +3681,19 @@ costs. The complete final-package refresh remains outstanding."""
                and c['allActualsRetained'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
                and c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
                for c in extended_cases.values())
+    tight64_stage = bicubic_package['tight64Partitioned']
+    tight64 = tight64_stage['case']
+    assert tight64_stage['producers'] == word_qualification
+    assert tight64_stage['raw']['mirrored'] and tight64_stage['raw']['allMembersVerified']
+    assert tight64_stage['originalGeneratedOperationsReused'] and tight64_stage['originalOperationBoundariesPreserved']
+    assert all(tight64[key] == extended_cases['Tight64x32_8'][key]
+               for key in ('librarySha256', 'inputSha256', 'managedOutputSha256',
+                           'nativeOutputSha256', 'nativeWorkerSha256'))
+    assert tight64['actuals'] == 12 and tight64['nativeGroups'] == 3
+    assert tight64['operationsPerSubject'] == 528 and tight64['nativeOperationsPerSubject'] == 128
+    assert tight64['segmentsPerUnit'] == 16 and tight64['status'] == 'pass' and tight64['upper'] <= 1
+    assert tight64['allOriginalGatesPassed'] and tight64['quietGuardsPassed']
+    extended_passes = sum(c['status'] == 'pass' for name, c in extended_cases.items() if name != tight64['caseId']) + 1
     tight_adjacent = bicubic_package['tightAdjacent']
     assert tight_adjacent['producers'] == word_qualification
     assert tight_adjacent['raw']['mirrored'] and tight_adjacent['raw']['allMembersVerified']
@@ -3827,9 +3840,10 @@ current package with their packet and delivery contracts.
 [Async encode measurements](../benchmarks/ASYNC-ENCODE-CURRENT-PACKAGE.md)
 All original pool-affected bicubic controls have current timing evidence.
 Of the {len(extended_cases)} additional cases,
-**{sum(case['status'] == 'pass' for case in extended_cases.values())} pass**.
-The tight 64×32 RGBA8 reduction remains uncertain at upper
-**{extended_cases['Tight64x32_8']['upper']:.6f}**. Compact horizontal coefficients
+**{extended_passes} pass**. The tight 64×32 RGBA8 reduction confirms at
+**{tight64['managedUs']:,.2f} / {tight64['nativeUs']:,.2f} µs** against prepared zimg,
+upper **{tight64['upper']:.6f}**, with **{tight64['allocatedBytes']:,} B/op**.
+Compact horizontal coefficients
 close the tight 128×64 RGBA16 gap at **{compact_word['case']['managedUs']:.2f} /
 {compact_word['case']['nativeUs']:.2f} µs**, upper **{compact_word['case']['upper']:.6f}**,
 with **112 B/op**. [Bicubic measurements and open cases](../benchmarks/BICUBIC-CURRENT-PACKAGE.md)
