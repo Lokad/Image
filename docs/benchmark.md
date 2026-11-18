@@ -20,23 +20,17 @@ The RGBA8 seekable and async nonseekable loads, async nonseekable encode,
 and caller-budget two-result decode also pass on that package. The encode
 and retained-output rows use the current measurements, as do all four PNG
 pixel-coding validation rows.
-[Current bicubic measurements](../benchmarks/BICUBIC-CURRENT-PACKAGE.md) update
-the RGBA8 reductions, the tight RGBA8 enlargement and both tight mixed-axis
-RGBA16 directions. Compact horizontal coefficients close the tight 128×64
-RGBA16 gap on the new actual package at **405.66 /
-448.29 µs**, upper **0.918803**
-and **112 B/op**. RGBA8 remains uncertain against the prepared zimg reference.
-The tight 16×8 RGBA16 reduction passes on the same package at
-**362.74 /
-534.04 µs**, upper
-**0.683124** and **112 B/op**.
-The 4 KiB 64×32 RGBA8 reduction remains uncertain at upper
-**1.014632**.
-Other entries that
-call the changed shared image/font pool, PNG workspace or async encoded-output
-pool retain **historical artifact costs pending refresh**, not current timing
-proof. [Affected boundaries](../benchmarks/COMPOSITION-STORAGE-REUSE.md) are explicit.
-This is not a full release refresh or a whole-library parity claim.
+All original pool-affected bicubic controls have current timing evidence.
+Of the 50 additional cases,
+**49 pass**.
+The tight 64×32 RGBA8 reduction remains uncertain at upper
+**1.014632**. Compact horizontal coefficients
+close the tight 128×64 RGBA16 gap at **405.66 /
+448.29 µs**, upper **0.918803**,
+with **112 B/op**. [Bicubic measurements and open cases](../benchmarks/BICUBIC-CURRENT-PACKAGE.md)
+Other entries affected by changed storage retain their recorded historical
+artifact costs pending the full release refresh.
+[Affected boundaries](../benchmarks/COMPOSITION-STORAGE-REUSE.md)
 
 [Direct JPEG block emission](../benchmarks/JPEG-DIRECT-BLOCK-EMISSION.md) closes
 the restart gap: **1,339.28 / FFmpeg 1,609.15 µs, upper 0.841**,
@@ -511,17 +505,17 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic RGBA8, width reduction / height enlargement, input+output+4 KiB † → 256×519 | 754.04 | 840.84 | 0.897 / 0.913422 | 113 |
 | Bicubic RGBA16, width down / height up / input+output+4 KiB (confidence open) † → 256×519 | 820.10 | 825.87 | 0.993 / 1.007289 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 32×16 | 435.03 | 442.74 | 0.983 / 0.991529 | 113 |
-| Bicubic RGBA8 extreme reduction, input+output+4 KiB † → 2×9 | 451.05 | 1,046.58 | 0.431 / 0.433 | 113 |
+| Bicubic RGBA8 extreme reduction, input+output+4 KiB † → 2×9 | 506.79 | 1,153.21 | 0.439 / 0.448250 | 113 |
 | Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 3,031.48 | 3,301.11 | 0.918 / 0.925615 | 116 |
 | Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,427.16 | 1,534.77 | 0.930 / 0.946599 | 114 |
 | Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,562.10 | 1,830.43 | 0.853 / 0.864226 | 126 |
 | Bicubic RGBA8 reduction, input+output+4 KiB (confidence open) † → 256×129 | 414.38 | 419.26 | 0.988 / 1.003866 | 113 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 495.34 | 569.89 | 0.869 / 0.873750 | 113 |
-| Bicubic RGBA8, fresh managed / prepared zimg † → 128×64 | 337.24 | 349.38 | 0.965 / 0.971 | 198,350 |
+| Bicubic RGBA8, fresh managed / prepared zimg † → 128×64 | 371.44 | 381.07 | 0.975 / 0.987210 | 198,350 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 921.58 | 944.33 | 0.976 / 0.984461 | 114 |
 | Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 872.48 | 907.53 | 0.961 / 0.974925 | 114 |
-| Bicubic RGBA16 extreme reduction, input+output+4 KiB † → 2×9 | 428.16 | 1,261.83 | 0.339 / 0.353 | 113 |
-| Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32 | 353.91 | 388.26 | 0.912 / 0.921 | 113 |
+| Bicubic RGBA16 extreme reduction, input+output+4 KiB † → 2×9 | 490.81 | 1,384.40 | 0.355 / 0.361113 | 113 |
+| Bicubic RGBA16 reduction, input+output+4 KiB † → 64×32 | 400.85 | 429.31 | 0.934 / 0.940276 | 113 |
 | Bicubic RGBA8 reduction, input+output+4 KiB (confidence open) † → 128×64 | 380.07 | 375.17 | 1.013 / 1.024773 | 112 |
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64 | 405.66 | 448.29 | 0.905 / 0.918803 | 112 |
 | Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 810.11 | 902.40 | 0.898 / 0.906412 | 199,938 |

@@ -1,8 +1,16 @@
 # Bicubic storage on the current package
 
-Four original bicubic cases use the changed shared idle storage. The tight
-RGBA8 and default horizontal RGBA16 enlargements pass on the actual 0.2.1
-package. Both RGBA8 reductions remain uncertain.
+Of the 61 original bicubic controls, 56 have valid passing evidence and five
+remain uncertain. The actual 0.2.1 package covers all 59 pool-affected
+controls. The two 4,264,104-byte RGBA16 full enlargement outputs exceed the
+unchanged 4 MiB pool cap and retain their source-valid passes.
+[Full word enlargement evidence](BICUBIC-ENLARGEMENT-HORIZONTAL-MODES.md)
+
+The open cases are the default and tight RGBA8 256×129 reductions, tight
+RGBA8 128×64 and 64×32 reductions, and tight RGBA16 width reduction with
+height enlargement. Keep the conservative confidence rule for all five.
+
+## Original package comparison
 
 | Complete operation | Lokad.Image µs | Prepared zimg µs | Conservative interval | GC B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
@@ -264,3 +272,40 @@ The nine further mixed-axis and axial reductions are retained in the mirrored
 members and 52,388 B, SHA-256
 `02e428f80a128445710f996ef6ac01275a12240be520c1420706f295c4245614`.
 The exact certified sample-half results and existing native bounds remain.
+
+## Default width enlargement and smaller reduction cases
+
+All fourteen additional cases pass on the actual package. The default 128×64
+RGBA8 reduction retains twelve 256-call pairs and the default width enlargement
+retains twelve 64-call pairs. Both keep their two twelve-sample native brackets
+and all 128 original non-core files.
+
+| Complete operation | Lokad.Image µs | Prepared zimg µs | Upper ratio | GC B/op |
+| --- | ---: | ---: | ---: | ---: |
+| Default RGBA8 reduction to 128×64 | 371.44 | 381.07 | 0.987210 | 198,350 |
+| Default RGBA8 width enlargement | 1,586.68 | 1,668.84 | 0.960436 | 112 |
+| Default RGBA16 reduction to 128×64 | 389.86 | 459.82 | 0.857492 | 198,445 |
+| Tight RGBA16 reduction to 64×32 | 400.85 | 429.31 | 0.940276 | 113 |
+
+Twelve smaller reductions and axial cases retain the generated delegates and the same 127 verified
+non-core runtime files. The exact managed rational frames, scoped reference
+bounds, independent owners and both idle guards pass throughout. The warm
+reference retains its original prepared graph and scratch. Each retains twelve measured
+actuals and both native brackets. There were no builds.
+
+The mirrored `bicubic-current-package-adjacent.tar.xz` retains 15 verified members and 25,848 B.
+SHA-256 `f271a345194a23261280569c4999b49ae940bd4ab04e829d9b3ff2b3ebdc4caa`.
+
+The mirrored `bicubic-current-package-small-and-vertical.tar.xz` retains 76 verified members and 63,440 B.
+SHA-256 `be4a6b29ee785330fa25c027bc9b5e0e1fac72067d9f76a61b6c45e71ec80aa2`.
+
+## Final pool-affected controls
+
+All thirteen original small reduction cases pass with their generated operation
+loops, at conservative upper ratios of 0.096139–0.916770 and 113 B/op.
+Each keeps twelve actuals, two native brackets, its exact managed output and the
+original native pixel, source, ownership and quietness checks. The evidence
+records every shape and sample. No new controls or builds were needed.
+
+The mirrored `bicubic-current-package-extreme-reductions.tar.xz` retains 82 verified members and
+65,052 B, SHA-256 `fe8f8dcc16eea25a0a8d47a0a8e3f47d661d85f31e89f187fc57c518e6e3c028`.

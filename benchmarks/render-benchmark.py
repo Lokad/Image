@@ -3584,7 +3584,7 @@ costs. The complete final-package refresh remains outstanding."""
     assert extended_bicubic['producers'] == word_qualification and extended_bicubic['builds'] == 0
     assert all(raw['mirrored'] and raw['allMembersVerified'] for raw in extended_bicubic['archives'])
     extended_cases = extended_bicubic['cases']
-    assert len(extended_cases) == 23
+    assert len(extended_cases) == 50
     assert all(c['librarySha256'] == word_qualification['linuxSha256'] and c['actuals'] == 12
                and c['allActualsRetained'] and c['allOriginalGatesPassed'] and c['quietGuardsPassed']
                and c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
@@ -3607,6 +3607,10 @@ costs. The complete final-package refresh remains outstanding."""
         ('Bicubic RGBA16 reduction, input+output+4 KiB', 'TightDown16'),
         ('Bicubic RGBA8, width reduction / same height, input+output+4 KiB', 'TightHorizontal8'),
         ('Bicubic RGBA16 reduction, input+output+4 KiB', 'Tight32x16_16'),
+        ('Bicubic RGBA8, fresh managed / prepared zimg', 'Wide8'),
+        ('Bicubic RGBA16 reduction, input+output+4 KiB', 'Tight64x32_16'),
+        ('Bicubic RGBA8 extreme reduction, input+output+4 KiB', 'Tight2x9_8'),
+        ('Bicubic RGBA16 extreme reduction, input+output+4 KiB', 'Tight2x9_16'),
     ):
         c = bicubic_cases[name]
         if name == 'Down8':
@@ -3703,23 +3707,17 @@ The RGBA8 seekable and async nonseekable loads, async nonseekable encode,
 and caller-budget two-result decode also pass on that package. The encode
 and retained-output rows use the current measurements, as do all four PNG
 pixel-coding validation rows.
-[Current bicubic measurements](../benchmarks/BICUBIC-CURRENT-PACKAGE.md) update
-the RGBA8 reductions, the tight RGBA8 enlargement and both tight mixed-axis
-RGBA16 directions. Compact horizontal coefficients close the tight 128×64
-RGBA16 gap on the new actual package at **{compact_word['case']['managedUs']:.2f} /
-{compact_word['case']['nativeUs']:.2f} µs**, upper **{compact_word['case']['upper']:.6f}**
-and **112 B/op**. RGBA8 remains uncertain against the prepared zimg reference.
-The tight 16×8 RGBA16 reduction passes on the same package at
-**{extended_cases['Tight16x8_16']['managedUs']:.2f} /
-{extended_cases['Tight16x8_16']['nativeUs']:.2f} µs**, upper
-**{extended_cases['Tight16x8_16']['upper']:.6f}** and **112 B/op**.
-The 4 KiB 64×32 RGBA8 reduction remains uncertain at upper
-**{extended_cases['Tight64x32_8']['upper']:.6f}**.
-Other entries that
-call the changed shared image/font pool, PNG workspace or async encoded-output
-pool retain **historical artifact costs pending refresh**, not current timing
-proof. [Affected boundaries](../benchmarks/COMPOSITION-STORAGE-REUSE.md) are explicit.
-This is not a full release refresh or a whole-library parity claim.
+All original pool-affected bicubic controls have current timing evidence.
+Of the {len(extended_cases)} additional cases,
+**{sum(case['status'] == 'pass' for case in extended_cases.values())} pass**.
+The tight 64×32 RGBA8 reduction remains uncertain at upper
+**{extended_cases['Tight64x32_8']['upper']:.6f}**. Compact horizontal coefficients
+close the tight 128×64 RGBA16 gap at **{compact_word['case']['managedUs']:.2f} /
+{compact_word['case']['nativeUs']:.2f} µs**, upper **{compact_word['case']['upper']:.6f}**,
+with **112 B/op**. [Bicubic measurements and open cases](../benchmarks/BICUBIC-CURRENT-PACKAGE.md)
+Other entries affected by changed storage retain their recorded historical
+artifact costs pending the full release refresh.
+[Affected boundaries](../benchmarks/COMPOSITION-STORAGE-REUSE.md)
 
 {jpeg_direct_note}
 
