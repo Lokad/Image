@@ -1,0 +1,218 @@
+{
+  "project": "Lokad.Image",
+  "stage": "FRP1355",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "privateLinuxDllSha256": "bc222368bdb96f346fc616d33b9e140b7d746e641da79a287b3037b77504e202",
+  "baselineLibrarySha256": "b874f8d2e1111e9c1bcf9452fd750cce2c7b812fbcf69a1f9a9c9219109a72d9",
+  "baselinePackageSha256": "d799f4cd633bcc4609bf0d16e8152b9371da3657c5cf5a69ce4d26b525b4e1f1",
+  "sourceChanges": {
+    "src/Lokad.Image/ImageDrawing.cs": {
+      "original": "cb627982dc88a38dff38f561c029fc6a73d6f392d167f49aaa91d2c3a0262adc",
+      "prior": "d6cc74f642f8074d396f11921e76c2586c856beed1c9d2e43bbda57e61d3a600",
+      "candidate": "d6cc74f642f8074d396f11921e76c2586c856beed1c9d2e43bbda57e61d3a600"
+    },
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": {
+      "original": "0379fdc65e3abe299a88c4bddaaff40f5b0339efcd155636d509a29ce5a162c1",
+      "prior": "482a83b1ca91212e284c7fe96218fb4ce92b585bdd3e0fe8a3b44bc0b406964c",
+      "candidate": "805c23abd64d25d2f5d363956b75e23ae2a7b2585f00bd4a1e9472fb621050ae"
+    }
+  },
+  "geometryCases": 1024,
+  "codegen": {
+    "methodBytes": 568,
+    "sampleCommands": 0,
+    "vectorMoves": 32,
+    "copyInstructions": [
+      "E886E4567E           call     CORINFO_HELP_NEWSFAST",
+      "FF156605FBFF         call     [CORINFO_HELP_STRCNS]",
+      "FF15EA2CBF00         call     [System.ArgumentOutOfRangeException:.ctor(System.String):this]",
+      "E8FA10427E           call     CORINFO_HELP_THROW",
+      "FF15C8031001         call     [Lokad.Image.Internal.IndependentRowCopy:SnapshotLength(int,int,int):int]",
+      "FF15B7031001         call     [Lokad.Image.Internal.IndependentRowCopy:SnapshotLength(int,int,int):int]",
+      "4963D7               movsxd   rdx, r15d",
+      "4963FF               movsxd   rdi, r15d",
+      "4963F5               movsxd   rsi, r13d",
+      "4963F4               movsxd   rsi, r12d",
+      "FF151C06FBFF         call     [System.ThrowHelper:ThrowArgumentOutOfRangeException()]",
+      "FF1599B80F01         call     [System.Threading.CancellationToken:ThrowOperationCanceledException():this]"
+    ],
+    "codegenSha256": "2cb2a93cbc866d8120c505c648b554cfe533a7070f53d220e2d6cb5dcf58a657"
+  },
+  "focusPerModeWindows": 2,
+  "cases": {
+    "OriginalClippedCopy8": {
+      "screen": {
+        "actuals": 3,
+        "operationsPerActual": 65536,
+        "ratio": 0.9943505758258799,
+        "lower": 0.9844056490982106,
+        "upper": 1.0043959708591805,
+        "allocatedBytes": 0,
+        "subjects": {
+          "baseline": {
+            "mean": 1.9609558817545574,
+            "lower": 1.958219196827313,
+            "upper": 1.9636925666818017,
+            "values": [
+              1.960813201904297,
+              1.960942169189453,
+              1.9611122741699218
+            ]
+          },
+          "candidate": {
+            "mean": 1.9498777567545573,
+            "lower": 1.9327662347842913,
+            "upper": 1.9669892787248233,
+            "values": [
+              1.950947494506836,
+              1.9494894409179688,
+              1.9491963348388672
+            ]
+          }
+        },
+        "rawMember": "tmp/frp1355/screen-pairs/frp1355-screen-OriginalClippedCopy8.json"
+      },
+      "confirm": {
+        "actuals": 12,
+        "operationsPerActual": 65536,
+        "ratio": 0.9979792093440641,
+        "lower": 0.971907346876621,
+        "upper": 1.0247504615369845,
+        "allocatedBytes": 0,
+        "subjects": {
+          "baseline": {
+            "mean": 1.9892015037536621,
+            "lower": 1.9508877997993286,
+            "upper": 2.0275152077079954,
+            "values": [
+              1.9683130950927734,
+              1.9691448974609376,
+              1.9708343200683593,
+              1.9940570526123047,
+              1.9706161041259767,
+              2.06050016784668,
+              1.9717513885498046,
+              2.0384578094482424,
+              1.9945763549804687,
+              1.9736974029541015,
+              1.9820164184570312,
+              1.9764530334472656
+            ]
+          },
+          "candidate": {
+            "mean": 1.9853292147318522,
+            "lower": 1.9352948910065304,
+            "upper": 2.0353635384571738,
+            "values": [
+              1.9504385833740234,
+              1.9489155883789062,
+              2.014019241333008,
+              1.986839553833008,
+              2.023234100341797,
+              2.0532698364257813,
+              1.9504627380371093,
+              1.9523045196533204,
+              1.9998325653076172,
+              2.0380716400146484,
+              1.9556836547851562,
+              1.9508785552978516
+            ]
+          }
+        },
+        "rawMember": "tmp/frp1355/confirm-pairs/frp1355-confirm-OriginalClippedCopy8.json"
+      }
+    },
+    "DrawingCopy8": {
+      "screen": {
+        "actuals": 3,
+        "operationsPerActual": 65536,
+        "ratio": 0.9856063776159483,
+        "lower": 0.9838419051114169,
+        "upper": 0.9873740146159165,
+        "allocatedBytes": 0,
+        "subjects": {
+          "baseline": {
+            "mean": 1.9724165496826171,
+            "lower": 1.9633207376617783,
+            "upper": 1.981512361703456,
+            "values": [
+              1.9728013153076172,
+              1.971853302001953,
+              1.9725950317382812
+            ]
+          },
+          "candidate": {
+            "mean": 1.9440263163248699,
+            "lower": 1.9367801616731881,
+            "upper": 1.9512724709765517,
+            "values": [
+              1.9444371337890625,
+              1.9436443328857422,
+              1.9439974822998047
+            ]
+          }
+        },
+        "rawMember": "tmp/frp1355/screen-pairs/frp1355-screen-DrawingCopy8.json"
+      },
+      "confirm": {
+        "actuals": 12,
+        "operationsPerActual": 65536,
+        "ratio": 0.9992138172749173,
+        "lower": 0.9945302048874708,
+        "upper": 1.0039194865339278,
+        "allocatedBytes": 0,
+        "subjects": {
+          "baseline": {
+            "mean": 2.0851734708150227,
+            "lower": 2.0497142939577415,
+            "upper": 2.120632647672304,
+            "values": [
+              2.121491424560547,
+              2.1187383880615234,
+              2.1118455352783205,
+              2.108897857666016,
+              2.1083934020996096,
+              2.090698303222656,
+              2.077570343017578,
+              2.062160659790039,
+              2.0613899993896485,
+              2.0547998046875,
+              2.052235046386719,
+              2.053860885620117
+            ]
+          },
+          "candidate": {
+            "mean": 2.08351039759318,
+            "lower": 2.050680349542222,
+            "upper": 2.116340445644138,
+            "values": [
+              2.1059956970214846,
+              2.1034156494140626,
+              2.1158433532714844,
+              2.1120966796875,
+              2.1111287078857424,
+              2.092828598022461,
+              2.074020980834961,
+              2.063879119873047,
+              2.053035217285156,
+              2.056460510253906,
+              2.0612020263671873,
+              2.052218231201172
+            ]
+          }
+        },
+        "rawMember": "tmp/frp1355/confirm-pairs/frp1355-confirm-DrawingCopy8.json"
+      }
+    }
+  },
+  "raw": {
+    "file": "bounded-snapshot-copy-trials.tar.xz",
+    "bytes": 416304,
+    "sha256": "ad3c182b03a9df52a80d1224f17d71a02f51dfc79412e6eb2c5f5b66adcd0dc3",
+    "members": 67,
+    "allMembersVerified": true,
+    "mirrored": true
+  },
+  "disposition": "The independent comparison does not establish a useful gain. No further standalone or production promotion."
+}

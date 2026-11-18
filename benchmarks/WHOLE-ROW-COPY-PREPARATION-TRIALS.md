@@ -584,3 +584,44 @@ the extra specialized path private and reuse production evidence.
 drivers, procedure, all observations and immutable DLLs. Mirrored
 `full-row-snapshot-copy-trials.tar.xz` contains **465,784 B / 70 verified
 members**, SHA-256 `793a3ce07cdcc0a59f05e8edbda72ac2384544a572d069acf57234eca56986af`.
+
+## Full-row snapshots with checked footprints
+
+This follow-up checks complete source and destination footprints once and
+then advances managed references between valid rows. The original 16-load,
+16-store order and one cancellation checkpoint per row remain. Complete
+spans bound every access. The exact helper passes all 64 eligible lengths,
+unequal pitches, canaries, overflow, invalid footprints and precancellation.
+The 568-byte generated Linux helper retains the requested vector schedule
+without vector spills.
+
+On three quiet-VM pairs, clipped copy saves 11.1 ns and separate copy saves
+28.4 ns. Independent twelve-pair confirmation gives **1.989202 → 1.985329 µs**
+for clipped copy with interval **0.971907–1.024750**, and
+**2.085173 → 2.083510 µs** for separate copy with interval
+**0.994530–1.003919**. Both allocate **0 B/op**. The qualified package supplies
+the baseline. All original operations, exact output and owner gates stay.
+
+Stop this candidate after confirmation. The gain seen in the short screen
+does not transfer to the independent pairs. No standalone FFmpeg replay or
+production change follows. [Evidence](bounded-snapshot-copy-trial-evidence.json)
+
+## Disjoint runtime copy for separate RGBA16 rows
+
+The retained current word comparison is uncertain even in adjacent pairs.
+Its paired interval is **0.998521–1.004941**, inside the full
+**0.991834–1.011718** interval. The paired clocks correlate 0.791.
+This capture does not isolate frequency as the cause of the uncertainty.
+
+An isolated variant chooses checked disjoint runtime copies once for
+separate word buffers within a row cancellation chunk. The original
+per-row overlap-safe copies are replaced by a single checked-copy
+helper with one poll per row. The 187-byte JIT helper contains one
+`CORINFO_HELP_MEMCPY` call. Small and wider copies use the existing implementation.
+
+Three alternating quiet-VM pairs give **3.795276 → 3.821405 µs**,
+interval **0.979366–1.035176**, at **0 B/op**. All exact frame, source,
+ownership and idle guards pass on the original fixture. This scoped screen
+gives no reason for confirmation or a standalone remeasurement. The
+qualified implementation and the uncertainty stay.
+[Evidence](disjoint-word-copy-trial-evidence.json)

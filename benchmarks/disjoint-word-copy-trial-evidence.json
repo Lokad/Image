@@ -1,0 +1,96 @@
+{
+  "project": "Lokad.Image",
+  "stage": "FRP1356",
+  "productionAccepted": false,
+  "productionChanged": false,
+  "frozenComparison": {
+    "rawArchive": "copy-operation-boundary.tar.xz",
+    "sourceMember": "tmp/cbr1262-DrawingCopy16-complete.json",
+    "baselineUncertainty": "uncertain",
+    "adjacentInterval": [
+      0.998521350192389,
+      1.0049407218852364
+    ],
+    "fullInterval": [
+      0.9918335608384379,
+      1.0117175709080912
+    ],
+    "covariation": 0.7912152795752173
+  },
+  "packageSha256": "d799f4cd633bcc4609bf0d16e8152b9371da3657c5cf5a69ce4d26b525b4e1f1",
+  "baselineLibrarySha256": "b874f8d2e1111e9c1bcf9452fd750cce2c7b812fbcf69a1f9a9c9219109a72d9",
+  "privateLibrarySha256": "8a13ccc5ebe4bdc5817b0e2dd20075294ead008bacf52a168c7b433583688a22",
+  "mechanism": "Separate packed word rows use one checked disjoint runtime block copy each.",
+  "sources": {
+    "src/Lokad.Image/ImageDrawing.cs": {
+      "original": "cb627982dc88a38dff38f561c029fc6a73d6f392d167f49aaa91d2c3a0262adc",
+      "candidate": "fd52ddcd922166c51f1aefce1c66d1f3854db5313adeffa2c66316ab7092e170"
+    },
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": {
+      "original": "0379fdc65e3abe299a88c4bddaaff40f5b0339efcd155636d509a29ce5a162c1",
+      "candidate": "fa81aa8eb7b8e1a6c09989f4e26170e24f43d6d774c4995f3cef4114039a8043"
+    }
+  },
+  "codegen": {
+    "methodBytes": 187,
+    "sampleCommands": 0,
+    "vectorMoves": 0,
+    "copyInstructions": [
+      "E8E4F917FF           call     CORINFO_HELP_MEMCPY",
+      "FF1505BA0F01         call     [System.Threading.CancellationToken:ThrowOperationCanceledException():this]",
+      "FF154E08FBFF         call     [System.ThrowHelper:ThrowArgumentOutOfRangeException()]"
+    ],
+    "codegenSha256": "5223f69913c24276bb84b826fe0688d3a74309bb1c4a49937604b0b896a6e67a"
+  },
+  "measurements": {
+    "caseId": "DrawingCopy16",
+    "actuals": 3,
+    "operationsPerActual": 65536,
+    "allActualsRetained": true,
+    "quietGuardsPassed": true,
+    "allOriginalGatesPassed": true,
+    "allocatedBytes": 0,
+    "subjects": {
+      "baseline": {
+        "mean": 3.795276107788086,
+        "lower": 3.7416485887656568,
+        "upper": 3.848903626810515,
+        "values": [
+          3.7985955505371094,
+          3.7942301177978517,
+          3.793002655029297
+        ]
+      },
+      "candidate": {
+        "mean": 3.821404739379883,
+        "lower": 3.7577438435038033,
+        "upper": 3.8850656352559625,
+        "values": [
+          3.818308624267578,
+          3.8251859436035156,
+          3.8207196502685545
+        ]
+      }
+    },
+    "ratio": 1.0068844355062516,
+    "lower": 0.9793664002032535,
+    "upper": 1.03517566689478
+  },
+  "builds": {
+    "privateCore": 1,
+    "embedded": 0,
+    "harness": 0,
+    "worker": 0,
+    "fixtures": 0,
+    "package": 0
+  },
+  "raw": {
+    "file": "disjoint-word-copy-trial.tar.xz",
+    "bytes": 408460,
+    "sha256": "37e6db2615f1c272e91f8ce62c7f265cdf09dfa3b35bd29dd1bb680a32cf61f8",
+    "members": 38,
+    "allMembersVerified": true,
+    "mirrored": true
+  },
+  "disposition": "No useful gain established or confirmation justified."
+}
