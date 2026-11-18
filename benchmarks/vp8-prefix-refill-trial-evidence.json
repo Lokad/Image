@@ -1,0 +1,83 @@
+{
+  "project": "Lokad.Image",
+  "stage": "FRP1354",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "repeatedReadBound": {
+    "maximumReadBytes": {
+      "baseline": 269,
+      "prefix": 269
+    },
+    "comparableDecisions": 622592,
+    "completedScalarCursors": 2048,
+    "directProductionCodeUsed": false
+  },
+  "sourceChanges": {
+    "src/Lokad.Image/Internal/Vp8BooleanReader.Block.cs": {
+      "parentSha256": "f3b2ae72fd2ad62bf268b5381794cef6eed55c71f708efb33531006ed649a00f",
+      "candidateSha256": "41a81fba4ebfc92728f69b0c5571f344897ebd870286748367c710e5e9603f5c"
+    },
+    "src/Lokad.Image/Internal/Vp8BooleanReader.CancellableBlock.cs": {
+      "parentSha256": "e2be6ec02b3ecf87630e7d144c20879178e5e0533fe382778f22bdabd4910d1b",
+      "candidateSha256": "7fa25a628a269443d7b72e70227b550d2e54629039fdbe1403bb3b23973a1452"
+    }
+  },
+  "baselineLibrarySha256": "654a90fa33ae8721e614a0c6196ffa597e634bdca9de2558cc9d403975449dbc",
+  "candidateLibrarySha256": "a443588be6147cbfbcd886cffe8b2870a21cf9a97c2f150e2db6115efd1fa4e2",
+  "baseline": "FRP1351 live-only sign candidate",
+  "actualPackageLibraryNotTimed": "b874f8d2e1111e9c1bcf9452fd750cce2c7b812fbcf69a1f9a9c9219109a72d9",
+  "case": "OpaqueCancelable8",
+  "completeManagedOnly": true,
+  "actuals": 3,
+  "operationsPerUnit": 16,
+  "allOriginalGatesPassed": true,
+  "quietGuardsPassed": true,
+  "allObservationsRetained": true,
+  "statistics": {
+    "baseline": {
+      "mean": 4970.838958333333,
+      "lower": 4686.9270192385875,
+      "upper": 5254.750897428078
+    },
+    "candidate": {
+      "mean": 5057.703104166667,
+      "lower": 4491.810103112929,
+      "upper": 5623.596105220405
+    },
+    "candidateToBaselineInterval": [
+      0.9419187887777852,
+      1.0990710298075146
+    ],
+    "candidateToBaselineRatio": 1.0174653080950953,
+    "allocations": {
+      "baseline": [
+        230880.0
+      ],
+      "candidate": [
+        230880.0
+      ]
+    },
+    "nativeGroupMeansUs": [
+      5194.044604166666,
+      5186.047770833334,
+      5187.6563541666665
+    ]
+  },
+  "buildCounts": {
+    "privateLinuxCore": 1,
+    "embedded": 0,
+    "harness": 0,
+    "native": 0,
+    "fixtures": 0,
+    "package": 0
+  },
+  "raw": {
+    "file": "vp8-decoder-prefix-refill-OpaqueCancelable8-3.tar.xz",
+    "sha256": "dc06edb2511312ddee0b89b394847a4ea3e61d4f983c3acbaf03794c0fea5949",
+    "bytes": 400564,
+    "members": 24,
+    "allMembersVerified": true,
+    "mirrored": true
+  },
+  "disposition": "Stop this implementation after the adverse, inconclusive screen."
+}

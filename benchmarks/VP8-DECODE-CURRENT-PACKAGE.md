@@ -263,3 +263,21 @@ The candidate remains private and the production evidence stands.
 Two orchestration builds, zero library, fixture or reference builds.
 The archive retains all observations, commands, stages and member hashes.
 [Clock and confirmation evidence](vp8-clock-attribution-evidence.json)
+
+### Shared refill check for coefficient prefixes
+
+This private follow-up prepares up to three coefficient decisions with one
+refill check. The decision order, live cancellation checks and scalar
+publication stay exact. The reservoir holds at most 53 future bits during
+prefix preparation. The conservative 304-decision model bounds total reads
+at 269 bytes within the existing 272-byte window guard. An independent model
+also agrees on 622,592 decisions and 2,048 published cursors.
+
+Three alternating quiet-VM pairs on the original live-token control measure
+**4,970.84 → 5,057.70 µs**, interval **0.941919–1.099071**, with
+**230,880 B/op** on both DLLs. The comparison adds only the refill change
+to the private live-sign candidate. Both guards and original exact pixel,
+source and ownership gates pass. The adverse point and overlapping interval
+give no reason for independent confirmation. Production and its
+qualification stay in place.
+[Refill trial evidence](vp8-prefix-refill-trial-evidence.json)
