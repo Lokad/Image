@@ -1,0 +1,135 @@
+{
+  "project": "Lokad.Image",
+  "stage": "FRP1349",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "baselineCommit": "1c4a9a87ddc6698c7ad07e61d4427711c9b6fd7f",
+  "baselinePackageSha256": "d799f4cd633bcc4609bf0d16e8152b9371da3657c5cf5a69ce4d26b525b4e1f1",
+  "baselineLinuxSha256": "b874f8d2e1111e9c1bcf9452fd750cce2c7b812fbcf69a1f9a9c9219109a72d9",
+  "mechanism": "Sixteen bounded vector loads before all sixteen stores.",
+  "sourceChanges": {
+    "src/Lokad.Image/ImageDrawing.cs": {
+      "original": "cb627982dc88a38dff38f561c029fc6a73d6f392d167f49aaa91d2c3a0262adc",
+      "candidate": "d6cc74f642f8074d396f11921e76c2586c856beed1c9d2e43bbda57e61d3a600"
+    },
+    "src/Lokad.Image/Internal/IndependentRowCopy.cs": {
+      "original": "0379fdc65e3abe299a88c4bddaaff40f5b0339efcd155636d509a29ce5a162c1",
+      "candidate": "482a83b1ca91212e284c7fe96218fb4ce92b585bdd3e0fe8a3b44bc0b406964c"
+    }
+  },
+  "referenceBoundary": "Unchanged CBR1262 complete FFmpeg av_image_copy_plane operation with dynamic preparation and borrowed inputs/output.",
+  "codegen": {
+    "methodBytes": 448,
+    "sampleCommands": 0,
+    "vectorMoves": 32,
+    "copyInstructions": [
+      "FF1518B90F01         call     [System.Threading.CancellationToken:ThrowOperationCanceledException():this]",
+      "FF158906FBFF         call     [System.ThrowHelper:ThrowArgumentOutOfRangeException()]"
+    ],
+    "codegenSha256": "8f419f0722aa0211029da589e97c97a0042af151dae9635d5609150dc9da5434",
+    "allLoadsBeforeStores": true,
+    "vectorSpills": false
+  },
+  "buildCounts": {
+    "privateLinuxCore": 1,
+    "embedded": 0,
+    "harness": 0,
+    "native": 0,
+    "fixture": 0,
+    "package": 0
+  },
+  "cases": {
+    "OriginalClippedCopy8": {
+      "screen": {
+        "rawMember": "tmp/frp1349/screen-pairs/frp1349-screen-OriginalClippedCopy8.json",
+        "actuals": 3,
+        "operationsPerActual": 65536,
+        "ratio": 0.9865667275063206,
+        "lower": 0.9531694517306782,
+        "upper": 1.0211341813937447,
+        "allocatedBytes": 0,
+        "baselineUs": 2.128846954345703,
+        "candidateUs": 2.1002470194498697
+      },
+      "confirm": {
+        "rawMember": "tmp/frp1349/confirm-pairs/frp1349-confirm-OriginalClippedCopy8.json",
+        "actuals": 12,
+        "operationsPerActual": 65536,
+        "ratio": 0.9788254839912813,
+        "lower": 0.9737955475426948,
+        "upper": 0.9838814015205379,
+        "allocatedBytes": 0,
+        "baselineUs": 2.149238754272461,
+        "candidateUs": 2.1037299817403157
+      },
+      "reference": {
+        "rawMember": "tmp/frp1349/reference/frp1349-OriginalClippedCopy8-complete.json",
+        "receipt": "tmp/frp1349/reference/frp1349-OriginalClippedCopy8-complete-receipt.json",
+        "status": "gap",
+        "ratio": 1.0453353378438506,
+        "lower": 1.0360129214296723,
+        "upper": 1.0515458418664487,
+        "statisticalUnitsPerGroup": 12,
+        "operationsPerUnit": 65536,
+        "segmentsPerUnit": 16,
+        "allocatedBytes": 0,
+        "managedUs": 2.1029985046386717,
+        "ffmpegUs": 2.0117931811014813
+      }
+    },
+    "DrawingCopy8": {
+      "screen": {
+        "rawMember": "tmp/frp1349/screen-pairs/frp1349-screen-DrawingCopy8.json",
+        "actuals": 3,
+        "operationsPerActual": 65536,
+        "ratio": 0.9948816680403799,
+        "lower": 0.9555596617821253,
+        "upper": 1.0358218047388528,
+        "allocatedBytes": 0,
+        "baselineUs": 2.1028657989501953,
+        "candidateUs": 2.0921042683919273
+      },
+      "confirm": {
+        "rawMember": "tmp/frp1349/confirm-pairs/frp1349-confirm-DrawingCopy8.json",
+        "actuals": 12,
+        "operationsPerActual": 65536,
+        "ratio": 0.9888966555659338,
+        "lower": 0.9852591386418219,
+        "upper": 0.9925476019816932,
+        "allocatedBytes": 0,
+        "baselineUs": 2.124057481129964,
+        "candidateUs": 2.1004763628641765
+      },
+      "reference": {
+        "rawMember": "tmp/frp1349/reference/frp1349-DrawingCopy8-complete.json",
+        "receipt": "tmp/frp1349/reference/frp1349-DrawingCopy8-complete-receipt.json",
+        "status": "gap",
+        "ratio": 1.0258615608633321,
+        "lower": 1.0132448518770745,
+        "upper": 1.0357490080578378,
+        "statisticalUnitsPerGroup": 12,
+        "operationsPerUnit": 65536,
+        "segmentsPerUnit": 1,
+        "allocatedBytes": 0,
+        "managedUs": 2.102463278452555,
+        "ffmpegUs": 2.0494610176086425
+      }
+    }
+  },
+  "candidateLinuxSha256": "fc6ed5ac976a0243c0e8bbf13e641cdf6b4241985a74abf1800844684fe88e73",
+  "raw": {
+    "file": "full-row-snapshot-copy-trials.tar.xz",
+    "bytes": 465784,
+    "sha256": "793a3ce07cdcc0a59f05e8edbda72ac2384544a572d069acf57234eca56986af",
+    "members": 70,
+    "allMembersVerified": true,
+    "mirrored": true
+  },
+  "replay": [
+    "tmp/frp1349-prepare.py",
+    "python3 tmp/frp1349/run-vm.py screen",
+    "python3 tmp/frp1349/pair-vm.py screen",
+    "python3 tmp/frp1349/pair-vm.py confirm",
+    "python3 tmp/frp1349/reference-vm.py"
+  ]
+}

@@ -555,3 +555,32 @@ JIT and package identities, raw captures and replay commands. Both archives
 were mirrored and member-verified: `native-rgba8-copy-attribution.tar.xz`
 (52,140 B, 25 members) and `four-group-rgba8-copy-screen.tar.xz`
 (390,912 B, 34 members).
+
+## Full-row loads before stores
+
+On both frozen RGBA8 copies the private candidate loads all sixteen vectors
+before any store. Three leading groups cover 768 bytes; the final group
+covers the last 256 bytes of a checked row. The route is confined to
+separate-buffer RGBA8 rows of 961–1,024 bytes and keeps one cancellation
+check per row. The 448-byte Linux JIT helper shows all sixteen loads before
+all sixteen stores, with no vector spills. There is no new owned capacity.
+
+Independent quiet-VM confirmation uses twelve alternating 65,536-call units
+per case, after the three-pair screen. Against the unchanged managed DLL,
+clipped copy improves from **2.149239 to 2.103730 µs**, interval
+**0.973796–0.983881**, and separate copy from **2.124057 to 2.100476 µs**,
+interval **0.985259–0.992548**. Both allocate 0 B/op. The exact canvas,
+source, hidden RGB, alpha, untouched pixels and caller ownership checks pass.
+
+The same candidate still has both gaps in the standalone complete comparison.
+Clipped copy is **2.102999 / 2.011793 µs** with upper **1.051546**; separate
+copy is **2.102463 / 2.049461 µs** with upper **1.035749**. Each retains
+twelve full units per group and the original [FFmpeg boundary](COPY-OPERATION-BOUNDARY.md).
+Pairs establish savings of about 45.5 and 23.6 ns within the managed
+implementation. The two standalone results do not establish parity. Keep
+the extra specialized path private and reuse production evidence.
+
+[Evidence](full-row-snapshot-copy-evidence.json) identifies the original
+drivers, procedure, all observations and immutable DLLs. Mirrored
+`full-row-snapshot-copy-trials.tar.xz` contains **465,784 B / 70 verified
+members**, SHA-256 `793a3ce07cdcc0a59f05e8edbda72ac2384544a572d069acf57234eca56986af`.
