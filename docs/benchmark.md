@@ -289,8 +289,11 @@ owner. Independent complete async-probe pairs save
 paired and all-actual intervals separate. These scoped effects are not added to
 earlier gains or described as FFmpeg parity. That stage refreshed all four dimension
 probes; unchanged PNG/WebP pass and stop. Source-valid
-JPEG sync is uncertain at **0.199 µs,
-upper 1.078**;async remains a gap at
+[Original-loop interleaving](../benchmarks/JPEG-PROBE-ORIGINAL-LOOP-REFERENCE.md)
+keeps JPEG sync uncertain at **0.196 µs,
+upper 1.017**. The exact generated
+workload loop and original unit counts remain; no production gain or extra
+statistical units are inferred. Async remains a gap at
 **0.220 µs,
 upper 1.134**.
 The async cost uses the current stuffed-pair package above, including its small
@@ -554,7 +557,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Operation / fixed control | Lokad µs | Reference µs | Ratio / upper | Lokad allocated B/op | Status |
 | --- | ---: | ---: | ---: | ---: | --- |
 | Probe PNG dimensions, seekable | 0.109 | 0.122 | 0.888 / 0.922 | 568 | Confirmed pass |
-| Probe JPEG dimensions, seekable | 0.199 | 0.195 | 1.022 / 1.078 | 568 | Confidence open |
+| Probe JPEG dimensions, seekable | 0.196 | 0.196 | 0.999 / 1.017 | 568 | Confidence open |
 | Probe WebP dimensions, seekable | 0.103 | 0.121 | 0.853 / 0.884 | 568 | Confirmed pass |
 | Probe JPEG dimensions, async nonseekable | 0.220 | 0.201 | 1.096 / 1.134 | 568 | Confirmed gap |
 | Validate PNG8, span † | 1,158.656 | 1,377.875 | 0.841 / 0.848 | 240 | Confirmed pass |

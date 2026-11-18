@@ -806,6 +806,22 @@ def stream_reader_stage():
         assert case['managedActuals'] == case['nativeSamplesEachBracket'] == 12
         assert case['allOriginalGatesPassed'] and case['quietGuardsPassed'] and case['allActualsRetained']
         assert case['allocatedBytes'] == 568
+    sync = json.loads((ROOT / 'benchmarks/jpeg-probe-original-loop-reference-evidence.json').read_text(encoding='utf-8'))
+    assert not sync['productionChanged'] and sync['requiredMaterialPaths'] == 289 and sync['newMaterialPaths'] == 0
+    assert sync['raw']['mirrored'] and sync['raw']['allMembersVerified']
+    assert sync['allOriginalGatesPassed'] and sync['quietGuardsPassed'] and sync['allActualsRetained']
+    assert sync['originalGeneratedLoopReused'] and sync['actualInvocationCountChecksPassed']
+    assert sync['initialDirectDriverIsNotCurrentPerformanceEvidence']
+    current = sync['case']
+    assert current['librarySha256'] == owner['producers']['linuxSha256']
+    assert sync['producers']['packageSha256'] == owner['producers']['packageSha256']
+    assert current['managedActuals'] == current['nativeSamplesEachBracket'] == current['allActualStatistics']['N'] == 12
+    assert current['managedOperationsPerUnit'] == 974960 and current['nativeOperationsPerUnitEachBracket'] == 262144
+    assert current['subdivisionsEachStatisticalUnit'] == 16 and current['allocatedBytes'] == 568 and current['rawOverheadIncluded']
+    assert current['upper'] >= current['allActualUpper']
+    assert current['status'] == ('pass' if current['upper'] <= 1 else 'gap' if current['lower'] > 1 else 'uncertain')
+    assert math.isclose(current['ratio'], current['managedUs'] / current['nativeUs'], rel_tol=1e-12)
+    owner['cases']['ProbeDimensionsJpeg'] = current
     owner['cases'] = {**owner['reusedCases'], **owner['cases']}
     return owner
 
@@ -3573,8 +3589,11 @@ owner. Independent complete async-probe pairs save
 paired and all-actual intervals separate. These scoped effects are not added to
 earlier gains or described as FFmpeg parity. That stage refreshed all four dimension
 probes; unchanged PNG/WebP pass and stop. Source-valid
-JPEG sync is uncertain at **{probe_owner['cases']['ProbeDimensionsJpeg']['managedUs']:.3f} µs,
-upper {probe_owner['cases']['ProbeDimensionsJpeg']['upper']:.3f}**;async remains a gap at
+[Original-loop interleaving](../benchmarks/JPEG-PROBE-ORIGINAL-LOOP-REFERENCE.md)
+keeps JPEG sync uncertain at **{probe_owner['cases']['ProbeDimensionsJpeg']['managedUs']:.3f} µs,
+upper {probe_owner['cases']['ProbeDimensionsJpeg']['upper']:.3f}**. The exact generated
+workload loop and original unit counts remain; no production gain or extra
+statistical units are inferred. Async remains a gap at
 **{probe_owner['cases']['ProbeDimensionsJpegAsync']['managedUs']:.3f} µs,
 upper {probe_owner['cases']['ProbeDimensionsJpegAsync']['upper']:.3f}**.
 The async cost uses the current stuffed-pair package above, including its small

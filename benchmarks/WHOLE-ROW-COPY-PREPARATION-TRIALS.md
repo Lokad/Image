@@ -54,3 +54,37 @@ SHA256 `37c67315add3aad0d36198205ae61fb79d41dbd619f63c92b2926024211bfe3f`. Archi
 tests, codegen, original frames/owners, actuals and guards reproduce the round
 from the named baseline and actor dependency. This rejected round supplies no
 displayed result or renderer dependency.
+
+## Borrowed-view follow-up
+
+**Unpromoted, near-neutral:** complete separate-byte copy measures
+**1.957207→1.959905µs**, interval **.978770–1.024509**, **0B/op**, on three reversed
+65,536-operation pairs. No useful gain, confirmation, standalone retiming or
+broad/package repetition. Qualified production/package/current costs stay.
+
+A scoped untimed observation of the actual801f DLL finds four pixel-span getter
+calls per public CopyRegion: two for capacity validation, two afterward. Returning
+the already borrowed views through the single shared validator eliminates the
+later two. Caller code changes1531→1536B, helper225→285B; out-span ABI/shuffle
+costs may offset removed calls, but these observations do not establish that cause.
+All instrumented clocks are discarded, with zero sample commands.
+
+Pixel kernels, clipping, traversal, policy/cancellation/canvas-first/source failure
+order, alias capacity, empty regions and borrowed-root/input ownership remain.
+Fill/Composite discard the extra outputs; no new heap/admitted/retained storage,
+owner, API, pin or cache. Each OS passes10internal/190public normal/AVX512-off/scalar
+checks; original full-byte/source/alpha/hidden-RGB/untouched/owner gates pass.
+One private Windows core/embedded build; zero other builds. Reuse6,839full/live
+eachOS/SAMEactualpackage/all3examples and greenCI44196350570. No adjacent ABI,
+inlining or validation sweep follows. The same three copy gaps remain open.
+
+The original input, CPU0 optimized JIT/natural GC, warmups, every actual and idle-v2
+guards stay. Caller payload1,062,936B is separate from zero added library workspace;
+physical/native/JIT peaks remain unmeasured. Sixty-four verified completed plain
+generated consumers are pruned, retaining completion logs/packages/raw/sources.
+
+Mirrored/member-verified `borrowed-copy-view-trial.tar.xz`: **1,115,648B /54members**,
+SHA256 `f19111f067dadf8b584252cf0bd1000feb357c9441d8800c2df84186b2a82a2b`. Archived bvr1247/cpa1246 recipes retain the exact
+source/DLLs, codegen, gates, all actuals and cleanup proof, using the named
+mapping-validation baseline and original prepared-word actor. This supplies no
+displayed result or renderer prerequisite.
