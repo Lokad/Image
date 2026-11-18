@@ -4,7 +4,7 @@ Sixteen of the eighteen original owned edits affected by the shared idle pool
 passed on the first tested 0.2.1 package. Clone, normal orientation, horizontal flip,
 half turn, both quarter turns and both transpose operations pass at both depths.
 The two [vertical flip passes](VERTICAL-PREPARED-ROWS.md) follow the pool change
-and remain valid. The RGBA8 crop now passes on the qualified build below.
+and remain valid. Both crops now pass on the qualified build below.
 
 | Complete crop / FFmpeg owned output | Lokad.Image µs | FFmpeg µs | Conservative interval | GC B/op |
 | --- | ---: | ---: | ---: | ---: |
@@ -43,6 +43,7 @@ It retains all measured samples, guards, validation records and source recipes.
 [Crop row reuse](CROP-ROW-REUSE.md) qualifies the new RGBA8 crop at
 **2.165 / FFmpeg 2.521 µs**, conservative upper **0.877018**, and **56 B/op**
 on the actual package. The associated complete PNG8 stream pipeline also
-passes. Seventeen of the eighteen original pool-affected cases now have valid
-passing evidence. The RGBA16 crop stays open at upper 1.005834, using the
-source-valid word route measurement above.
+passes. The [word crop confirmation](CROP-WORD-RUNTIME-ROWS.md) passes at
+**4.156 / FFmpeg 4.298 µs**, upper **0.977282**, **56 B/op** on the same
+package. All eighteen original pool-affected cases now have valid passing
+evidence and stop.

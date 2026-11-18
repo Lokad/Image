@@ -458,15 +458,21 @@ def current_crop_costs(owned_package):
     assert qualification['timedDllUsedUnchanged'] and qualification['fullEachOs'] == [3384, 2519, 948]
     cases = stage['cases']
     assert set(cases) == {'WarmCrop8', 'PngCropFit8'}
-    crop = cases['WarmCrop8']
-    assert all(crop[key] == owned_package['cases']['WarmCrop8'][key] for key in ('inputSha256', 'outputSha256'))
-    for name, count in (('WarmCrop8', 4096), ('PngCropFit8', 256)):
+    word_crop = stage['wordCropConfirmation']
+    assert word_crop['packageSha256'] == qualification['packageSha256']
+    assert not word_crop['productionChanged'] and word_crop['builds'] == 0
+    assert word_crop['raw']['mirrored'] and word_crop['raw']['allMembersVerified']
+    cases = {**cases, 'WarmCrop16': word_crop['case']}
+    for name in ('WarmCrop8', 'WarmCrop16'):
+        crop = cases[name]
+        assert all(crop[key] == owned_package['cases'][name][key] for key in ('inputSha256', 'outputSha256'))
+        assert crop['allocatedBytes'] == 56
+    for name, count in (('WarmCrop8', 4096), ('WarmCrop16', 4096), ('PngCropFit8', 256)):
         case = cases[name]
         assert case['librarySha256'] == qualification['linuxSha256']
         assert case['actuals'] == 12 and case['status'] == 'pass' and case['upper'] <= 1
         assert case['operationsPerSubject'] == count
         assert all(case[key] for key in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed'))
-    assert crop['allocatedBytes'] == 56
     return cases
 
 
@@ -3246,6 +3252,7 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
     assert len(owned_package['cases']) == 18 and owned_package['reusedOriginalDriverAndCounts']
     crop_costs = current_crop_costs(owned_package)
     byte_crop = crop_costs['WarmCrop8']
+    word_crop = crop_costs['WarmCrop16']
     for name, label in [('WarmTranspose16', 'Plain transpose RGBA16 † → 259×513'),
                         ('WarmTranspose8', 'Plain transpose RGBA8 † → 259×513'),
                         ('WarmCounterclockwise8', 'Counterclockwise quarter turn RGBA8 † → 259×513'),
@@ -3288,7 +3295,10 @@ zero added scratch and unmeasured physical/native/JIT peaks remain distinct.
 The [qualified RGBA8 crop](../benchmarks/CROP-ROW-REUSE.md) passes at
 **{byte_crop['managedUs']:.3f} / FFmpeg {byte_crop['nativeUs']:.3f} µs,
 upper {byte_crop['upper']:.6f}**, **{byte_crop['allocatedBytes']} B/op**.
-The original RGBA16 crop remains uncertain.
+The [original RGBA16 crop](../benchmarks/CROP-WORD-RUNTIME-ROWS.md) passes at
+**{word_crop['managedUs']:.3f} / FFmpeg {word_crop['nativeUs']:.3f} µs,
+upper {word_crop['upper']:.6f}**, **{word_crop['allocatedBytes']} B/op**.
+Both crops and all eighteen original pool-affected owned edits now pass.
 Other copy, font/text, codec and resizing paths retain identified source-valid
 costs. The complete final-package refresh remains outstanding."""
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])

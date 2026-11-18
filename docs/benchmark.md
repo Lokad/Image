@@ -223,7 +223,10 @@ zero added scratch and unmeasured physical/native/JIT peaks remain distinct.
 The [qualified RGBA8 crop](../benchmarks/CROP-ROW-REUSE.md) passes at
 **2.165 / FFmpeg 2.521 µs,
 upper 0.877018**, **56 B/op**.
-The original RGBA16 crop remains uncertain.
+The [original RGBA16 crop](../benchmarks/CROP-WORD-RUNTIME-ROWS.md) passes at
+**4.156 / FFmpeg 4.298 µs,
+upper 0.977282**, **56 B/op**.
+Both crops and all eighteen original pool-affected owned edits now pass.
 Other copy, font/text, codec and resizing paths retain identified source-valid
 costs. The complete final-package refresh remains outstanding.
 

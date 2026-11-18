@@ -61,8 +61,8 @@ The package consumer and all three examples pass on both OSes.
 The [Release evidence](crop-current-package-evidence.json) retains the
 source, timings, guards, package and checks.
 
-The word crop still uses the existing copy loop and
-[retains its open measurement](OWNED-EDITS-CURRENT-PACKAGE.md). The PNG16
+The word crop uses the existing copy loop and
+[passes its subsequent confirmation](CROP-WORD-RUNTIME-ROWS.md). The PNG16
 composition and one-shot cases use that route. The borrowed copy kernels
 are independent callers of the same shared helper and retain their existing
 results. Publication stays separate.

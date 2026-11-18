@@ -1,0 +1,350 @@
+{
+  "project": "Lokad.Image",
+  "stage": "FRP1331",
+  "sourceCommit": "60718bec",
+  "originalCase": "WarmCrop16",
+  "baselinePackageSha256": "6fed564e002264ff6ec115d43d5e3e6be3c7ad0d33e0e9fdd9c479b3665f4fed",
+  "baselineDllSha256": "cc095d1a8b4fa50fb8d7e6854d7096a482aabfa4cfbdfdc2beac0206a0c7a028",
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "addedOwnedCapacityBytes": 0,
+  "addedRetainedCapacityBytes": 0,
+  "privateCoreBuilds": 1,
+  "actorBuilds": 0,
+  "referenceBuilds": 0,
+  "trials": {
+    "Fixed16-3": {
+      "candidateDllSha256": "6d4c88d7fc9bae1dd7016802c1bbdddc9f44bdee9a26cd48d6fd595ccf8f74d4",
+      "metrics": {
+        "baseline": {
+          "mean": 4.178176432291667,
+          "lower": 3.7190268802002433,
+          "upper": 4.637325984383091
+        },
+        "candidate": {
+          "mean": 4.007136311848958,
+          "lower": 2.6574463143553118,
+          "upper": 5.356826309342605
+        },
+        "candidateToBaselineInterval": [
+          0.7594222571170713,
+          1.2109434118587608
+        ],
+        "candidateToBaselineRatio": 0.9589668289752401,
+        "allocations": {
+          "baseline": [
+            56.0
+          ],
+          "candidate": [
+            56.0
+          ]
+        },
+        "nativeGroupMeansUs": [
+          4.147772379557291,
+          4.190772867838541,
+          4.179979410807292
+        ]
+      },
+      "statisticalUnits": 3,
+      "operationsPerSubject": 4096,
+      "raw": {
+        "file": "crop-word-runtime-row-Fixed16-3.tar.xz",
+        "sha256": "a1dd6987035bb237754b5b7818afade7e9a3dc982cb7de781e26db12f37b9a92",
+        "bytes": 385444,
+        "members": 18,
+        "allMembersVerified": true,
+        "memberHashes": {
+          "tmp/frp1328/actor/CropActor.dll": "8768e7b3855d056fb83dfea1a088eb0118ff50527cdfa413453a6a58fe5631fe",
+          "tmp/frp1331/Fixed16-3/baseline-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tmp/frp1328/actor/CropActor.csproj": "98e2e790941aed5c2cd50d5ae28803953ba860ba9c56bff055e4bcf25f52f9fa",
+          "tmp/frp1331/src/Lokad.Image/Internal/CropCopy.cs": "2d4167044238a958bccf6b4add406856394f7f621e80873df1ed19074221bd78",
+          "tmp/frp1331/src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "6d4c88d7fc9bae1dd7016802c1bbdddc9f44bdee9a26cd48d6fd595ccf8f74d4",
+          "tmp/frp1331/Fixed16-3/candidate-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tmp/frp1331/Fixed16-3/before.json": "fb958883d2af2cb59cccd86c7ed16d16630039b38ddbbba4aab564095b7da229",
+          "tmp/frp1331/Fixed16-3/statistics.json": "11f43a6ed21797c8eb12ed469da90e795ba2e07825277d04daaa2b83de0c4f50",
+          "tmp/frp1331/screen-vm.py": "e00d28b0701f38dc3ebdd774d58b8f659d7532d8ef5cecdd6327d9ff529c4dda",
+          "tmp/frp1331/Fixed16-3/observations.json": "a25c9f7b2f555ed962172563efed177aba591e79230f1213e44626ae376f4833",
+          "tmp/frp1331/Fixed16-3/preparation.json": "1a5b91b11579705fed3b77fa7d5c4f09a3d2284a91d76887d4a38c9b36888633",
+          "tmp/frp1331/Fixed16-3/candidate-validation.json": "361d3f2d3c9517daf142f8735404922eda7342f208e2d4c4f7286af99ccf5533",
+          "tmp/frp1331/Fixed16-3/after.json": "0d663b039ef4697a0f6b7b7955dcd5440c4540c46b0025fe9c182bb830ac3051",
+          "tmp/frp1328/actor/Program.cs": "cc9b4a9b3e2c6e2394cb457e339b769c10563afc4f9f20829234836031abc45b",
+          "tmp/frp1283-edits-preparation.json": "e384c61c838cbb5e85215bdfe57f679873d3828a55329a2fd833f70842f59378",
+          "tmp/frp1284-WarmCrop16-receipt.json": "1415900698cb69bc7435e22b93e34a568663904a3f988a52028a503dabf8c7c5",
+          "tmp/frp1331/Fixed16-3/wire.jsonl": "81aa2f0f631d1e332eb1e519dd03a1c56c7e7b04b183db78661869520b4004ab",
+          "tmp/frp1331/Fixed16-3/baseline-validation.json": "d9a3ae2222f7fbc9c2e70e24fa2e6f7a4dadca484feb5ba2c813563a142da2ad"
+        },
+        "mirrored": true
+      }
+    },
+    "Fixed16-12": {
+      "candidateDllSha256": "6d4c88d7fc9bae1dd7016802c1bbdddc9f44bdee9a26cd48d6fd595ccf8f74d4",
+      "metrics": {
+        "baseline": {
+          "mean": 4.1168326619466145,
+          "lower": 4.095215720702349,
+          "upper": 4.13844960319088
+        },
+        "candidate": {
+          "mean": 3.961742696126302,
+          "lower": 3.953131454283585,
+          "upper": 3.970353937969019
+        },
+        "candidateToBaselineInterval": [
+          0.9567186589304484,
+          0.9679822441719483
+        ],
+        "candidateToBaselineRatio": 0.962333972440271,
+        "allocations": {
+          "baseline": [
+            56.0
+          ],
+          "candidate": [
+            56.0
+          ]
+        },
+        "nativeGroupMeansUs": [
+          4.220671183268229,
+          4.15138905843099,
+          4.137815856933594
+        ]
+      },
+      "statisticalUnits": 12,
+      "operationsPerSubject": 4096,
+      "raw": {
+        "file": "crop-word-runtime-row-Fixed16-12.tar.xz",
+        "sha256": "56aa8fefe6ffe0f81e721c955e80ba23c4256a82f5ebbe30c1647caef992e299",
+        "bytes": 386860,
+        "members": 18,
+        "allMembersVerified": true,
+        "memberHashes": {
+          "tmp/frp1331/Fixed16-12/candidate-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tmp/frp1328/actor/Program.cs": "cc9b4a9b3e2c6e2394cb457e339b769c10563afc4f9f20829234836031abc45b",
+          "tmp/frp1331/Fixed16-12/baseline-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tmp/frp1328/actor/CropActor.dll": "8768e7b3855d056fb83dfea1a088eb0118ff50527cdfa413453a6a58fe5631fe",
+          "tmp/frp1328/actor/CropActor.csproj": "98e2e790941aed5c2cd50d5ae28803953ba860ba9c56bff055e4bcf25f52f9fa",
+          "tmp/frp1283-edits-preparation.json": "e384c61c838cbb5e85215bdfe57f679873d3828a55329a2fd833f70842f59378",
+          "tmp/frp1331/Fixed16-12/baseline-validation.json": "035b2ce2aa75cdd64d6d46cd03fc9ea9bd4f9bedf1a59d08bdbb7e91fb4184f3",
+          "tmp/frp1331/src/Lokad.Image/Internal/CropCopy.cs": "2d4167044238a958bccf6b4add406856394f7f621e80873df1ed19074221bd78",
+          "tmp/frp1331/Fixed16-12/after.json": "e0e490879e80e5e928bf3803516d2007c025fee89fbb940ffa38d469773e4e42",
+          "tmp/frp1331/Fixed16-12/observations.json": "5ba795014756ca0ed278f2c6066e71bbf8edfdf6c280c3161d5b5ed5c9de4dd0",
+          "tmp/frp1331/Fixed16-12/before.json": "eb17c5b887bfc617732bf13c452890d0bf7e3a08c4bfc6ef3a944a195ea5ea3e",
+          "tmp/frp1331/Fixed16-12/preparation.json": "90c6413d1667b98a0cef1f377ffd23ab6ba385b8862abba331d858db135a7233",
+          "tmp/frp1331/Fixed16-12/candidate-validation.json": "81a5ff91aed6dd2b100eb78cd9738ac5d2cdbea30828150bb87362b12658f709",
+          "tmp/frp1331/screen-vm.py": "e00d28b0701f38dc3ebdd774d58b8f659d7532d8ef5cecdd6327d9ff529c4dda",
+          "tmp/frp1284-WarmCrop16-receipt.json": "1415900698cb69bc7435e22b93e34a568663904a3f988a52028a503dabf8c7c5",
+          "tmp/frp1331/src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "6d4c88d7fc9bae1dd7016802c1bbdddc9f44bdee9a26cd48d6fd595ccf8f74d4",
+          "tmp/frp1331/Fixed16-12/statistics.json": "badbdda04795b0e208f423507b951ae057e7bfe2e07c6a160f1cc662306b0df6",
+          "tmp/frp1331/Fixed16-12/wire.jsonl": "7b925967b4ceddd089fe3bd9a8440a58545ecd84cc700d40cecee3acb16cd09b"
+        },
+        "mirrored": true
+      }
+    },
+    "standalone": {
+      "candidateDllSha256": "6d4c88d7fc9bae1dd7016802c1bbdddc9f44bdee9a26cd48d6fd595ccf8f74d4",
+      "metrics": {
+        "ratio": 0.9198774346369051,
+        "lower": 0.9115602936972008,
+        "upper": 0.9249188770878993,
+        "status": "pass",
+        "managedUs": 3.9171177368164063,
+        "nativeUs": 4.258303975423177,
+        "nativeGroupMeansUs": [
+          4.258303975423177,
+          4.2754415486653645,
+          4.2717278238932295
+        ],
+        "allocatedBytes": 56
+      },
+      "statisticalUnits": 12,
+      "operationsPerSubject": 4096,
+      "raw": {
+        "file": "crop-word-runtime-row-standalone.tar.xz",
+        "sha256": "e939be1277e52b76ecba849f9459b1f98ac24813c8970979ea9f3d6937b684d7",
+        "bytes": 392600,
+        "members": 13,
+        "allMembersVerified": true,
+        "memberHashes": {
+          "tmp/frp1331/src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "6d4c88d7fc9bae1dd7016802c1bbdddc9f44bdee9a26cd48d6fd595ccf8f74d4",
+          "tmp/frp1331/standalone/run.log": "a3de2a7ec09b566324ebe56369d350ec32efe99cd91fc830f82b8d6bc8bc864c",
+          "tmp/frp1331/standalone/observations.json": "40222ae7ae3aa7944afc8c67febefd285147a4a84689e9aa8506e848eeeb814c",
+          "tmp/frp1331/standalone/metrics.json": "f04839f2d72d632befd739413527e20adfbd20ff2b94ba225c8d2f93fe34291f",
+          "tmp/frp1331/standalone/validation.json": "71a6963a475f2dc2a005b1cd382be737d8651abb3bba2ca4ab0b2e9c20ea2020",
+          "tmp/frp1331/standalone/after.json": "d602b837a4a7e1e6e5766aa4bacde9c602035ba7526b764b9583ca07e42b5938",
+          "tmp/frp1331/standalone/before.json": "b678432f1ea616204b3f9ebd63b75ade0a76331a38bd080b41026f96eced76dd",
+          "tmp/frp1331/standalone/preparation.json": "9cb8716d3e5803580a4158d52dff110ba9da054a33374e5530c11f67083b02fb",
+          "tmp/frp1331/src/Lokad.Image/Internal/CropCopy.cs": "2d4167044238a958bccf6b4add406856394f7f621e80873df1ed19074221bd78",
+          "tmp/frp1284-WarmCrop16-receipt.json": "1415900698cb69bc7435e22b93e34a568663904a3f988a52028a503dabf8c7c5",
+          "tmp/frp1283-edit-runtime-1aedbdc2/AdjacentManagedNative.dll": "df068695dd7c14b1e2c2e39edf5e639bf086de6408ead5261eef5bd35aedfd60",
+          "tmp/frp1283-edits-preparation.json": "e384c61c838cbb5e85215bdfe57f679873d3828a55329a2fd833f70842f59378",
+          "tmp/frp1331/standalone-vm.py": "09986a3829e4d8f3e875d53114c455b23f76a4c6ea8aa07f66ddfc73f4255341"
+        },
+        "mirrored": true
+      }
+    }
+  },
+  "stagedReleaseTrial": {
+    "cases": {
+      "WarmCrop16": {
+        "ratio": 0.9571358108225493,
+        "lower": 0.9331589499211137,
+        "upper": 0.9788117069652628,
+        "status": "pass",
+        "caseId": "WarmCrop16",
+        "librarySha256": "4a43e5ea729cea05b7f4a1cb60d896f8c70bcaa6f35306d682aa1c53d0fc4d05",
+        "sourceSha256": "2d4167044238a958bccf6b4add406856394f7f621e80873df1ed19074221bd78",
+        "operationsPerSubject": 4096,
+        "actuals": 12,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "allActualsRetained": true,
+        "driverSha256": "df068695dd7c14b1e2c2e39edf5e639bf086de6408ead5261eef5bd35aedfd60",
+        "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "outputSha256": "7e4f1497475b7b581a3883f16de4f0274816934a39bea6a31926a71f1a13fc31",
+        "managedUs": 3.9623628133138022,
+        "nativeUs": 4.1398125203450515,
+        "nativeGroupMeansUs": [
+          4.1398125203450515,
+          4.147640848795573,
+          4.145833129882813
+        ],
+        "allocatedBytes": 56,
+        "validationSha256": "18fb8342831a01cc022afd08b56560033df1dfba88a969ba74d1010fa2dfb717",
+        "nativeWorkerSha256": "8efa62424dcc6b67a5741520af82b07561b4b8f255fee40227eaf679de1e3aba"
+      },
+      "PngCropFit16": {
+        "ratio": 0.9678195497748564,
+        "lower": 0.8248097644639415,
+        "upper": 1.0340285612473128,
+        "status": "uncertain",
+        "caseId": "PngCropFit16",
+        "librarySha256": "4a43e5ea729cea05b7f4a1cb60d896f8c70bcaa6f35306d682aa1c53d0fc4d05",
+        "sourceSha256": "2d4167044238a958bccf6b4add406856394f7f621e80873df1ed19074221bd78",
+        "operationsPerSubject": 256,
+        "actuals": 12,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "allActualsRetained": true,
+        "driverSha256": "c594e13a98d62f39ab4cc561ea30411299cec739b695402f92b6d90fb95a64bb",
+        "inputSha256": "3e4b64d778c395392451d5331d2a11b541d262e2f39826e1322d22d6f03bb4a8",
+        "outputSha256": "4ee60a74d23fcf4977f0d0563b43fd660dda214610371b67246202049bfe86df",
+        "managedUs": 2846.369474283854,
+        "nativeUs": 2941.0125833333336,
+        "nativeGroupMeansUs": [
+          2941.0125833333336,
+          2943.154150390625,
+          3155.243224283854
+        ],
+        "allocatedBytes": 8888.161458333334,
+        "validationSha256": "ebd43206022bdc36d123c52d2d1e57a795747cb788425cfa2969300ceed41406",
+        "nativeWorkerSha256": "78ba7dbbb443f478fb36c0cbc59cf042a2ccc4e778c6bda8bce7559c68ee45de"
+      },
+      "PngCropFit16OneShot": {
+        "ratio": 0.8613753165274739,
+        "lower": 0.849205841196977,
+        "upper": 0.8685618656326433,
+        "status": "pass",
+        "caseId": "PngCropFit16OneShot",
+        "librarySha256": "4a43e5ea729cea05b7f4a1cb60d896f8c70bcaa6f35306d682aa1c53d0fc4d05",
+        "sourceSha256": "2d4167044238a958bccf6b4add406856394f7f621e80873df1ed19074221bd78",
+        "operationsPerSubject": 64,
+        "actuals": 12,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "allActualsRetained": true,
+        "driverSha256": "546fdf27be0f454dbc587b2467802bd87e0983a1d6bad7685b150779b7c62c0b",
+        "inputSha256": "3e4b64d778c395392451d5331d2a11b541d262e2f39826e1322d22d6f03bb4a8",
+        "outputSha256": "4ee60a74d23fcf4977f0d0563b43fd660dda214610371b67246202049bfe86df",
+        "managedUs": 3082.1276067708336,
+        "nativeUs": 3578.1471184895836,
+        "nativeGroupMeansUs": [
+          3578.1471184895836,
+          3591.8698723958337,
+          3606.8308567708336
+        ],
+        "allocatedBytes": 8888,
+        "validationSha256": "f2873115f43a77c30394584a41da2ad6eac0be8dbb4d11bc21bd5aac0797cfa0",
+        "nativeWorkerSha256": "22f0f118c94b7cc6208075a9bcea7a48214c47f5f69eaf69d39a26aabecce24f"
+      },
+      "PngCropFit16Partitioned": {
+        "ratio": 0.9508332787018691,
+        "lower": 0.8917675791199439,
+        "upper": 1.0108380311755638,
+        "status": "uncertain",
+        "caseId": "PngCropFit16",
+        "librarySha256": "4a43e5ea729cea05b7f4a1cb60d896f8c70bcaa6f35306d682aa1c53d0fc4d05",
+        "sourceSha256": "2d4167044238a958bccf6b4add406856394f7f621e80873df1ed19074221bd78",
+        "operationsPerSubject": 256,
+        "actuals": 12,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "allActualsRetained": true,
+        "driverSha256": "5b320f32f6f8b430c8c7bc0bc25c6c8b9104f00431df3b7b17d786cc44e86158",
+        "inputSha256": "3e4b64d778c395392451d5331d2a11b541d262e2f39826e1322d22d6f03bb4a8",
+        "outputSha256": "4ee60a74d23fcf4977f0d0563b43fd660dda214610371b67246202049bfe86df",
+        "managedUs": 2961.654289388021,
+        "nativeUs": 3114.79873046875,
+        "nativeGroupMeansUs": [
+          3114.79873046875,
+          3124.475302734375,
+          3124.3997740885416
+        ],
+        "allocatedBytes": 8888.161458333334,
+        "validationSha256": "d694d752a1f975bb2b2dee643221b732aa5a369183dc3e07c309177a38a5ef85",
+        "nativeWorkerSha256": "78ba7dbbb443f478fb36c0cbc59cf042a2ccc4e778c6bda8bce7559c68ee45de"
+      }
+    },
+    "raw": {
+      "file": "crop-word-runtime-row-release-trial.tar.xz",
+      "sha256": "922449076979e244755ac783fda97e6cdab7536206bcec838a612f1b661ba1bc",
+      "bytes": 539988,
+      "members": 40,
+      "allMembersVerified": true,
+      "memberHashes": {
+        "tmp/frp1332-archive.py": "3e7908d796f612cc3adb029f8ba43a5bce4f59cdb40382d82a8fce556a4be89d",
+        "tmp/frp1332-costs/PngCropFit16/after.json": "6149d26f5ec05dbfa8b2c1a82aa4d553cbb35d17e56bd3c7ea0eab496aefe8b3",
+        "tmp/frp1332-costs/PngCropFit16/before.json": "8908cf1daa51ee0044ede7850a0ac383cf814d8bb8c14fa921e9607f96441a3e",
+        "tmp/frp1332-costs/PngCropFit16/metrics.json": "ac319afed066ee02a2185b87f3f3d24a5045fd35406a4f5b6ff8a3a88f932cac",
+        "tmp/frp1332-costs/PngCropFit16/observations.json": "8beeb7d179adba8d92e7695869e6aca2fffdc0ee35d17bf48a0be143fbcdc8fd",
+        "tmp/frp1332-costs/PngCropFit16/preparation.json": "929a5395957d2ba8c815e6c1fd06d35746d5aa21b3d6bd5118eef64eeb457435",
+        "tmp/frp1332-costs/PngCropFit16/run.log": "42a1f209a3745f5b8293566f663d0b5437f3965479d36410740cc577c888ba65",
+        "tmp/frp1332-costs/PngCropFit16/validation.json": "ebd43206022bdc36d123c52d2d1e57a795747cb788425cfa2969300ceed41406",
+        "tmp/frp1332-costs/PngCropFit16OneShot/after.json": "6a0fb55c18c60b33a7b6e0e0f7facedc932635c734327cbc41096180ef4646a0",
+        "tmp/frp1332-costs/PngCropFit16OneShot/before.json": "4d5aa8224c039879fb7237a2d398c2e723e8257fba40bf58ec270479c9144183",
+        "tmp/frp1332-costs/PngCropFit16OneShot/capture.log": "b8ba55581dc3e4017ef77b06fb2e0f8149dc04d9c568159b2634fa9e344100f3",
+        "tmp/frp1332-costs/PngCropFit16OneShot/metrics.json": "0bc8a0c4b4eb39978a2a129d5676b222e2b334d68076943f85c4451b89de545b",
+        "tmp/frp1332-costs/PngCropFit16OneShot/observations.json": "1402d834ce38debb96b6e1f5bc298ef2f6c7ca61adaf2791a7fdf9833a6cf597",
+        "tmp/frp1332-costs/PngCropFit16OneShot/preparation.json": "bd129e55b3b487f5c9cf97c5096a605bf70a5926c27147bcec5f2e1438d77f3d",
+        "tmp/frp1332-costs/PngCropFit16OneShot/receipt.json": "9fe6f5d04f6e0c40406c8f5a5ca4ed8e06420cb1faaddb8b9bac4f2a85359632",
+        "tmp/frp1332-costs/PngCropFit16OneShot/validation.json": "f2873115f43a77c30394584a41da2ad6eac0be8dbb4d11bc21bd5aac0797cfa0",
+        "tmp/frp1332-costs/PngCropFit16Partitioned/after.json": "a5f355ac0088847960a95cfe93bc01480b07100b3c19f799fdb02d91c2fd051e",
+        "tmp/frp1332-costs/PngCropFit16Partitioned/before.json": "db22236a13c5daecbabf4b32f7c22535d2343e65c52a7b41528e988d631238ff",
+        "tmp/frp1332-costs/PngCropFit16Partitioned/metrics.json": "6fd81b3b96b3985dc3a6d62e61da07f53acfca35244f66af1afba9890736e97f",
+        "tmp/frp1332-costs/PngCropFit16Partitioned/observations.json": "1cba64970016e793d9af64328f455317ca3f775560ed65dbf840de8a3b51bf02",
+        "tmp/frp1332-costs/PngCropFit16Partitioned/preparation.json": "7f90008ee13e206edd70d3930f782882c1a9588bfdb53c55af64c03b53c5f086",
+        "tmp/frp1332-costs/PngCropFit16Partitioned/run.log": "c503f60c0519b2cf011f5db6dde80463d6bae331002d8cb5155427d6874c249d",
+        "tmp/frp1332-costs/PngCropFit16Partitioned/validation.json": "d694d752a1f975bb2b2dee643221b732aa5a369183dc3e07c309177a38a5ef85",
+        "tmp/frp1332-costs/WarmCrop16/after.json": "d226d09009a4cce476cb8d16da4d1b0d83d1afa36972e0b5b0eef4fac69f66dc",
+        "tmp/frp1332-costs/WarmCrop16/before.json": "0bf6af6deba626b11dfff4738dfacba3b5ce81e381c0d86e05d9f800c35dc18f",
+        "tmp/frp1332-costs/WarmCrop16/metrics.json": "84a9934dcf57b025d84c586bdb596d0b555bdf8a83cc7ba0c11ef82a0df23f3e",
+        "tmp/frp1332-costs/WarmCrop16/observations.json": "393ba899d4ea9987e975a0c8b452bb55c797f95bc8c76977495bf29ac4946e4e",
+        "tmp/frp1332-costs/WarmCrop16/preparation.json": "c64897c71aef2c961f88917c9c2c6453e7722481798d4b92e6543038bce18567",
+        "tmp/frp1332-costs/WarmCrop16/run.log": "424d9dc083eba9a62371322989eb59a853eb5693c4d322a2ae197c742dcef6bb",
+        "tmp/frp1332-costs/WarmCrop16/validation.json": "18fb8342831a01cc022afd08b56560033df1dfba88a969ba74d1010fa2dfb717",
+        "tmp/frp1332-final-cost-vm.py": "45999424a8c6fb93df9d92e7b8f0f9e83fff98d7e633a73946aa2bff1fbe7175",
+        "tmp/frp1332-linux-build.log": "c68c7a8ef2f30f30996735dcc91543162ae7dde3e55b502dc061b08b8f705c26",
+        "tmp/frp1332-one-shot-vm.py": "2dea20cd44cedd22a32e963021142aab2043ed4a8749d0fb057f7da2bc90b058",
+        "tmp/frp1332-partitioned/PngCropPartitioned.csproj": "d0eefac52652fb9102f39531ea097a6bd0861c60c5557258ed1d032cac21d22f",
+        "tmp/frp1332-partitioned/PngCropPartitioned.dll": "5b320f32f6f8b430c8c7bc0bc25c6c8b9104f00431df3b7b17d786cc44e86158",
+        "tmp/frp1332-partitioned/Program.cs": "e9627b33db7ce73986238bba592bed224c03ed7242884e4b8c6ccd5ef8751b56",
+        "tmp/frp1332-partitioned-vm.py": "ba8cb3d19859539ba64fe2c26c9a90865b7dcc376534118fb3a1bc3d2994cd7f",
+        "tmp/frp1332-release/src/Lokad.Image/Internal/CropCopy.cs": "2d4167044238a958bccf6b4add406856394f7f621e80873df1ed19074221bd78",
+        "tmp/frp1332-release/src/Lokad.Image/bin/Release/net10.0/Lokad.Image.dll": "4a43e5ea729cea05b7f4a1cb60d896f8c70bcaa6f35306d682aa1c53d0fc4d05",
+        "tmp/frp1332-release/stage-inputs.json": "24ee234c91bf6bc81828ea5d3d51ca39024c5cda563de762eb703c0c21c12703"
+      },
+      "mirrored": true
+    },
+    "disposition": "private"
+  },
+  "productionChanged": false,
+  "acceptance": "Private candidate. Prepared PNG16 confidence remains open for this producer."
+}
