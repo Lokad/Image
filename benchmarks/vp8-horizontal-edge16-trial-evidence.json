@@ -1,0 +1,115 @@
+{
+  "project": "Lokad.Image",
+  "stage": "FRP1357",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "windowsFocusedPerMode": 35,
+  "cases": {
+    "Opaque8": {
+      "stats": {
+        "baseline": {
+          "mean": 4749.9928125,
+          "lower": 4275.0642463187005,
+          "upper": 5224.921378681299
+        },
+        "candidate": {
+          "mean": 4672.630666666667,
+          "lower": 4030.557021866906,
+          "upper": 5314.704311466428
+        },
+        "candidateToBaselineInterval": [
+          0.9120596689568836,
+          1.0609772532892725
+        ],
+        "candidateToBaselineRatio": 0.983704509700854,
+        "allocations": {
+          "baseline": [
+            230880.0
+          ],
+          "candidate": [
+            230880.0
+          ]
+        },
+        "nativeGroupMeansUs": [
+          4850.6164375,
+          4796.076979166666,
+          4799.105520833334
+        ]
+      },
+      "actuals": 3,
+      "operationsPerSubject": 16,
+      "reusedFrozenActor": true,
+      "allGuardsAndGatesPassed": true,
+      "raw": {
+        "file": "vp8-decoder-horizontal-edge16-Opaque8-3.tar.xz",
+        "sha256": "617f7b8706d147a37bb56e7f4edcf635673741964226b300761590067fa6aada",
+        "bytes": 398328,
+        "members": 22,
+        "allMembersVerified": true,
+        "mirrored": true
+      }
+    },
+    "OpaqueCancelable8": {
+      "stats": {
+        "baseline": {
+          "mean": 4772.579375,
+          "lower": 4435.374074895259,
+          "upper": 5109.784675104742
+        },
+        "candidate": {
+          "mean": 4801.70075,
+          "lower": 4043.7480756131004,
+          "upper": 5559.653424386899
+        },
+        "candidateToBaselineInterval": [
+          0.8054709018753072,
+          1.2566568590725073
+        ],
+        "candidateToBaselineRatio": 1.0060817728320712,
+        "allocations": {
+          "baseline": [
+            230880.0
+          ],
+          "candidate": [
+            230880.0
+          ]
+        },
+        "nativeGroupMeansUs": [
+          4787.457125,
+          4794.787354166667,
+          4835.156229166667
+        ]
+      },
+      "actuals": 3,
+      "operationsPerSubject": 16,
+      "reusedFrozenActor": true,
+      "allGuardsAndGatesPassed": true,
+      "raw": {
+        "file": "vp8-decoder-horizontal-edge16-OpaqueCancelable8-3.tar.xz",
+        "sha256": "f1df6cfa15a5bc4e0c877be788170a50990d0cfdb8bc2b86af2279fa771b5849",
+        "bytes": 398436,
+        "members": 22,
+        "allMembersVerified": true,
+        "mirrored": true
+      }
+    }
+  },
+  "baselinePackageSha256": "d799f4cd633bcc4609bf0d16e8152b9371da3657c5cf5a69ce4d26b525b4e1f1",
+  "baselineLibrarySha256": "b874f8d2e1111e9c1bcf9452fd750cce2c7b812fbcf69a1f9a9c9219109a72d9",
+  "privateLibrarySha256": "082c9622b7282f818c99a026ea03b307a51c32e41839727018fd42ff44e92b9d",
+  "sourcePath": "src/Lokad.Image/Internal/Vp8LoopFilter.cs",
+  "originalSha256": "b892f7b0397be3e5b5fc06df2cdf19162f2a4bdc3de94cecdb2de54775d992fb",
+  "candidateSourceSha256": "50b6d4949e18b56efe0104a4f16fdb632fb25225659ebac3ec023649fb550db4",
+  "mechanism": "Horizontal AVX2 16-pixel edges only. Preserve scalar, 8-lane and vertical filtering.",
+  "windowsLogs": {
+    "normal": {
+      "file": "frp1357-windows-normal.log",
+      "sha256": "5a018b4b1d0783401a94b2063895460ac6107c01c8d915832c6309547ff31670"
+    },
+    "scalar": {
+      "file": "frp1357-windows-scalar.log",
+      "sha256": "8da2e57571d751d42a1205fdf0eddf4da51c7f807b3050f5df0a3db46fee4322"
+    }
+  },
+  "disposition": "Keep the current filter. Neither result establishes a reliable gain. No confirmation or production change."
+}

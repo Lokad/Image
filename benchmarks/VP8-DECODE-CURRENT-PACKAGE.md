@@ -281,3 +281,20 @@ source and ownership gates pass. The adverse point and overlapping interval
 give no reason for independent confirmation. Production and its
 qualification stay in place.
 [Refill trial evidence](vp8-prefix-refill-trial-evidence.json)
+
+### Sixteen-pixel horizontal filter
+
+This private variant filters one horizontal luma edge in sixteen AVX2 lanes
+instead of two eight-lane passes. It widens 16 input bytes without loss and
+narrows with the same unsigned saturation. Thresholds, edge order,
+cancellation and ownership remain exact. The eight-pixel, vertical and
+portable implementations are unchanged. Thirty-five focused Windows tests
+pass in each normal and scalar mode, including the whole-plane scalar oracle.
+
+Three alternating quiet-VM pairs in each original complete operation give
+ordinary opaque **4,749.99 → 4,672.63 µs**, interval **0.912060–1.060977**,
+and live token **4,772.58 → 4,801.70 µs**, interval **0.805471–1.256657**.
+Both allocate **230,880 B/op**. The exact frame, source, owner and quiet
+guards pass. These mixed results give no basis to keep the specialized
+kernel or repeat standalone timing. The production uncertainties remain.
+[Filter trial evidence](vp8-horizontal-edge16-trial-evidence.json)
