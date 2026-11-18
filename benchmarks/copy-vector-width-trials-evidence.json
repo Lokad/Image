@@ -1941,5 +1941,70 @@
       "allMembersVerified": true,
       "mirrored": true
     }
+  },
+  "stagedFourVectorTail": {
+    "package": {
+      "linuxSha256": "6ac84ac61e98222b7fef7653a99bd45b30cf932a5dd8c54509cb68a3758c4a1e",
+      "packageSha256": "d52e53f26295a8a807941b9d22aabde91c7d801169fcea2302cf729d0b108332"
+    },
+    "candidateSha256": "f7d1b171d3e4c6293221b1cc114108da9ee74e5c6448c0301b38340fbc879dbb",
+    "allOriginalGatesPassed": true,
+    "standaloneCaptures": 0,
+    "productionChanged": false,
+    "privateCoreBuilds": 1,
+    "allocationBytesPerOperation": 0,
+    "codegen": {
+      "methodBytes": 510,
+      "sampleCommands": 0,
+      "vectorMoves": 16,
+      "stackVectorMoves": [],
+      "codegenSha256": "08a365e890912cfa65f567d4f4f3ca6bdcc0c4ee668e596ae8845f9d1fca638c"
+    },
+    "qualifiedLengthsInModel": 1009,
+    "model": {
+      "cache": {
+        "sets": 64,
+        "ways": 12,
+        "lineBytes": 64
+      },
+      "analyzedPriorPlacements": 8,
+      "warmLineFillsIdentical": true,
+      "hardwareCountersAvailable": false,
+      "sourceInputs": {
+        "tmp\\native-rgba8-copy-attribution.tar.xz": "2e80d420a7f0975fbcca4a9387b055a4e2125c09870b71a02a513d4a844df511",
+        "tmp\\frp1402\\native-and-managed-shared-copy-storage.tar.xz": "a8055e64f97345aaa5717f094a8f83e2de8ad0ac48ea78005e2ab73a2c1b8aab",
+        "tmp\\bcp1265-local-records.tar": "50d7c507db262aa5839ef7868ac600bb2e1573020329a02d95e31ea2a0b87250"
+      }
+    },
+    "raw": {
+      "file": "rgba8-staged-tail-and-cache-model.tar.xz",
+      "bytes": 46324,
+      "sha256": "b0285084c179a50ee413b71674d08db7dec461a5a42bbe45ff718fe7a4653475",
+      "members": 37,
+      "allMembersVerified": true,
+      "mirrored": true
+    },
+    "pairedScreens": {
+      "OriginalClippedCopy8": {
+        "baselineUs": 1.9535712432861327,
+        "candidateUs": 1.960442352294922,
+        "interval": [
+          0.9811979477951116,
+          1.0263427608865694
+        ],
+        "actuals": 3,
+        "operationsPerActual": 65536
+      },
+      "DrawingCopy8": {
+        "baselineUs": 1.959898900349935,
+        "candidateUs": 1.9611311798095703,
+        "interval": [
+          0.938141995418679,
+          1.06726732351631
+        ],
+        "actuals": 3,
+        "operationsPerActual": 65536
+      }
+    }
   }
 }

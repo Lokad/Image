@@ -1021,3 +1021,35 @@ original standalone result uncertain. A new scored run needs a concrete
 reason to expect different timing or better control of a measured
 source of variance.
 [Reproducible review of the retained samples](copy-vector-width-trials-evidence.json)
+
+## RGBA8 cache-line reuse and staged tail
+
+On the quiet VM, CPU 0 reports a 48 KiB L1 data cache with 64 sets, 12 ways
+and 64-byte lines. Hardware cycle, instruction and cache events are unavailable.
+An in-order, write-allocate LRU model replays the original managed and native
+vector schedules on the eight retained shared-buffer placements. Both schedules
+fill the same number of source and destination lines in every placement. Clipped
+RGBA8 fills 2,169 lines per buffer per warm copy. Separate RGBA8 ranges from 2,153
+to 2,185 depending on placement and buffer. The model gives no evidence of a
+difference in L1 line reuse. Prefetching, split-instruction cost, other working
+data and actual cache replacement are outside the model.
+
+The private candidate loads the last four vectors before the middle loop and
+writes them afterward. This follows the ordering seen in the frozen native
+copy, using the existing bounded unaligned managed accesses. Separate RGBA8
+rows with four end vectors are eligible. The model verifies coverage for all
+1,009 eligible row lengths. The 510-byte Linux helper retains all four tail
+vectors across the middle loop with no vector spills. Its original per-row
+cancellation checkpoint remains.
+
+Three alternating quiet-VM pairs of 65,536 complete calls per side give
+**1.953571 → 1.960442 µs** for clipped RGBA8 (interval **0.981198–1.026343**)
+and **1.959899 → 1.961131 µs** for separate RGBA8 (**0.938142–1.067267**).
+The qualified JPEG marker-coalescing package supplies the managed baseline.
+Both operations allocate **0 B/op** and pass the original exact-frame, source,
+ownership and idle guards. Both point estimates are adverse and both intervals
+include parity between the managed builds. Stop the candidate at screening.
+The original standalone copy scores still apply.
+
+The 37-member archive retains the model, source, assembly, actuals, guard
+records and commands. [Verified evidence](copy-vector-width-trials-evidence.json)
