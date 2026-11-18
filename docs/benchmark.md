@@ -9,6 +9,10 @@ corrected per-operation native preparation. Current
 font loading and complete text integrations use the mapping-validation package;
 ordinary/clipped drawing retains the source-valid scan-band-coordinate package.
 JPEG stream probes and complete headers use the pending-publication package.
+[Original resident PNG decode](../benchmarks/PNG-CURRENT-PACKAGE.md) also passes on
+that actual package: **1,192.53 / FFmpeg 1,396.53 µs,
+upper 0.862908**, **4,472 B/op**, natural GC.
+This nondisplayed required path stops; the other 46 original decoder costs await refresh.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing

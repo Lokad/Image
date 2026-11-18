@@ -3407,6 +3407,20 @@ costs. The complete final-package refresh remains outstanding."""
         assert all(a[k] for k in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed', 'exactManagedObservations', 'independentOutputs'))
         editing += (f'\n| {label} / corrected ImageSharp integration (parity confirmed) | '
                     f'{a["managedUs"]:.3f} | {a["referenceUs"]:.3f} | {a["ratio"]:.3f} / {a["upper"]:.6f} | {a["allocatedBytes"]:,} |')
+    png_package = json.loads((ROOT / 'benchmarks/png-current-package-cost-evidence.json').read_text(encoding='utf-8'))
+    png_package_case = png_package['case']
+    assert png_package['measurementAccepted'] and not png_package['productionChanged']
+    assert not png_package['productionSpeedupClaim'] and png_package['newRequiredPaths'] == 0
+    assert png_package['producers'] == jpeg_pending['producers']
+    assert png_package['raw']['mirrored'] and png_package['raw']['allMembersVerified']
+    assert png_package['sourceReconciliation']['originalPngDecoderCases'] == 47
+    assert png_package_case['caseId'] == 'Decode8' and png_package_case['status'] == 'pass'
+    assert png_package_case['librarySha256'] == png_package['producers']['linuxSha256']
+    assert png_package_case['actualIterations'] == png_package_case['nativeSamplesEachBracket'] == 12
+    assert all(png_package_case[k] for k in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed',
+                                           'originalGeneratedLoopsAndConsumer', 'completePublicDecodeAndIndependentOutputDisposal'))
+    assert not png_package_case['forceGcBetweenIterations'] and png_package_case['upper'] <= 1
+    assert math.isclose(png_package_case['ratio'], png_package_case['managedUs'] / png_package_case['nativeUs'], rel_tol=1e-12)
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
 
@@ -3419,6 +3433,10 @@ corrected per-operation native preparation. Current
 font loading and complete text integrations use the mapping-validation package;
 ordinary/clipped drawing retains the source-valid scan-band-coordinate package.
 JPEG stream probes and complete headers use the pending-publication package.
+[Original resident PNG decode](../benchmarks/PNG-CURRENT-PACKAGE.md) also passes on
+that actual package: **{png_package_case['managedUs']:,.2f} / FFmpeg {png_package_case['nativeUs']:,.2f} µs,
+upper {png_package_case['upper']:.6f}**, **{png_package_case['allocatedBytes']:,} B/op**, natural GC.
+This nondisplayed required path stops; the other 46 original decoder costs await refresh.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing
