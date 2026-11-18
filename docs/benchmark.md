@@ -32,6 +32,12 @@ Compact horizontal coefficients
 close the tight 128×64 RGBA16 gap at **405.66 /
 448.29 µs**, upper **0.918803**,
 with **112 B/op**. [Bicubic measurements and open cases](../benchmarks/BICUBIC-CURRENT-PACKAGE.md)
+Deferred fallback views close the tight 256×129 RGBA8 reduction on the newly
+qualified package at **422.56 /
+450.23 µs**, upper
+**0.947041**, **112 B/op**. The affected RGBA16
+reduction also passes at upper **0.834755**,
+**113 B/op**. Both keep the same complete prepared-zimg reference boundary.
 The four prepared bicubic operations also pass on that package, with
 **137 B/op** and unchanged retained plan capacity.
 [Current-package bilinear](../benchmarks/BILINEAR-CURRENT-PACKAGE.md) confirms
@@ -520,8 +526,8 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic RGBA8 enlargement, input+output+4 KiB † → 1027×519 | 3,031.48 | 3,301.11 | 0.918 / 0.925615 | 116 |
 | Bicubic RGBA8 width enlargement, input+output+4 KiB † → 1027×259 | 1,427.16 | 1,534.77 | 0.930 / 0.946599 | 114 |
 | Bicubic RGBA8 height enlargement, input+output+4 KiB † → 513×519 | 1,562.10 | 1,830.43 | 0.853 / 0.864226 | 126 |
-| Bicubic RGBA8 reduction, input+output+4 KiB (confidence open) † → 256×129 | 458.97 | 460.68 | 0.996 / 1.002833 | 112 |
-| Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 495.34 | 569.89 | 0.869 / 0.873750 | 113 |
+| Bicubic RGBA8 reduction, input+output+4 KiB † → 256×129 | 422.56 | 450.23 | 0.939 / 0.947041 | 112 |
+| Bicubic RGBA16 reduction, input+output+4 KiB † → 256×129 | 512.36 | 618.28 | 0.829 / 0.834755 | 113 |
 | Bicubic RGBA8, fresh managed / prepared zimg † → 128×64 | 371.44 | 381.07 | 0.975 / 0.987210 | 198,350 |
 | Bicubic RGBA8, width up / height down, input+output+4 KiB † → 1027×129 | 921.58 | 944.33 | 0.976 / 0.984461 | 114 |
 | Bicubic RGBA16, width up / height down, input+output+4 KiB † → 1027×129 | 872.48 | 907.53 | 0.961 / 0.974925 | 114 |

@@ -229,21 +229,22 @@ internal static partial class ColumnBicubicResize
                     for (; x + 1 < length; x += 2)
                     {
                         var count0 = counts[x]; var count1 = counts[x + 1];
-                        var offsets0 = offsets.Slice(x * 10, count0);
-                        var offsets1 = offsets.Slice((x + 1) * 10, count1);
-                        var weights0 = weights.Slice(x * 10, count0);
-                        var weights1 = weights.Slice((x + 1) * 10, count1);
                         if (count0 == 8 && count1 == 8 && offsets[x * 10 + 9] != 0)
                         {
                             var firstPixel = offsets[x * 10 + 9] - 1;
                             var pair = typeof(TSamples) == typeof(ByteSamples)
                                 ? FilterPreparedBytePair(decoded.Slice(firstPixel, 10), weights.Slice(x * 10, 16))
-                                : BicubicMath.FilterOverlappingHorizontalPair(
-                                    decoded.Slice(firstPixel, 10), weights0, weights1, 8, 2);
+                                : BicubicMath.FilterOverlappingHorizontalPair(decoded.Slice(firstPixel, 10),
+                                    weights.Slice(x * 10, count0), weights.Slice((x + 1) * 10, count1), 8, 2);
                             cache[slot * cacheStride + x] = pair.GetLower();
                             cache[slot * cacheStride + x + 1] = pair.GetUpper();
                             continue;
                         }
+                        // The overlapping byte pair reads compact weights and needs no fallback views.
+                        var offsets0 = offsets.Slice(x * 10, count0);
+                        var offsets1 = offsets.Slice((x + 1) * 10, count1);
+                        var weights0 = weights.Slice(x * 10, count0);
+                        var weights1 = weights.Slice((x + 1) * 10, count1);
                         var shared = Math.Min(count0, count1);
                         var sum = Vector512<double>.Zero;
                         for (var tx = 0; tx < shared; tx++)

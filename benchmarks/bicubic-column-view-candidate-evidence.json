@@ -32,7 +32,7 @@
     "passed": 701,
     "logSha256": "0c110ebd9f710018df202cf13cdb7588dd040e30e9137a06848c3775b4ed784b"
   },
-  "next": "Reconcile bounded RGBA16 and prove affected dispatch before final DLL and package qualification.",
+  "next": "Time the final immutable Linux DLL at both affected boundaries before Windows/Linux and Release-package qualification.",
   "screen": {
     "baseline": {
       "mean": 448.7728169642857,
@@ -157,5 +157,93 @@
     "observationsSha256": "70c9a0b33b490205366ecb5760d89f728b6ea29a479a918dd3bcef544d031a85"
   },
   "candidateDllSha256": "eb64c744123ae3b99ff98f52fe61fcaac7a0c6ff2d0d07e5e4fe8bb162e2dbf6",
-  "candidateSourceSha256": "426c5d955038d3c711e04b4607392ae2699791d847de8ee6f52ad7da57402f6d"
+  "candidateSourceSha256": "426c5d955038d3c711e04b4607392ae2699791d847de8ee6f52ad7da57402f6d",
+  "boundedWord": {
+    "allActualsRetained": true,
+    "actuals": 12,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "librarySha256": "eb64c744123ae3b99ff98f52fe61fcaac7a0c6ff2d0d07e5e4fe8bb162e2dbf6",
+    "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+    "managedOutputSha256": "2676207be4d1a7c9109061fc3c8eb5a0d6b8d10a97bbbc611fbebda3330ffd9f",
+    "nativeOutputSha256": "0be58309816eda22e05a1122c6157f4971865909c730a3eb7c86b1946c092f86",
+    "nativeWorkerSha256": "d7f9edea4a86e458045791399e6265fca68d1bc4088e9ece20b79bec45618a5f",
+    "managedUs": 516.6539090000001,
+    "nativeUs": 618.6050123697917,
+    "ratio": 0.835191921612095,
+    "lower": 0.8291080906984835,
+    "upper": 0.841760134375027,
+    "status": "pass",
+    "allocatedBytes": 113,
+    "raw": {
+      "file": "bicubic-column-view-private-word.tar.xz",
+      "bytes": 23432,
+      "sha256": "70be2207a00687979b247daa02fc9acc32562653a9c54c6c4c81b5604685c40e",
+      "members": 10,
+      "allMembersVerified": true,
+      "mirrored": true
+    },
+    "validationSha256": "1ddf2e831077c762b39a2e9df3fe01dd957a995d0d1c7c1c9e8e0fc73a94969c",
+    "rawLogSha256": "3f3fbf1373379ac882dadb883bf00ebfd004f65570976c4166eabf04bc140c5f"
+  },
+  "dispatch": {
+    "originalDirectCases": 61,
+    "onlyGeometryEligible": [
+      "Down16",
+      "Down8",
+      "TightDown16",
+      "TightDown8"
+    ],
+    "runtimePinCount": 127,
+    "sourceSha256": "426c5d955038d3c711e04b4607392ae2699791d847de8ee6f52ad7da57402f6d",
+    "toolSha256": "315a496d70049a3a9db3fb5df2cab8db9a5f8f44d2498eb3d71c5e32f2c902be",
+    "cases": {
+      "Down8": {
+        "route": "cached",
+        "librarySha256": "eb64c744123ae3b99ff98f52fe61fcaac7a0c6ff2d0d07e5e4fe8bb162e2dbf6",
+        "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "outputSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+        "jitSha256": "0281c9efe0d944b0fa8b479ab86a30e9235da6058993c5cdc68613bbde80e82b",
+        "originalGatesPassed": true,
+        "timedOperations": 0
+      },
+      "Down16": {
+        "route": "cached",
+        "librarySha256": "eb64c744123ae3b99ff98f52fe61fcaac7a0c6ff2d0d07e5e4fe8bb162e2dbf6",
+        "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "outputSha256": "2676207be4d1a7c9109061fc3c8eb5a0d6b8d10a97bbbc611fbebda3330ffd9f",
+        "jitSha256": "2924f5e1885db263d9dac9a4703f88d482b66c9ba3276ee243c4f506b5b913e6",
+        "originalGatesPassed": true,
+        "timedOperations": 0
+      },
+      "TightDown8": {
+        "route": "column",
+        "librarySha256": "eb64c744123ae3b99ff98f52fe61fcaac7a0c6ff2d0d07e5e4fe8bb162e2dbf6",
+        "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "outputSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+        "jitSha256": "76325304c928140f62088c8d913743226310d837cd584bcd469d6c95c150dbc9",
+        "originalGatesPassed": true,
+        "timedOperations": 0
+      },
+      "TightDown16": {
+        "route": "column",
+        "librarySha256": "eb64c744123ae3b99ff98f52fe61fcaac7a0c6ff2d0d07e5e4fe8bb162e2dbf6",
+        "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "outputSha256": "2676207be4d1a7c9109061fc3c8eb5a0d6b8d10a97bbbc611fbebda3330ffd9f",
+        "jitSha256": "e5df248ec97bd07d5e27b83b70327ae07ee378b7f69ed7bd1b8a573eab3e807a",
+        "originalGatesPassed": true,
+        "timedOperations": 0
+      }
+    },
+    "productionChanges": 0,
+    "toolingBuilds": 1,
+    "raw": {
+      "file": "bicubic-column-dispatch.tar.xz",
+      "sha256": "e410bd7b4d6ec7b8c5be3d029574484be4c071dc65b81d21c01e29839f3ebfb2",
+      "bytes": 37624,
+      "members": 17,
+      "allMembersVerified": true,
+      "mirrored": true
+    }
+  }
 }

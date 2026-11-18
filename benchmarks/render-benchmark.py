@@ -3710,6 +3710,15 @@ costs. The complete final-package refresh remains outstanding."""
                            'nativeOutputSha256', 'nativeWorkerSha256'))
     assert tight_down8['actualOperationCounts'] == [448] * 12 and tight_down8['nativeGroups'] == 3
     assert tight_down8['nativeOperationsPerSubject'] == 128 and tight_down8['segmentsPerUnit'] == 16
+    column_views = bicubic_package['deferredColumnViews']
+    column_cases = column_views['cases']
+    column_package = column_views['qualification']
+    assert column_views['productionAccepted'] and set(column_cases) == {'TightDown8', 'TightDown16'}
+    assert column_views['raw']['mirrored'] and column_views['raw']['allMembersVerified']
+    assert column_package['timedDllUsedUnchanged'] and column_package['actualPackageConsumerPassedBothOs']
+    assert column_package['fullEachOs'] == [3384, 2517, 948] and column_package['usageExamplesEachOs'] == 3
+    assert all(c['librarySha256'] == column_package['linuxSha256'] and c['status'] == 'pass' and c['upper'] <= 1
+               and c['raw']['mirrored'] and c['raw']['allMembersVerified'] for c in column_cases.values())
     bicubic_cases = {**bicubic_package['cases'], **mixed_word['cases'], **bounded_wide['cases'], **extended_cases}
     for label, name in (
         ('Bicubic resize RGBA8', 'Down8'),
@@ -3742,8 +3751,12 @@ costs. The complete final-package refresh remains outstanding."""
                        ('inputSha256', 'managedOutputSha256', 'nativeOutputSha256', 'nativeWorkerSha256'))
             c = compact_word['case']
             assert c['librarySha256'] == word_qualification['linuxSha256'] and c['status'] == 'pass'
-        elif name == 'TightDown8':
-            c = tight_down8
+        elif name in column_cases:
+            before = tight_down8 if name == 'TightDown8' else c
+            current = column_cases[name]
+            assert all(current[key] == before[key] for key in
+                       ('inputSha256', 'managedOutputSha256', 'nativeOutputSha256', 'nativeWorkerSha256'))
+            c = current
         elif name in tight_adjacent['cases']:
             current = tight_adjacent['cases'][name]
             assert all(current[key] == c[key] for key in
@@ -3859,6 +3872,12 @@ Compact horizontal coefficients
 close the tight 128×64 RGBA16 gap at **{compact_word['case']['managedUs']:.2f} /
 {compact_word['case']['nativeUs']:.2f} µs**, upper **{compact_word['case']['upper']:.6f}**,
 with **112 B/op**. [Bicubic measurements and open cases](../benchmarks/BICUBIC-CURRENT-PACKAGE.md)
+Deferred fallback views close the tight 256×129 RGBA8 reduction on the newly
+qualified package at **{column_cases['TightDown8']['managedUs']:.2f} /
+{column_cases['TightDown8']['nativeUs']:.2f} µs**, upper
+**{column_cases['TightDown8']['upper']:.6f}**, **112 B/op**. The affected RGBA16
+reduction also passes at upper **{column_cases['TightDown16']['upper']:.6f}**,
+**113 B/op**. Both keep the same complete prepared-zimg reference boundary.
 The four prepared bicubic operations also pass on that package, with
 **137 B/op** and unchanged retained plan capacity.
 [Current-package bilinear](../benchmarks/BILINEAR-CURRENT-PACKAGE.md) confirms

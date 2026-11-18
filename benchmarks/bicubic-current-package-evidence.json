@@ -3487,5 +3487,198 @@
       "allMembersVerified": true,
       "mirrored": true
     }
+  },
+  "deferredColumnViews": {
+    "stage": "FRP1325",
+    "productionAccepted": true,
+    "productionChanged": true,
+    "requiredMaterialPaths": 289,
+    "affectedRequiredPaths": [
+      "TightDown8",
+      "TightDown16"
+    ],
+    "newRequiredPaths": 0,
+    "sourceSha256": "426c5d955038d3c711e04b4607392ae2699791d847de8ee6f52ad7da57402f6d",
+    "stageManifestSha256": "7ed4b02c3c7900ebfceca34b1a11b45b7625d0e03ad6d6c20ccc515f47618f96",
+    "cases": {
+      "TightDown8": {
+        "status": "pass",
+        "lower": 0.9293632754423079,
+        "upper": 0.9470405580418365,
+        "ratio": 0.9385476929649448,
+        "managedUs": 422.5589237351191,
+        "nativeUs": 450.226373046875,
+        "nativeGroupMeansUs": [
+          450.55993098958334,
+          450.293291015625,
+          450.226373046875
+        ],
+        "allocatedBytesMinimum": 112,
+        "allocatedBytesMaximum": 112,
+        "pairedInterval": [
+          0.9354536528709412,
+          0.9413842795865892
+        ],
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "pairs": 12,
+        "operationsPerSubject": 448,
+        "nativeOperationsPerSubject": 128,
+        "segmentsPerUnit": 16,
+        "allocatedBytes": 112,
+        "caseId": "TightDown8",
+        "librarySha256": "bb3d063de699fd01e0ee635ffae1e4bbe0882618503127c23289e79f0169528f",
+        "depth": 8,
+        "actuals": 12,
+        "actualOperationCounts": [
+          448,
+          448,
+          448,
+          448,
+          448,
+          448,
+          448,
+          448,
+          448,
+          448,
+          448,
+          448
+        ],
+        "allActualsRetained": true,
+        "outputWidth": 256,
+        "outputHeight": 129,
+        "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "managedOutputSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+        "nativeOutputSha256": "ae15e612f6f6a7cbe1407f9e892536b2594ac8f83a628e0dfbd2ba7d1cd5058a",
+        "nativeWorkerSha256": "7c2cddadf3dedb714086dea3f61a5dbce5720e95a420105fc90a141852400eca",
+        "raw": {
+          "file": "bicubic-column-view-final-byte.tar.xz",
+          "bytes": 149424,
+          "sha256": "5604e30184af0bd50d45eb94d759e40eccbdb927928f2439aea1660b25c49c3b",
+          "members": 15,
+          "allMembersVerified": true,
+          "mirrored": true
+        },
+        "validationSha256": "44f0461a0ebe80bc5baab4ec90d1b559e4b8fa7557b1391f5404de1d0dc6b5ba",
+        "rawLogSha256": "442877e20105ae9c14fb4db39160f52da8c4924c0c09206c1b94f81cf1aa410b"
+      },
+      "TightDown16": {
+        "managedUs": 512.3605168749999,
+        "nativeUs": 618.2805462239584,
+        "ratio": 0.828686136098173,
+        "lower": 0.8205678328553784,
+        "upper": 0.834755154270364,
+        "status": "pass",
+        "allocatedBytes": 113,
+        "allOriginalGatesPassed": true,
+        "quietGuardsPassed": true,
+        "caseId": "TightDown16",
+        "librarySha256": "bb3d063de699fd01e0ee635ffae1e4bbe0882618503127c23289e79f0169528f",
+        "depth": 16,
+        "actuals": 12,
+        "actualOperationCounts": [
+          400,
+          400,
+          400,
+          400,
+          400,
+          400,
+          400,
+          400,
+          400,
+          400,
+          400,
+          400
+        ],
+        "allActualsRetained": true,
+        "outputWidth": 256,
+        "outputHeight": 129,
+        "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+        "managedOutputSha256": "2676207be4d1a7c9109061fc3c8eb5a0d6b8d10a97bbbc611fbebda3330ffd9f",
+        "nativeOutputSha256": "0be58309816eda22e05a1122c6157f4971865909c730a3eb7c86b1946c092f86",
+        "nativeWorkerSha256": "d7f9edea4a86e458045791399e6265fca68d1bc4088e9ece20b79bec45618a5f",
+        "raw": {
+          "file": "bicubic-column-view-final-word.tar.xz",
+          "bytes": 23484,
+          "sha256": "96863a93f9470fbc523b63f5ab58a1bd0a379d31e1840733be1dcaf749eeadaa",
+          "members": 10,
+          "allMembersVerified": true,
+          "mirrored": true
+        },
+        "validationSha256": "e37644c0229b80d884d39bc82bd7440b5be1c63ae0a7e027b19b75447fd56206",
+        "rawLogSha256": "fe6b96f112d07c17f0aa86e96d8288b6c3892482077ad7a5f80fb3b8db769ee0"
+      }
+    },
+    "qualification": {
+      "windowsSha256": "26540a7e5c91cb8be5c30a0f278afe6f5b83190dd6f32f639f53e60a33dcefd4",
+      "linuxSha256": "bb3d063de699fd01e0ee635ffae1e4bbe0882618503127c23289e79f0169528f",
+      "packageSha256": "1699cfb1b42432e0b31dc32869c4e6a59b5adcf284cd70716c4bd7504ac262ce",
+      "symbolsSha256": "0256a61fbd7d88fc26834c46648b16da86d7d57190a607f0fd9059ebace6bd12",
+      "fullEachOs": [
+        3384,
+        2517,
+        948
+      ],
+      "focusedPerMode": 37,
+      "platforms": [
+        {
+          "platform": "windows",
+          "checks": [
+            3384,
+            2517,
+            948
+          ],
+          "testedModes": {
+            "normal": [
+              37
+            ],
+            "avx512-off": [
+              37
+            ],
+            "scalar": [
+              37
+            ]
+          },
+          "testDllSha256": "26540a7e5c91cb8be5c30a0f278afe6f5b83190dd6f32f639f53e60a33dcefd4",
+          "consumerLogSha256": "afde40191866fac41184fcb4be4c69d0987965dbbfd71bd3ce979a9ef5bdfd05"
+        },
+        {
+          "platform": "linux",
+          "checks": [
+            3384,
+            2517,
+            948
+          ],
+          "testedModes": {
+            "normal": [
+              37
+            ],
+            "avx512-off": [
+              37
+            ],
+            "scalar": [
+              37
+            ]
+          },
+          "testDllSha256": "bb3d063de699fd01e0ee635ffae1e4bbe0882618503127c23289e79f0169528f",
+          "consumerLogSha256": "07d9942da04f84581f38c60c3c3ff0ea2cf34ceca359f2b34dd67e1d3e47a7be"
+        }
+      ],
+      "actualPackageConsumerPassedBothOs": true,
+      "usageExamplesEachOs": 3,
+      "timedDllUsedUnchanged": true,
+      "productionBuildsPerOs": 1,
+      "timedDllRebuilds": 0,
+      "originalGuardRejectionsRetained": 2
+    },
+    "raw": {
+      "file": "bicubic-column-view-qualification.tar.xz",
+      "bytes": 1949260,
+      "sha256": "470f0c71c8921ad0cf5425b7af6210ab08401f845f91936d2dec504755d9bdfd",
+      "members": 27,
+      "allMembersVerified": true,
+      "mirrored": true
+    },
+    "publicationPostponed": true
   }
 }

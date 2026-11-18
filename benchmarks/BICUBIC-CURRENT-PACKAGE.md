@@ -1,14 +1,14 @@
 # Bicubic storage on the current package
 
-Of the 61 original bicubic controls, 57 have valid passing evidence and four
+Of the 61 original bicubic controls, 58 have valid passing evidence and three
 remain uncertain. The actual 0.2.1 package covers all 59 pool-affected
 controls. The two 4,264,104-byte RGBA16 full enlargement outputs exceed the
 unchanged 4 MiB pool cap and retain their source-valid passes.
 [Full word enlargement evidence](BICUBIC-ENLARGEMENT-HORIZONTAL-MODES.md)
 
-The open cases are the default and tight RGBA8 256×129 reductions, tight
-RGBA8 128×64 reduction, and tight RGBA16 width reduction with height
-enlargement. Keep the conservative confidence rule for all four.
+The open cases are the default RGBA8 256×129 reduction, tight RGBA8 128×64
+reduction, and tight RGBA16 width reduction with height enlargement. Keep
+the conservative confidence rule for all three.
 
 ## Original package comparison
 
@@ -436,11 +436,41 @@ prototype passes its complete parity boundary with the same 448 managed and
 units. All original frames, native bounds, ownership checks and quiet guards
 pass. Windows passes 701 focused public resize tests.
 
-The result qualifies this private build for further work. The current package
-row retains its own uncertain result. Reconcile the affected bounded RGBA16
-path and prove the other dispatch boundaries before transferring to the final
-DLL and qualifying Windows, Linux, scalar paths and the actual package.
+The private build also passes the bounded RGBA16 control at 516.65 / 618.61 µs,
+upper 0.841760 and 113 B/op. The retained private results precede the final
+package qualification below.
 
 [Candidate evidence](bicubic-column-view-candidate-evidence.json) retains
 the three mirrored, member-verified archives, candidate source and module
 hashes, all observations, checks and replay commands.
+
+## Deferred fallback views qualification
+
+| Complete tight 256×129 reduction | Lokad.Image µs | Prepared zimg µs | Conservative upper ratio | GC B/op |
+| --- | ---: | ---: | ---: | ---: |
+| RGBA8 | 422.56 | 450.23 | 0.947041 | 112 |
+| RGBA16 | 512.36 | 618.28 | 0.834755 | 113 |
+
+The Linux Release DLL containing the exact tested source passes both direct
+reductions. The byte control uses the established partitioned schedule.
+The word control uses the original generated job with natural GC and both
+native brackets. Both runs keep twelve actuals, every reference sample and
+the original operation, exact pixels, native bounds and ownership gates.
+Allocation, scratch admission and retained owner capacity are separate.
+The controlled 9.1% reduction above belongs to the private paired run.
+
+Across the 61 frozen direct controls, only four meet the changed method's
+geometry bounds. Untimed checks confirm that the two default controls use
+the cached path and the two tight controls use bounded columns. Prepared
+resize uses the separate cached executor. The other direct and prepared
+controls keep their existing scoped qualification.
+
+Both systems pass 6,849 full and live checks and 37 focused tests in each
+normal, AVX-512-disabled and scalar mode. The actual dependency-free Release
+package `1699cfb1` contains the exact timed Linux DLL `bb3d063d`. Its consumer and all three usage
+examples pass on both systems. The package remains a development artifact.
+Pre-timing quiet checks that found our idle build workers are retained. After
+the workers exited, the original validations and both statistical guards passed.
+The [final evidence](bicubic-current-package-evidence.json) pins the
+27-member `bicubic-column-view-qualification.tar.xz` and the two timing
+archives.
