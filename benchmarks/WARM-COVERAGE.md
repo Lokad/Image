@@ -73,6 +73,12 @@ reconciliation. Five useful prefix/lifetime tests remain; both OS pass182focused
 public checks in normal/scalar modes. Qualified production/package and current
 costs remain unchanged; no new broad/package repetition or renderer dependency.
 
+[Checkpoint preparation](COPY-CHECKPOINT-PREPARATION-TRIAL.md) confirms a scoped
+private gain but does not establish useful actual-DLL transfer. The exact qualified
+production, embedded modules, source manifest and package are restored; current
+costs remain unchanged. All actuals and both code shapes stay retained, without
+favorable retry, stopped-path retiming or broad/package repetition.
+
 Recent copy leads remain private: [prepared-row grouping](EIGHT-VECTOR-COPY-GROUP-TRIAL.md#prepared-row-follow-up),
 [capacity access](WHOLE-ROW-COPY-PREPARATION-TRIALS.md#capacity-getter-follow-up) and
 [stride preparation](WHOLE-ROW-COPY-PREPARATION-TRIALS.md#stride-preparation-follow-up).
