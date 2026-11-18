@@ -3514,6 +3514,26 @@ costs. The complete final-package refresh remains outstanding."""
         result = (f'| {label} ({png_status[c["status"]]}) | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | '
                   f'{c["ratio"]:.3f} / {c["upper"]:.6f} | {c["allocatedBytes"]:,} | — |')
         codecs = codecs.replace(old, result)
+    bicubic_package = json.loads((ROOT / 'benchmarks/bicubic-current-package-evidence.json').read_text(encoding='utf-8'))
+    assert bicubic_package['producers'] == png_package['producers']
+    assert bicubic_package['raw']['mirrored'] and bicubic_package['raw']['allMembersVerified']
+    for label, name in (
+        ('Bicubic resize RGBA8', 'Down8'),
+        ('Bicubic RGBA8 reduction, input+output+4 KiB', 'TightDown8'),
+        ('Bicubic RGBA8 enlargement, input+output+4 KiB', 'TightUp8'),
+    ):
+        c = bicubic_package['cases'][name]
+        assert c['librarySha256'] == png_package['producers']['linuxSha256']
+        assert len(c['actualOperationCounts']) == 12
+        assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
+        assert all(c[k] for k in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed'))
+        size = f'{c["outputWidth"]}×{c["outputHeight"]}'
+        heading = f'| {label} † → {size} |'
+        old, = (line for line in editing.splitlines() if line.startswith(heading))
+        status = f' ({png_status[c["status"]]})' if c['status'] != 'pass' else ''
+        result = (f'| {label}{status} † → {size} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | '
+                  f'{c["ratio"]:.3f} / {c["upper"]:.6f} | {c["allocatedBytes"]:,} |')
+        editing = editing.replace(old, result)
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
 
@@ -3537,6 +3557,8 @@ The RGBA8 seekable and async nonseekable loads, async nonseekable encode,
 and caller-budget two-result decode also pass on that package. The encode
 and retained-output rows use the current measurements, as do all four PNG
 pixel-coding validation rows.
+[Current bicubic measurements](../benchmarks/BICUBIC-CURRENT-PACKAGE.md) update
+the default and tight RGBA8 reductions and the tight RGBA8 enlargement.
 Other entries that
 call the changed shared image/font pool, PNG workspace or async encoded-output
 pool retain **historical artifact costs pending refresh**, not current timing

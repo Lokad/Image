@@ -1,0 +1,315 @@
+{
+  "project": "Lokad.Image",
+  "producers": {
+    "windowsSha256": "30bf6a15b32dbde2d875b7e7c9b6e9ef08026dcf50c51b9de7f84d38776a47f8",
+    "linuxSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+    "timedArtifactSha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+    "packageSha256": "f4c5b5dbaeb6f7d8d1782c9f2d1100dccbcdfa7994750c1a041fed3662b3ccf0",
+    "symbolsSha256": "a83fbf7b71c643c7de4cc2c6c1fcdf906da9618fe097c16c8e6eacb01a6eae3d"
+  },
+  "productionChanged": false,
+  "newRequiredPaths": 0,
+  "raw": {
+    "file": "bicubic-storage-current-package-confirmations.tar.xz",
+    "bytes": 109044,
+    "sha256": "23a5cbf0938c4478ab5043d267d781b4253f9aa545642fe73fb351920a143245",
+    "members": 28,
+    "allMembersVerified": true,
+    "mirrored": true
+  },
+  "cases": {
+    "Down8": {
+      "caseId": "Down8",
+      "managedUs": 416.72641020833333,
+      "nativeUs": 417.09506575520834,
+      "ratio": 0.9991161354397528,
+      "lower": 0.9450390313115228,
+      "upper": 1.0393993940274344,
+      "status": "uncertain",
+      "allocatedBytes": 199984,
+      "exactAllocatedBytesPerOperation": 199983.31666666668,
+      "actualOperationCounts": [
+        480,
+        480,
+        480,
+        480,
+        480,
+        480,
+        480,
+        480,
+        480,
+        480,
+        480,
+        480
+      ],
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "originalGeneratedLoopsAndConsumer": true,
+      "forceGcBetweenIterations": false,
+      "librarySha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+      "benchmarkAssemblySha256": "e84197a78e558adb2b75b437bcbcb47dcb50536b6bfb84cb5aa492333c915a42",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "nativeBrackets": [
+        {
+          "side": "nativeBefore",
+          "mean": 417095.0657552083,
+          "standardError": 457.48190440862805
+        },
+        {
+          "side": "nativeAfter",
+          "mean": 423399.0989583333,
+          "standardError": 2379.420255114431
+        }
+      ],
+      "confidenceViews": [
+        {
+          "view": "statistics",
+          "samples": 10,
+          "lower": 0.9465977120880125,
+          "upper": 1.0239612586830455
+        },
+        {
+          "view": "unfilteredActualStatistics",
+          "samples": 12,
+          "lower": 0.9450390313115228,
+          "upper": 1.0393993940274344
+        }
+      ],
+      "rawLog": "tmp/frp1280-Down8.log",
+      "rawLogSha256": "6d88f995daeb6f72fd466cc35749f5028d180153ace3678714af8f25b77143a7",
+      "validationPath": "artifacts/benchmark-validation/WarmBicubicResize-bc14f7b892874e3ea0baf1f149760e04.json",
+      "validationSha256": "58b114cc13e0c212dda65f8d41b7aaff819090f0f2d7d384287cfe0e685e758d",
+      "managedOutputSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+      "nativeOutputSha256": "ae15e612f6f6a7cbe1407f9e892536b2594ac8f83a628e0dfbd2ba7d1cd5058a",
+      "workingLimitBytes": null,
+      "depth": 8,
+      "outputWidth": 256,
+      "outputHeight": 129,
+      "nativeWorkerSha256": "7c2cddadf3dedb714086dea3f61a5dbce5720e95a420105fc90a141852400eca"
+    },
+    "TightDown8": {
+      "caseId": "TightDown8",
+      "managedUs": 414.37648528225805,
+      "nativeUs": 419.2616998697917,
+      "ratio": 0.9883480542366478,
+      "lower": 0.9746437504019246,
+      "upper": 1.0038663900385185,
+      "status": "uncertain",
+      "allocatedBytes": 113,
+      "exactAllocatedBytesPerOperation": 112.5,
+      "actualOperationCounts": [
+        496,
+        496,
+        496,
+        496,
+        496,
+        496,
+        496,
+        496,
+        496,
+        496,
+        496,
+        496
+      ],
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "originalGeneratedLoopsAndConsumer": true,
+      "forceGcBetweenIterations": false,
+      "librarySha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+      "benchmarkAssemblySha256": "e84197a78e558adb2b75b437bcbcb47dcb50536b6bfb84cb5aa492333c915a42",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "nativeBrackets": [
+        {
+          "side": "nativeBefore",
+          "mean": 419261.6998697917,
+          "standardError": 196.92786572555545
+        },
+        {
+          "side": "nativeAfter",
+          "mean": 419664.6334635417,
+          "standardError": 894.6097682606181
+        }
+      ],
+      "confidenceViews": [
+        {
+          "view": "statistics",
+          "samples": 10,
+          "lower": 0.9759713686108714,
+          "upper": 0.9990621821396273
+        },
+        {
+          "view": "unfilteredActualStatistics",
+          "samples": 12,
+          "lower": 0.9746437504019246,
+          "upper": 1.0038663900385185
+        }
+      ],
+      "rawLog": "tmp/frp1280-TightDown8.log",
+      "rawLogSha256": "094af11b70fce044539398f5323de17d9780e3f8adf3e2a56b9d8ca713b3226f",
+      "validationPath": "artifacts/benchmark-validation/WarmBicubicResize-52929ecc361e4bccbcb3f24430d79cee.json",
+      "validationSha256": "954cb9d42a84ebf687ae9eee5ba43f1ba722db5bec04cd538c66bc47b39125d6",
+      "managedOutputSha256": "656bb2248362c88dff8fe510dcc21055155976a3dd2b33aa20c48d2b036f59a8",
+      "nativeOutputSha256": "ae15e612f6f6a7cbe1407f9e892536b2594ac8f83a628e0dfbd2ba7d1cd5058a",
+      "workingLimitBytes": 667660,
+      "depth": 8,
+      "outputWidth": 256,
+      "outputHeight": 129,
+      "nativeWorkerSha256": "7c2cddadf3dedb714086dea3f61a5dbce5720e95a420105fc90a141852400eca"
+    },
+    "TightUp8": {
+      "caseId": "TightUp8",
+      "managedUs": 3031.482035,
+      "nativeUs": 3301.10834375,
+      "ratio": 0.9183224903052684,
+      "lower": 0.9067493480517482,
+      "upper": 0.9256145892154795,
+      "status": "pass",
+      "allocatedBytes": 116,
+      "exactAllocatedBytesPerOperation": 115.1,
+      "actualOperationCounts": [
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80,
+        80
+      ],
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "originalGeneratedLoopsAndConsumer": true,
+      "forceGcBetweenIterations": false,
+      "librarySha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+      "benchmarkAssemblySha256": "e84197a78e558adb2b75b437bcbcb47dcb50536b6bfb84cb5aa492333c915a42",
+      "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+      "nativeBrackets": [
+        {
+          "side": "nativeBefore",
+          "mean": 3313602.1875,
+          "standardError": 4675.581713689465
+        },
+        {
+          "side": "nativeAfter",
+          "mean": 3301108.34375,
+          "standardError": 3077.9066319106737
+        }
+      ],
+      "confidenceViews": [
+        {
+          "view": "statistics",
+          "samples": 10,
+          "lower": 0.9067493480517482,
+          "upper": 0.924444596756644
+        },
+        {
+          "view": "unfilteredActualStatistics",
+          "samples": 12,
+          "lower": 0.9072225049570125,
+          "upper": 0.9256145892154795
+        }
+      ],
+      "rawLog": "tmp/frp1280-TightUp8.log",
+      "rawLogSha256": "f7a0c08b4a415271292ddc4f6d4acf6611e467e71157d61a711c56c6319e2989",
+      "validationPath": "artifacts/benchmark-validation/WarmBicubicResize-fb57e0aaea45498e874e691d27b75bff.json",
+      "validationSha256": "f4aa9710727e4092af313d6f27175f167ed029ddd10a8467e27d2f394519a27e",
+      "managedOutputSha256": "08cde71ddb8b20be884c7ba812cec349f9302b21a348b79d3614bfda19805b94",
+      "nativeOutputSha256": "42c00d0a2ac75c3915d1bf2b0596469b8607ba5f15bd23ff93be005d00ebe7ad",
+      "workingLimitBytes": 2667616,
+      "depth": 8,
+      "outputWidth": 1027,
+      "outputHeight": 519,
+      "nativeWorkerSha256": "38e0a60ff597a069bde51d6ba46633174f926a7b80eb8e21dade72304f3a24f8"
+    },
+    "HorizontalUp16": {
+      "caseId": "HorizontalUp16",
+      "managedUs": 1496.1944943181818,
+      "nativeUs": 1572.9414791666668,
+      "ratio": 0.9512079846167291,
+      "lower": 0.9326783913678275,
+      "upper": 0.9613149986652983,
+      "status": "pass",
+      "allocatedBytes": 114,
+      "exactAllocatedBytesPerOperation": 113.72222222222223,
+      "actualOperationCounts": [
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144,
+        144
+      ],
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "originalGeneratedLoopsAndConsumer": true,
+      "forceGcBetweenIterations": false,
+      "librarySha256": "7b59eabed152f4c05331d957dad515b41aee8e278d026943de40e7202e270bd0",
+      "benchmarkAssemblySha256": "e84197a78e558adb2b75b437bcbcb47dcb50536b6bfb84cb5aa492333c915a42",
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "nativeBrackets": [
+        {
+          "side": "nativeBefore",
+          "mean": 1572941.4791666667,
+          "standardError": 792.6584551719582
+        },
+        {
+          "side": "nativeAfter",
+          "mean": 1586479.4036458333,
+          "standardError": 1202.029135376883
+        }
+      ],
+      "confidenceViews": [
+        {
+          "view": "statistics",
+          "samples": 11,
+          "lower": 0.9326783913678275,
+          "upper": 0.9606615155725058
+        },
+        {
+          "view": "unfilteredActualStatistics",
+          "samples": 12,
+          "lower": 0.9335551604484956,
+          "upper": 0.9613149986652983
+        }
+      ],
+      "rawLog": "tmp/frp1280-HorizontalUp16.log",
+      "rawLogSha256": "d6c4445bb2c4dd014779fe96bcb52288a577aed82ab0c35a1124778829159189",
+      "validationPath": "artifacts/benchmark-validation/WarmBicubicResize-c7f0623d3f594e4d80bb4d710d58eeff.json",
+      "validationSha256": "878b3d8f2e6ffc64d519a81ab0ddb1189c5912aa897a3bcc147a7d77970021b2",
+      "managedOutputSha256": "12073f9f1f3c8aa21fd50826350ec72021c8252923f9f52055302cb811405a35",
+      "nativeOutputSha256": "98a397fa9093765f5e7b3c4e9e259f259a4551b2586b38f118884022920206c6",
+      "workingLimitBytes": null,
+      "depth": 16,
+      "outputWidth": 1027,
+      "outputHeight": 259,
+      "nativeWorkerSha256": "7d36a13db7c8a6e1b699124e316d88e44d441032a1b4ce28f7415c69dc37e167"
+    }
+  },
+  "preparation": {
+    "oneRuntime": true,
+    "noncoreFilesVerified": 127,
+    "originalCases": [
+      "Down8",
+      "TightDown8",
+      "TightUp8",
+      "HorizontalUp16"
+    ]
+  },
+  "parserSha256": "7edbc957d6446bd4d19d2084e78748fadacaa845393eccaef43d299967fc4e6e",
+  "confidence": "Conservative filtered and all-actual bounds against both native brackets.",
+  "allocationPolicy": "Separate post-actual diagnostic. GC allocation does not measure physical peak or idle retention."
+}
