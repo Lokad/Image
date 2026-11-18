@@ -77,7 +77,7 @@ logical admitted capacity, idle retention and unmeasured physical peaks stay sep
 | Required family/boundary | Current evidence and next action |
 | --- | --- |
 | PNG decoding | [Current package](PNG-CURRENT-PACKAGE.md) passes all 47 resident decode controls and the caller-root two-retained-result decode. The four coding validators also pass. [Wide scan CRC](WIDE-PNG-SCAN-CRC.md) retains the original qualification, including exact samples, cancellation and admission. |
-| Stream decode/composition | [Current completed-row package](NEAREST-ROW-REUSE.md): original retained-native PNG16/8 pipelines pass at 2772.041/2937.903 us and 1185.369/1475.389 us, upper .951202/.807373, 8888.16/4792.08 B/op. All four original direct-nearest controls pass/stop; Up16 is 949.453/981.396 us upper .981828, 4264364 B/op. Independent controlled complete Up16 gain 10.35%/110.756 us; exact cells/hidden RGB, 1024-pixel polls, no new capacity or pool-cap change. Shared-storage allocation gains remain separately attributed. Every public pipeline call/intermediate/output/disposal and original pixel/source/stream/owner gate remains. Earlier fresh-native one-shot and other historical pool-dependent costs still need the final complete package refresh. |
+| Stream decode/composition | [Current completed-row package](NEAREST-ROW-REUSE.md): original retained-native PNG16/8 pipelines pass at 2772.041/2937.903 us and 1185.369/1475.389 us, upper .951202/.807373, 8888.16/4792.08 B/op. All four original direct-nearest controls pass/stop; Up16 is 949.453/981.396 us upper .981828, 4264364 B/op. Independent controlled complete Up16 gain 10.35%/110.756 us; exact cells/hidden RGB, 1024-pixel polls, no new capacity or pool-cap change. Shared-storage allocation gains remain separately attributed. Every public pipeline call/intermediate/output/disposal and original pixel/source/stream/owner gate remains. [Fresh-state PNG16 composition](PNG-COMPOSITION-ONE-SHOT.md) passes on the current actual package at 2,999.60 / 3,980.11 µs, upper 0.806590, 8,888 B/op. This view includes fresh FFmpeg codec and graph preparation and keeps its original exact packet, pixel, stream and owner checks. |
 | JPEG reading | [Current package](JPEG-DECODE-CURRENT-PACKAGE.md) passes all 24 original owned-output cases. Adjacent FFmpeg samples confirm horizontal CMYK at upper 0.980020 and sparse-2D CMYK at upper 0.987805. The earlier adverse and uncertain captures stay available. Resident, fresh stream and fresh native contexts retain separate boundaries. Caller-buffer and coding-only routes retain source-valid evidence. [Horizontal preparation](JPEG-HORIZONTAL-PREPARATION.md) preserves the earlier scoped paired improvement. |
 | JPEG encoding | All 18 declared comparisons pass/stop. [Direct block emission](JPEG-DIRECT-BLOCK-EMISSION.md) closes restart33: 1,339.28 / FFmpeg 1,609.15 µs, upper .841, 151,180 B/op, exact 58,010 / 58,012 B packets with the strict 2 B attribution exception. Separate complete paired steps save 19.21% and 17.00%; no summed gain. The 17 [adaptive replay controls](JPEG-LOCAL-ENTROPY-REPLAY.md) reuse unchanged paths/artifact identities. SIMD libjpeg-turbo grayscale stays explicitly labeled. Native contexts/table preparation remain retained; managed preparation stays timed. No added storage or broader content/settings claim. |
 | PNG encoding | All 17 equivalent fresh-state controls pass/stop. [Longer Gray8 integration](PNG-GRAY-CURRENT-PATH.md) resolves uncertainty:1,964.07/FFmpeg1,978.51µs,upper.999681,546523B/op,exact72586B. No production speedup; original samples retained. Sixteen passing controls reuse unchanged [compressed heap](PNG-HUFFMAN-HEAP-ENTRIES.md) and [stored](PNG-STORED-WORD-NORMALIZATION.md) evidence. Stored-word naturalGC64 passes/stops; postGC4 retained-word uncertainty remains a distinct diagnostic. |
@@ -276,13 +276,15 @@ The existing `Up16` bilinear path also has an [equivalent complete one-shot view
 on its frozen 513×259→1027×519 RGBA16 input/settings. Native graph/context/geometry,
 first-use storage and result wrappers are fresh per operation; resident inputs are
 borrowed on both sides. This adds one comparison view, no required material path
-or settings grid. Its pass does not relabel the earlier asymmetric uncertainty.
+or settings grid. The [prepared-native view](BILINEAR-PARTITIONED-REFERENCE.md)
+also has a separate passing confirmation.
 
 The existing `PngCropFit16` stream pipeline also has an [equivalent one-shot view](PNG-COMPOSITION-ONE-SHOT.md)
 on its frozen513×259 packet and127×64 output. Fresh native codec/options, graph,
 wrappers, input acquisition, full decode/conversion and owned result/disposal are
 inside timing. Managed public calls and all intermediate owners stay unchanged.
-It passes/stops; the previous retained-native observation remains uncertain.
+It passes on the current package. The [retained-native view](NEAREST-ROW-REUSE.md)
+also has separate passing evidence.
 This is one comparison view, no new required material path or fixture/settings grid.
 
 The canonical Lanczos identity-axis branch now has two named additional views of

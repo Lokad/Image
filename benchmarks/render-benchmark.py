@@ -150,20 +150,26 @@ def apply_current_lanczos(editing):
 
 
 def append_one_shot_png_composition(editing):
-    evidence = json.loads((ROOT / 'benchmarks/png-composition-one-shot-evidence.json').read_text(encoding='utf-8'))
-    case, qualification = evidence['case'], evidence['qualification']
-    assert evidence['measurementAccepted'] and not evidence['productionChanged'] and not evidence['productionSpeedupClaim']
-    assert evidence['requiredMaterialPaths'] == 289 and evidence['newMaterialPaths'] == 0 and evidence['newComparisonViews'] == 1
-    assert evidence['raw']['mirrored'] and evidence['raw']['allMembersVerified'] and all(evidence['sourceProof'].values())
-    assert qualification['sameImmutableActualPackageReused'] and qualification['packageAndCoreIdentityVerifiedBothOs'] and qualification['broadOrPackageRepeats'] == 0
-    assert case['librarySha256'] == evidence['producers']['timedArtifactSha256'] and case['actuals'] == case['nativeSamplesEachBracket'] == 12
-    assert case['status'] == 'pass' and case['upper'] <= 1 and case['operationsPerSubject'] == 64 and case['allActualsRetained']
-    assert all(case[k] for k in ('allOriginalInputPixelOwnershipAndStreamGatesPassed', 'quietGuardsPassed', 'allRgbaSamplesExact', 'sourceUnchanged', 'independentOwnedOutput', 'nativeCliNormalScalarPixelsExact', 'callerStreamLeftOpen', 'inputConsumedToEnd'))
+    evidence = json.loads((ROOT / 'benchmarks/png-composition-fresh-current-package-evidence.json').read_text(encoding='utf-8'))
+    case = evidence['case']
+    history = json.loads((ROOT / 'benchmarks/png-composition-one-shot-evidence.json').read_text(encoding='utf-8'))['case']
+    assert not evidence['productionChanged'] and evidence['buildCount'] == 0
+    assert evidence['requiredMaterialPaths'] == 289 and evidence['newMaterialPaths'] == 0
+    assert evidence['raw']['mirrored'] and evidence['raw']['allMembersVerified']
+    assert case['librarySha256'] == evidence['producers']['linuxSha256'] and case['actuals'] == case['nativeSamplesEachBracket'] == 12
+    assert case['status'] == 'pass' and case['upper'] <= 1 and case['operationsPerSubject'] == 64
+    assert all(case[k] for k in ('allOriginalGatesPassed', 'allActualsRetained', 'quietGuardsPassed',
+                                'allRgbaSamplesExact', 'sourceUnchanged', 'independentOwnedOutput',
+                                'nativeCliNormalScalarPixelsExact', 'callerStreamLeftOpen',
+                                'inputConsumedToEnd', 'originalManagedAndNativeDriversReused'))
+    assert case['inputSha256'] == history['encodedInputSha256']
+    assert all(case[k] == history[k] for k in ('outputSha256', 'driverSha256', 'nativeReady'))
     assert all(case['nativeReady'][k] for k in ('decoderPreparationTimed', 'graphPreparationTimed', 'resultWrapperPreparationTimed', 'preparedStateReleasedBeforeOutputPublication'))
-    assert not case['nativeReady']['preparedStateRetainedBetweenOperations'] and evidence['originalAsymmetric']['unchanged']
+    assert not case['nativeReady']['preparedStateRetainedBetweenOperations']
     assert math.isclose(case['ratio'], case['managedUs'] / case['nativeUs'], rel_tol=1e-12)
-    allocated = f"{case['allocatedBytesMinimum']:,.0f}–{case['allocatedBytesMaximum']:,.0f}"
-    row = f"| PNG RGBA16 one-shot stream decode/orient/crop/fit / FFmpeg one-shot † → 127×64 | {case['managedUs']:,.2f} | {case['nativeUs']:,.2f} | {case['ratio']:.3f} / {case['upper']:.3f} | {allocated} |"
+    allocations = case['observedAllocationValues']
+    allocated = f'{allocations[0]:,.0f}' if len(allocations) == 1 else f'{min(allocations):,.0f}–{max(allocations):,.0f}'
+    row = f"| PNG RGBA16 one-shot stream decode/orient/crop/fit / FFmpeg one-shot † → 127×64 | {case['managedUs']:,.2f} | {case['nativeUs']:,.2f} | {case['ratio']:.3f} / {case['upper']:.6f} | {allocated} |"
     return editing + '\n' + row, evidence
 
 
@@ -443,10 +449,11 @@ def nearest_row_reuse():
     return stage
 
 
-def current_png_stream_word_note(current, one_shot):
+def current_png_stream_word_note(one_shot):
     stage = nearest_row_reuse()
     word, byte, up = (stage['cases'][name] for name in ('PngCropFit16', 'PngCropFit8', 'Up16'))
     gain = stage['pairedEffect']
+    fresh = one_shot['case']
     return ('[Completed nearest rows](../benchmarks/NEAREST-ROW-REUSE.md) qualify the current complete '
             f'PNG16 pipeline at **{word["managedUs"]:,.2f} / FFmpeg {word["nativeUs"]:,.2f} µs, '
             f'upper {word["upper"]:.6f}**, **{word["allocatedBytes"]:,.2f} B/op**. '
@@ -463,8 +470,10 @@ def current_png_stream_word_note(current, one_shot):
             'diagnostic; accepted gain uses one default-loader process per DLL. Windows/Linux each pass6776full/live '
             'checks,534internal/204public normal/scalar and the SAME actual package/all three examples. '
             'Earlier [shared storage](../benchmarks/COMPOSITION-STORAGE-REUSE.md) independently establishes97.4%lessallocation, '
-            'not a summed CPU gain. Earlier fresh-native [one-shot composition](../benchmarks/PNG-COMPOSITION-ONE-SHOT.md) '
-            'and other historical storage-dependent costs still await the final complete package refresh.')
+            'not a summed CPU gain. The [fresh-state one-shot composition](../benchmarks/PNG-COMPOSITION-ONE-SHOT.md) '
+            f'passes on the current package at **{fresh["managedUs"]:,.2f} / {fresh["nativeUs"]:,.2f} µs**, '
+            f'upper **{fresh["upper"]:.6f}** and **{fresh["allocatedBytesMaximum"]:,.0f} B/op**, with fresh '
+            'FFmpeg decoder and graph preparation included.')
 
 
 def apply_current_png_scan(codecs, reads, current):
@@ -3255,7 +3264,7 @@ zero added scratch and unmeasured physical/native/JIT peaks remain distinct.
 Other copy, font/text, codec and resizing paths retain identified source-valid
 costs. The complete final-package refresh remains outstanding."""
     read_table = '\n'.join([header + ' Status |', separator + ' --- |', *read_rows])
-    png_stream_word_note = current_png_stream_word_note(resident_png, png_composition_one_shot)
+    png_stream_word_note = current_png_stream_word_note(png_composition_one_shot)
     codecs, read_table = apply_current_vp8_fixed_code(codecs, read_table, reader_current)
     editing = apply_current_bicubic_adjacent_confidence(editing)
     vp8_package = json.loads((ROOT / 'benchmarks/vp8-decode-current-package-evidence.json').read_text(encoding='utf-8'))
@@ -3577,6 +3586,7 @@ costs. The complete final-package refresh remains outstanding."""
     assert compact_word['affectedRequiredPaths'] == ['TightWide16'] and compact_word['newRequiredPaths'] == 0
     assert compact_word['raw']['mirrored'] and compact_word['raw']['allMembersVerified']
     word_qualification = compact_word['qualification']
+    assert png_composition_one_shot['producers'] == word_qualification
     assert opaque_current['producers'] == word_qualification
     assert word_qualification['timedDllUsedUnchanged'] and word_qualification['actualPackageConsumerPassedBothOs']
     assert word_qualification['fullEachOs'] == [3384, 2517, 948] and word_qualification['usageExamplesEachOs'] == 3

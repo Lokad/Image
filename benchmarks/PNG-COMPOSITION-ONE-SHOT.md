@@ -1,8 +1,33 @@
 # Complete one-shot RGBA16 PNG composition
 
-[Current retained-native precision](PNG-WORD-COMPOSITION-PRECISION.md) remains
-uncertain on the latest actual package. The scoped milestone observations below
-are retained; the independent equivalent one-shot pass stays valid.
+## Current package
+
+Fresh managed and FFmpeg operations pass on package `d873438f`, containing
+timed DLL `dc8c9a94`. Lokad.Image takes **2,999.60 µs** and FFmpeg takes
+**3,980.11 µs**, with a conservative ratio interval of **0.660903–0.806590**
+and **8,888 B/op** of managed GC allocation. That figure measures allocations,
+separate from live or retained storage.
+
+The original driver and fresh-state FFmpeg worker run all twelve alternating
+64-operation pairs and both twelve-sample native brackets on quiet CPU 0.
+The 136 frozen non-core runtime files, 960,565 B encoded packet, exact word
+output, normal/scalar FFmpeg output, borrowed stream lifetime, EOF and independent
+owners pass. Each call retains decoder/graph preparation and disposal on
+the relevant side. The [retained-native pipelines](NEAREST-ROW-REUSE.md)
+have their own passing evidence and operation boundaries.
+
+The replay uses the existing package and tooling. An initial launch stopped
+before sampling because the memory-backed mount rejects native execution.
+The replay links the hash-verified original worker on the executable mount
+and keeps untimed data and logs in memory-backed storage. The [current
+evidence](png-composition-fresh-current-package-evidence.json) records both
+attempts. The mirrored `png-composition-fresh-current-package.tar.xz` has
+10 verified members and 24,928 B, with SHA-256
+`17b0f617a7816145e584ba8a897c71267c92c0477c893b59aa0ad7018325ffd8`.
+It includes the unchanged driver/reference bindings, all actuals, original
+validation, guards and executable replay. Stop this comparison unless affected.
+
+## Original qualification
 
 The existing frozen 513×259 RGBA16 seekable-PNG control now has an equivalent
 fresh-state comparison: Decode → AutoOrient(Normal) → centered 256×129 crop →
