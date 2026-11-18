@@ -1,0 +1,107 @@
+{
+  "project": "Lokad.Image",
+  "productionChanged": false,
+  "productionAccepted": false,
+  "baseline": {
+    "packageSha256": "d799f4cd633bcc4609bf0d16e8152b9371da3657c5cf5a69ce4d26b525b4e1f1",
+    "linuxSha256": "b874f8d2e1111e9c1bcf9452fd750cce2c7b812fbcf69a1f9a9c9219109a72d9"
+  },
+  "sourcePath": "src/Lokad.Image/Internal/IndependentRowCopy.cs",
+  "sourceHashes": {
+    "original": "0379fdc65e3abe299a88c4bddaaff40f5b0339efcd155636d509a29ce5a162c1",
+    "candidate": "5c6e9e871526474ca334fe645039cfed4494fc6a64b6770ff2cfb8547f5c234e"
+  },
+  "candidateUnixLibrarySha256": "8d0777d3a91423194f0bb6f62d47287b0b678fc3748ba79222c41c6c52a9a657",
+  "mechanism": "Classify token cancellation once for independent SIMD rows; preserve live checks and the copy schedule.",
+  "generatedCode": {
+    "methodBytes": 407,
+    "sampleCommands": 0,
+    "vectorMoves": 10,
+    "cancellationThrowAbsent": true,
+    "codegenSha256": "7d8550b17c375873398286f1aabc607c22d598713476012f638a554f95207318"
+  },
+  "cases": {
+    "OriginalClippedCopy8": {
+      "actuals": 3,
+      "operationsPerActual": 65536,
+      "subjects": {
+        "baseline": {
+          "mean": 2.1361863301595054,
+          "lower": 1.8993652045624303,
+          "upper": 2.3730074557565803,
+          "values": [
+            2.128603530883789,
+            2.1287803497314455,
+            2.1511751098632814
+          ]
+        },
+        "candidate": {
+          "mean": 2.126348230997721,
+          "lower": 1.8084136170814458,
+          "upper": 2.4442828449139964,
+          "values": [
+            2.114358947753906,
+            2.1183466033935545,
+            2.146339141845703
+          ]
+        }
+      },
+      "ratio": 0.9953845521063838,
+      "lower": 0.9554267872872526,
+      "upper": 1.037013426622862,
+      "allocatedBytes": 0,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true
+    },
+    "DrawingCopy8": {
+      "actuals": 3,
+      "operationsPerActual": 65536,
+      "subjects": {
+        "baseline": {
+          "mean": 2.087519780476888,
+          "lower": 1.8935609199946195,
+          "upper": 2.2814786409591563,
+          "values": [
+            2.098521530151367,
+            2.0867359771728515,
+            2.0773018341064455
+          ]
+        },
+        "candidate": {
+          "mean": 2.088311533610026,
+          "lower": 1.8986455432398417,
+          "upper": 2.2779775239802103,
+          "values": [
+            2.0878507843017577,
+            2.0989304809570313,
+            2.078153335571289
+          ]
+        }
+      },
+      "ratio": 1.0003796628393928,
+      "lower": 0.905493790181272,
+      "upper": 1.1052085399970706,
+      "allocatedBytes": 0,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true
+    }
+  },
+  "windowsFocused": {
+    "normal": {
+      "passed": 208,
+      "logSha256": "84f6e44ba7177f8682e644815761f4be9d537875d129fe7c77d1439391342613"
+    },
+    "scalar": {
+      "passed": 208,
+      "logSha256": "5a480203c537f211784a016cf89ae04793c6a93804a0ceb8d87851e6ff3b68d4"
+    }
+  },
+  "raw": {
+    "file": "uncancelable-row-copy-trial.tar.xz",
+    "bytes": 1032816,
+    "sha256": "9efd2f9f93b8b588657e88d7b903dc4218a62b0bde87bebf63161e8916bf86c7",
+    "members": 50,
+    "allMembersVerified": true,
+    "mirrored": true
+  }
+}

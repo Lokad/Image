@@ -625,3 +625,24 @@ ownership and idle guards pass on the original fixture. This scoped screen
 gives no reason for confirmation or a standalone remeasurement. The
 qualified implementation and the uncertainty stay.
 [Evidence](disjoint-word-copy-trial-evidence.json)
+
+## Cancellation dispatch for independent rows
+
+The private helper selects its SIMD row loop once using `CanBeCanceled`.
+Live tokens keep every row checkpoint. The default-token loop omits the poll
+and preserves row order, checked spans, bulk/tail transfers and ownership.
+The Linux JIT emits a 407-byte default-token body with no cancellation throw
+path. No buffer, retained storage or pixel change is introduced.
+
+Three alternating quiet-VM pairs of 65,536 complete calls per side give
+**2.136186 → 2.126348 µs** for clipped RGBA8, interval **0.955427–1.037013**,
+and **2.087520 → 2.088312 µs** for separate RGBA8, interval
+**0.905494–1.105209**. Both allocate **0 B/op**. Exact canvas and source,
+hidden RGB, alpha, untouched pixels, caller ownership and idle guards pass on
+the original controls. Windows passes 208 focused public tests in each of
+normal and scalar modes.
+
+The clipped point savings of about 10 ns fall short of the 69 ns measured gap.
+Both intervals include unchanged performance. The trial ends at the screen and
+the qualified package keeps its existing costs and statuses.
+[Timing, generated code and verification evidence](uncancelable-row-copy-trial-evidence.json)
