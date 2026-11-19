@@ -1532,3 +1532,19 @@ Three of four backing means are adverse. Normal and scalar exactness, caller
 ownership and both idle guards pass at **0 B/op**. Keep the existing private
 snapshot lead and the original standalone confidence status.
 [Generated loop and matched observations](copy-vector-width-trials-evidence.json)
+
+## Source-aligned word snapshot
+
+The source-aligned variant transfers the final edge first, then loads the
+head and 31 source-aligned vectors before committing the remaining 32 stores.
+The JIT keeps them in registers. All 64 source phases stay within the checked
+row footprint.
+
+Against the current BCL-based package `3e09246f`, the variant loses **10.3 ns**
+on average over four shared backings, with two favorable and two adverse
+backing means. The matched driver alternates subject order and swaps buffer
+roles at 65,536 complete calls per subject. Normal and scalar exactness,
+ownership and both idle guards pass at **0 B/op**. Keep the current mover and
+the original full-group snapshot as the private lead. Standalone confidence
+remains open.
+[Sources, generated loop and matched observations](copy-vector-width-trials-evidence.json)

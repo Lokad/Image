@@ -366,3 +366,21 @@ consumers and select the existing natural-GC driver from the pinned runtime.
 This stage verifies identities and commands. Execute the original gates on
 the final immutable DLL during the refresh.
 [Verified archive and recipe identities](benchmark-refresh-runtime-preparation-evidence.json)
+
+## WebP decoder refresh recipes
+
+All four displayed WebP decode recipes resolve to frozen input, output and
+reference identities. The VM verifies 238 non-core runtime paths and one
+shared worker for the three VP8L rows. Keep the original natural-GC drivers,
+native brackets and 80, 80 and 496 managed calls per unit, respectively,
+for resident RGBA8, fresh-stream RGBA8 and the 16-color RGBA8 input.
+
+The original VP8 fresh-stream receipt pointed to an expired temporary
+directory. The restored runtime uses 51 pinned non-core files, two frozen
+fixture files and the actual `3e09246f` package DLL. Its original separate
+FFmpeg worker and build identity match. An untimed preflight passes exact
+managed and normal/scalar CLI pixels, alpha, complete stream reading, input
+lifetime and independent output ownership. All clocks were discarded.
+Retain the frozen 12-unit schedule and 16 subdivisions of eight calls for
+the final refresh.
+[Restored commands, source identities and verified archive](benchmark-refresh-runtime-preparation-evidence.json)
