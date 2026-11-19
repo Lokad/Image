@@ -478,3 +478,25 @@ generated consumers, pilot rule and both native brackets. The managed
 and native preparation and independent output lifetimes stay inside
 each one-shot operation, with zero retained managed plan bytes.
 [Recovered commands and verified validation archive](benchmark-refresh-runtime-preparation-evidence.json)
+
+## PNG and VP8L coding-validation refresh recipes
+
+The four displayed PNG validators and the VP8L alpha validator pass
+untimed on package `3e09246f`. The frozen PNG and WebP runtimes use
+the same benchmark assembly and FFmpeg worker. One regenerated proof
+matches both archived proofs apart from the package DLL identity.
+All seven input packets are byte-identical. The proof retains the
+prefix versus full-coding distinction, including rejection of invalid
+Deflate data by both coding validators.
+
+Each original generated delegate passes with the same 36-byte
+descriptor, independently owned results and unchanged input. The
+asynchronous PNG16 case retains complete delivery through EOF and
+borrowed stream ownership. The four PNG recipes reuse the original
+natural-GC driver. The VP8L recipe uses the same natural-GC settings
+with its original generated consumer, pilot, 12 actuals and native
+brackets. Rehearsal clocks were discarded. The verified archive also
+retains the first VP8L launch, which found that its frozen runtime only
+ships the generated driver's runtime configuration. Sharing the
+identical preparation proof resolved that launch dependency.
+[Commands, historical counts and validation archive](benchmark-refresh-runtime-preparation-evidence.json)

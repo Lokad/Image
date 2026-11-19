@@ -1609,6 +1609,29 @@ snapshot. All 32 matched pairs across eight backings are adverse, at
 to replace the private full-group lead or reopen its standalone timing.
 [Source, generated instructions and complete observations](copy-vector-width-trials-evidence.json)
 
+## Common storage across eight relative page offsets
+
+The quiet-VM diagnostic compares the production BCL mover, the private
+ascending 2 KiB snapshot and the frozen FFmpeg adapter on the same
+caller buffers. It retains each complete operation, both buffer roles,
+both orders and all 32 triples of 65,536 calls per subject. The eight
+folded relative page offsets span 160 to 1,968 bytes. Original pixel and
+ownership checks pass at **0 B/op**.
+
+The snapshot averages **21.4 ns** faster than production and **11.9 ns**
+faster than the adapter under the shared clock. It leads production on
+all eight backing averages and 14 of 16 role-specific averages. Twelve
+roles favor the snapshot in both orders. Choosing the faster managed
+mover in hindsight per role would save only another **0.8 ns** before
+dispatch cost. This leaves little headroom for a phase-based selector
+in the tested layout.
+
+One backing remains slower than the adapter and the independently
+allocated standalone intervals still include parity. The shared-buffer
+diagnostic adds no scored confirmation. Keep the snapshot private and
+preserve the production mover.
+[Complete observations, identities and verified archive](copy-vector-width-trials-evidence.json)
+
 ## Default-token dispatch and post-tested word groups
 
 The private route moves the noncancelable check to dispatch and enters
