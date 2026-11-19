@@ -299,9 +299,20 @@ def borrowed_copy_stage():
         assert c['nativeBuild'] == current['referenceBuild']['identity']
         stage['caseProducerSha256'][name] = current['producers']['linuxSha256']
     stage['cases'].update(current['cases'])
-    stage['currentBorrowedDrawingCounts'] = current['currentBorrowedDrawingCounts']
+    aligned = json.loads((ROOT / 'benchmarks/aligned-middle-copy-evidence.json').read_text(encoding='utf-8'))
+    assert aligned['productionAccepted'] and aligned['raw']['mirrored'] and aligned['raw']['allMembersVerified']
+    assert aligned['qualification']['sameActualPackageBothOs'] and aligned['qualification']['allThreeUsageExamplesBothOs']
+    assert set(aligned['cases']) == {'DrawingCopy8', 'OriginalClippedCopy8'}
+    for name, case in aligned['cases'].items():
+        previous = current['cases'][name]
+        for field in ('inputSha256', 'outputSha256', 'nativeBuild', 'driverSha256',
+                      'operationsPerSubject', 'subdivisionsPerUnit', 'referenceGeometryPreparedPerOperation'):
+            assert previous[field] == case[field]
+        assert case['librarySha256'] == aligned['librarySha256'] and case['status'] == 'pass'
+        stage['caseProducerSha256'][name] = aligned['librarySha256']
+    stage['cases'].update(aligned['cases'])
+    stage['currentBorrowedDrawingCounts'] = {'total': 13, 'passCount': 12, 'gaps': 0, 'uncertain': 1}
     assert set(stage['cases']) == {'DrawingCopy8', 'DrawingCopy16', 'DrawingCopyOverlap8', 'OriginalWordOverlap', 'OriginalClippedCopy8'}
-    assert current['currentCopyCounts'] == {'pass': 2, 'gap': 2, 'uncertain': 1}
     for name, c in stage['cases'].items():
         assert c['librarySha256'] == stage['caseProducerSha256'][name]
         assert c['actualIterations'] == c['nativeSamplesEachBracket'] == 12 and c['allActualsRetained']
@@ -2133,6 +2144,7 @@ No heap capacity or retention is added; validation and independent owners remain
         mark = ' †' if name.startswith('DrawingComposite') or name == 'OriginalWordComposite' else ''
         rows.append(('editing', f'| {label} ({status}){mark} | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | {c["ratio"]:.3f} / {c["upper"]:.3f} | 0 |'))
     b8, bw, bo = (drawing_cases[n] for n in ('DrawingCopy8', 'DrawingCopy16', 'DrawingCopyOverlap8'))
+    clipped_byte = copy_current['cases']['OriginalClippedCopy8']
     word_overlap = drawing_cases['OriginalWordOverlap']
     borrowed_drawing_note = f"""[Shared self-row storage](../benchmarks/SELF-ROW-STORAGE.md) saves
 **{copy_current['pairedEffect']['gainPercent']:.2f}% / {copy_current['pairedEffect']['savedUs']:.3f} µs** in controlled complete word pairs.
@@ -2142,32 +2154,17 @@ cost **{word_overlap['managedUs']:.3f} / FFmpeg {word_overlap['nativeUs']:.3f} �
 **{word_overlap['upper']:.6f}**, passes/stops. This is a scoped final-DLL gain;
 historical clocks and prototype effects are not added.
 
-[Complete copy-operation boundaries](../benchmarks/COPY-OPERATION-BOUNDARY.md)
-now include native dynamic clipping and address preparation every operation.
-The old fixed adapter prevalidated geometry; compiler versioning hoisted
-preparation in the extended clipped adapter. The explicit authored-wrapper
-correction preserves FFmpeg, inputs, settings and exact output. Old figures
-remain prepared-native diagnostics, without a production speedup claim.
-
-Separate byte is **{b8['managedUs']:.3f} / {b8['nativeUs']:.3f} µs**, upper
-**{b8['upper']:.6f}**, a gap; clipped byte also remains a gap. Separate word is
+[Aligned-interior RGBA8 copying](../benchmarks/WHOLE-ROW-COPY-PREPARATION-TRIALS.md#aligned-interior-with-one-vector-at-each-edge)
+passes the complete-operation comparisons. Separate RGBA8 is
+**{b8['managedUs']:.3f} / FFmpeg {b8['nativeUs']:.3f} µs**, upper **{b8['upper']:.6f}**.
+Clipped RGBA8 is **{clipped_byte['managedUs']:.3f} / FFmpeg {clipped_byte['nativeUs']:.3f} µs**,
+upper **{clipped_byte['upper']:.6f}**. Both use the original reference with dynamic clipping
+and address preparation. Separate RGBA16 is
 **{bw['managedUs']:.3f} / {bw['nativeUs']:.3f} µs**, interval
-**{bw['lower']:.6f}–{bw['upper']:.6f}**, uncertain. All twelve units/group, original
-65,536/262,144 operations, case-specific drivers, subdivisions, warmups and
-conservative gates stay. The [placement-balanced RGBA16 confirmation](../benchmarks/COPY-OPERATION-BOUNDARY.md#placement-balanced-rgba16-confirmation)
-also leaves confidence open across twelve independent borrowed backing pairs.
-Byte overlap **{bo['managedUs']:.3f} / {bo['nativeUs']:.3f} µs**, upper
-**{bo['upper']:.6f}**, passes/stops. Both self-copy passes retain identified
-source-valid shared-self-row evidence; the three corrected comparisons use the
-actual pending-publication package. Other primitives keep their own producers.
-
-Copies allocate **0 B/op**, with no new owned/admitted/retained workspace.
-Caller storage and unmeasured physical/native/JIT peaks stay separate. All three
-corrected normal/scalar preflights and original full-frame/source/owner gates
-pass. One authored native-worker build; zero production/harness/driver/archive/
-fixture/package builds. Unchanged production reuses **6,844 full/live checks each
-OS**, the SAME actual package and all three examples. Superseded/rejected
-experiments remain linked history, outside current renderer dependencies.
+**{bw['lower']:.6f}–{bw['upper']:.6f}**. Its [placement-balanced confirmation](../benchmarks/COPY-OPERATION-BOUNDARY.md#placement-balanced-rgba16-confirmation)
+also leaves parity uncertain. Byte overlap **{bo['managedUs']:.3f} / {bo['nativeUs']:.3f} µs**,
+upper **{bo['upper']:.6f}**, retains its passing evidence. These copies allocate
+**0 B/op** and borrow both buffers without owned workspace.
 """
     wc = word_composite['case']
     borrowed_drawing_note += f"""
@@ -3917,8 +3914,9 @@ artifact costs pending the full release refresh.
 retains inherited unmeasured names. Passing related inputs or different public
 boundaries do not retire those requirements; the full 289-path objective stays open.
 
-[Original clipped fills](../benchmarks/ORIGINAL-CLIPPED-FILL.md) pass; the
-[clipped byte copy](../benchmarks/COPY-OPERATION-BOUNDARY.md) is a demonstrated gap. Both use the original 254×129 effective region; earlier 256-pixel controls
+[Original clipped fills](../benchmarks/ORIGINAL-CLIPPED-FILL.md) and the
+[clipped byte copy](../benchmarks/WHOLE-ROW-COPY-PREPARATION-TRIALS.md#aligned-interior-with-one-vector-at-each-edge)
+pass. Both use the original 254×129 effective region. Earlier 256-pixel controls
 stay separate. The [original byte composite](../benchmarks/ORIGINAL-CLIPPED-COMPOSITE.md)
 passes at **{oc['managedUs']:.3f} / {oc['nativeUs']:.3f} µs**, upper **{oc['upper']:.6f}**, over 510×254 pixels.
 Its reference is a **retained FFmpeg n8.1 overlay graph/static source**, with reset
@@ -3929,9 +3927,9 @@ All four original clipped operations allocate **0 B/public operation**; composit
 allocation uses a separate 3×128 normal/scalar diagnostic because its BDN driver
 emits no GC line. Added owned capacity per operation is zero; standing caller pixels,
 native graph/allocator retention and unmeasured physical/JIT peaks stay separate.
-Reuse unchanged **6,747 checks per OS/SAME actual package/all 3 examples**. All inherited
-drawing recipes now have measurements: **thirteen borrowed controls, ten passes,
-two gaps, one uncertainty**. [Authored default variation](../benchmarks/DEFAULT-VARIATION.md)
+Reuse unchanged **6,747 checks per OS/SAME actual package/all 3 examples**. The
+thirteen borrowed drawing controls have **twelve passes and one uncertainty**.
+[Authored default variation](../benchmarks/DEFAULT-VARIATION.md)
 now passes/stops at **{dv['managedUs']:.3f} / {dv['referenceUs']:.3f} µs**, upper **{dv['upper']:.6f}**,
 with **3,608 / 58,496 B/op**. Four reference public layout calls, outlines,
 measurement, independent output and disposal are included; fonts are prepared

@@ -1,5 +1,9 @@
 # Complete copy-operation reference boundary
 
+The [aligned-interior round](WHOLE-ROW-COPY-PREPARATION-TRIALS.md#aligned-interior-with-one-vector-at-each-edge)
+supersedes both RGBA8 timings below with passing complete-operation evidence.
+The separate RGBA16 confidence remains open.
+
 **Measurement/tooling correction; no production change.** Dynamic clipping and
 address preparation now run inside every native copy operation. Two byte-copy
 gaps remain; separate-word confidence is open. No historical-clock difference is

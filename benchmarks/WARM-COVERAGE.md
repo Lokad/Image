@@ -436,8 +436,6 @@ All actuals/guards/exactframes are retained. Production/package/current costs
 remain unchanged;no broad/package repeat or renderer dependency. Further work
 needs attributable useful work,not favorable recaptures of either implementation.
 
-[Whole-row copy preparation](WHOLE-ROW-COPY-PREPARATION-TRIALS.md) stays private.
-Both original separate-word screens have adverse means; the extent-proof revision
-removes duplicate JIT loops but remains inconclusive. No confirmation, production
-change, reference refresh or broad/package repeat. Current gaps and qualified
-mapping package remain; the earlier row-view risk is reconciled explicitly.
+[Aligned-interior copying](WHOLE-ROW-COPY-PREPARATION-TRIALS.md#aligned-interior-with-one-vector-at-each-edge)
+passes both separate-buffer RGBA8 controls on the accepted Release package.
+The separate RGBA16 route retains its existing mover and open confidence.

@@ -1390,3 +1390,40 @@ are adverse. Both variants preserve original normal and scalar exactness
 and ownership and allocate **0 B/op** in the matched screens with passing
 idle guards. Close both variants.
 [Observations and generated code](copy-vector-width-trials-evidence.json)
+
+## Aligned interior with one vector at each edge
+
+The row kernel copies the full aligned middle between two bounded edge
+transfers. An initial step of 64, 128, 192 or 256 bytes lets the first two
+groups overlap when required, leaving a single four-vector loop. Only the
+head and end stores can cross a destination cache line when the phase holds.
+All vector accesses stay inside the proved row footprints even if the backing
+moves. The portable and self-overlap routes and live-token row checkpoints
+retain their original behavior.
+
+The first version used two tests to copy the middle remainder exactly.
+It saves 3.7 ns clipped with mixed placements and loses 21.0 ns separate.
+The revised 400-byte helper uses one loop and saves 269.8 ns clipped and
+315.3 ns separate against the reversed-tail package across all four shared
+backings. Both revisions pass 254,016 width/phase combinations and retain
+all role and order observations. The clocks cover the complete operation.
+The split-store counts come from the geometry model.
+
+| Original borrowed operation | Lokad.Image / FFmpeg µs | Conservative ratio interval | GC B/op |
+| --- | ---: | ---: | ---: |
+| Clipped RGBA8, 254×129 effective | 1.589 / 1.876 | 0.835696–0.855785 | 0 |
+| Separate RGBA8, 256×129 | 1.578 / 1.895 | 0.807195–0.852137 | 0 |
+
+Both standalone comparisons pass on the same immutable Release package.
+They retain 12 units in each group, the original public clipping and
+borrowing boundaries, exact full canvases and source/ownership checks.
+Windows and Linux pass 6,861 checks each including the live differential
+suite, focused normal and scalar paths, and the same actual package consumer
+with all three usage examples. The new regression test covers separate byte
+copies around the vector and cancellation chunk boundaries.
+
+Routing separate RGBA16 through the same loop loses 17.5 ns on average in
+the matched screen, with three of four backing means adverse. Keep its
+existing mover and open reference confidence. The rejected word route and
+first byte implementation retain their complete observations and checks.
+[Accepted scores, qualification and verified archive](aligned-middle-copy-evidence.json)

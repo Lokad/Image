@@ -76,32 +76,17 @@ cost **5.186 / FFmpeg 5.602 µs**, upper
 **0.930762**, passes/stops. This is a scoped final-DLL gain;
 historical clocks and prototype effects are not added.
 
-[Complete copy-operation boundaries](../benchmarks/COPY-OPERATION-BOUNDARY.md)
-now include native dynamic clipping and address preparation every operation.
-The old fixed adapter prevalidated geometry; compiler versioning hoisted
-preparation in the extended clipped adapter. The explicit authored-wrapper
-correction preserves FFmpeg, inputs, settings and exact output. Old figures
-remain prepared-native diagnostics, without a production speedup claim.
-
-Separate byte is **1.953 / 1.906 µs**, upper
-**1.037472**, a gap; clipped byte also remains a gap. Separate word is
+[Aligned-interior RGBA8 copying](../benchmarks/WHOLE-ROW-COPY-PREPARATION-TRIALS.md#aligned-interior-with-one-vector-at-each-edge)
+passes the complete-operation comparisons. Separate RGBA8 is
+**1.578 / FFmpeg 1.895 µs**, upper **0.852137**.
+Clipped RGBA8 is **1.589 / FFmpeg 1.876 µs**,
+upper **0.855785**. Both use the original reference with dynamic clipping
+and address preparation. Separate RGBA16 is
 **3.827 / 3.817 µs**, interval
-**0.991834–1.011718**, uncertain. All twelve units/group, original
-65,536/262,144 operations, case-specific drivers, subdivisions, warmups and
-conservative gates stay. The [placement-balanced RGBA16 confirmation](../benchmarks/COPY-OPERATION-BOUNDARY.md#placement-balanced-rgba16-confirmation)
-also leaves confidence open across twelve independent borrowed backing pairs.
-Byte overlap **3.885 / 4.183 µs**, upper
-**0.938291**, passes/stops. Both self-copy passes retain identified
-source-valid shared-self-row evidence; the three corrected comparisons use the
-actual pending-publication package. Other primitives keep their own producers.
-
-Copies allocate **0 B/op**, with no new owned/admitted/retained workspace.
-Caller storage and unmeasured physical/native/JIT peaks stay separate. All three
-corrected normal/scalar preflights and original full-frame/source/owner gates
-pass. One authored native-worker build; zero production/harness/driver/archive/
-fixture/package builds. Unchanged production reuses **6,844 full/live checks each
-OS**, the SAME actual package and all three examples. Superseded/rejected
-experiments remain linked history, outside current renderer dependencies.
+**0.991834–1.011718**. Its [placement-balanced confirmation](../benchmarks/COPY-OPERATION-BOUNDARY.md#placement-balanced-rgba16-confirmation)
+also leaves parity uncertain. Byte overlap **3.885 / 4.183 µs**,
+upper **0.938291**, retains its passing evidence. These copies allocate
+**0 B/op** and borrow both buffers without owned workspace.
 
 [Original RGBA16 self-compositing](../benchmarks/ORIGINAL-WORD-COMPOSITE.md)
 passes/stops at **649.772 / ImageSharp 716.960 µs**, upper
@@ -117,8 +102,9 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
 retains inherited unmeasured names. Passing related inputs or different public
 boundaries do not retire those requirements; the full 289-path objective stays open.
 
-[Original clipped fills](../benchmarks/ORIGINAL-CLIPPED-FILL.md) pass; the
-[clipped byte copy](../benchmarks/COPY-OPERATION-BOUNDARY.md) is a demonstrated gap. Both use the original 254×129 effective region; earlier 256-pixel controls
+[Original clipped fills](../benchmarks/ORIGINAL-CLIPPED-FILL.md) and the
+[clipped byte copy](../benchmarks/WHOLE-ROW-COPY-PREPARATION-TRIALS.md#aligned-interior-with-one-vector-at-each-edge)
+pass. Both use the original 254×129 effective region. Earlier 256-pixel controls
 stay separate. The [original byte composite](../benchmarks/ORIGINAL-CLIPPED-COMPOSITE.md)
 passes at **78.567 / 526.201 µs**, upper **0.159260**, over 510×254 pixels.
 Its reference is a **retained FFmpeg n8.1 overlay graph/static source**, with reset
@@ -129,9 +115,9 @@ All four original clipped operations allocate **0 B/public operation**; composit
 allocation uses a separate 3×128 normal/scalar diagnostic because its BDN driver
 emits no GC line. Added owned capacity per operation is zero; standing caller pixels,
 native graph/allocator retention and unmeasured physical/JIT peaks stay separate.
-Reuse unchanged **6,747 checks per OS/SAME actual package/all 3 examples**. All inherited
-drawing recipes now have measurements: **thirteen borrowed controls, ten passes,
-two gaps, one uncertainty**. [Authored default variation](../benchmarks/DEFAULT-VARIATION.md)
+Reuse unchanged **6,747 checks per OS/SAME actual package/all 3 examples**. The
+thirteen borrowed drawing controls have **twelve passes and one uncertainty**.
+[Authored default variation](../benchmarks/DEFAULT-VARIATION.md)
 now passes/stops at **3.551 / 20.357 µs**, upper **0.184945**,
 with **3,608 / 58,496 B/op**. Four reference public layout calls, outlines,
 measurement, independent output and disposal are included; fonts are prepared
@@ -531,7 +517,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic RGBA16 reduction, input+output+4 KiB † → 128×64 | 405.66 | 448.29 | 0.905 / 0.918803 | 112 |
 | Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 810.11 | 902.40 | 0.898 / 0.906412 | 199,938 |
 | Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 732.70 | 825.62 | 0.887 / 0.898772 | 199,898 |
-| Exact rectangle copy into borrowed RGBA8 canvas (gap) | 1.95 | 1.91 | 1.025 / 1.037 | 0 |
+| Exact rectangle copy into borrowed RGBA8 canvas (parity confirmed) | 1.58 | 1.90 | 0.833 / 0.852 | 0 |
 | Exact rectangle copy into borrowed RGBA16 canvas (confidence open) | 3.83 | 3.82 | 1.003 / 1.012 | 0 |
 | Exact clipped fill into borrowed RGBA8 canvas (parity confirmed) | 1.24 | 1.57 | 0.789 / 0.793 | 0 |
 | Exact clipped fill into borrowed RGBA16 canvas (parity confirmed) | 2.09 | 4.10 | 0.511 / 0.513 | 0 |
@@ -577,7 +563,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Vertical flip RGBA8 (parity confirmed) † | 8.92 | 9.15 | 0.975 / 0.988 | 56 |
 | Original clipped RGBA8 fill, 254×129 (parity confirmed) | 1.195 | 1.730 | 0.690 / 0.696649 | 0 |
 | Original clipped RGBA16 fill, 254×129 (parity confirmed) | 2.184 | 4.829 | 0.452 / 0.456739 | 0 |
-| Original clipped RGBA8 copy, 254×129 (gap) | 1.983 | 1.914 | 1.036 / 1.049530 | 0 |
+| Original clipped RGBA8 copy, 254×129 (pass) | 1.589 | 1.876 | 0.847 / 0.855785 | 0 |
 | Original clipped RGBA8 composite / retained FFmpeg (parity confirmed) | 78.567 | 526.201 | 0.149 / 0.159260 | 0 |
 | Authored default-variation layout / ImageSharp public integration (parity confirmed) | 3.551 | 20.357 | 0.174 / 0.184945 | 3,608 |
 | Authored Unicode layout / corrected ImageSharp integration (parity confirmed) | 2.585 | 117.234 | 0.022 / 0.023246 | 5,592 |

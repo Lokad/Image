@@ -96,6 +96,9 @@ public static partial class ImageDrawing
             if (sameBuffer && canvas.BitDepth == 16)
                 IndependentRowCopy.CopySelfRows(canvasPixels, sourceRowOffset, canvasRowOffset,
                     rowBytes, region.Height, canvasRowStep, cancellationToken);
+            else if (!sameBuffer && rowBytes >= 512)
+                IndependentRowCopy.CopyStagedAlignedRows(sourcePixels, canvasPixels, sourceRowOffset, canvasRowOffset,
+                    rowBytes, region.Height, sourceRowStep, canvasRowStep, cancellationToken);
             else
                 IndependentRowCopy.CopyRows(sourcePixels, canvasPixels, sourceRowOffset, canvasRowOffset,
                     rowBytes, region.Height, sourceRowStep, canvasRowStep, cancellationToken);
