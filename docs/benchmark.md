@@ -51,6 +51,11 @@ The shared identity-height executor also passes.
 RGBA8 128×64 reduction at **356.63 / 366.62 µs**,
 upper **0.986644**, **112 B/op**.
 All 61 required direct bicubic controls now have passing evidence.
+[Six-tap Lanczos3 word windows](../benchmarks/LANCZOS-SIX-TAP-WORD-WINDOWS.md)
+qualify both RGBA16 enlargement boundaries on one actual package. The prepared
+path saves **231 µs** in matched managed comparisons. Exact output and capacity
+are preserved.
+
 [Current-package bilinear](../benchmarks/BILINEAR-CURRENT-PACKAGE.md) confirms
 the RGBA8 enlargement and both reductions. The interleaved RGBA8 reduction
 passes at upper **0.997123** and **8,473 B/op**.
@@ -482,8 +487,8 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Lanczos3 prepared RGBA16 / zimg prepared † → 256×129 | 497.44 | 512.29 | 0.971 / 0.984 | 141 |
 | Lanczos3 one-shot RGBA8 / zimg one-shot † → 1027×519 | 3,779.99 | 5,260.25 | 0.719 / 0.723 | 319,224 |
 | Lanczos3 prepared RGBA8 / zimg prepared † → 1027×519 | 3,333.69 | 4,090.78 | 0.815 / 0.831 | 148 |
-| Lanczos3 one-shot RGBA16 / zimg one-shot † → 1027×519 | 4,080.93 | 5,074.41 | 0.804 / 0.808 | 4,592,818 |
-| Lanczos3 prepared RGBA16 / zimg prepared † → 1027×519 | 4,117.26 | 4,212.39 | 0.977 / 0.990 | 4,264,760 |
+| Lanczos3 one-shot RGBA16 / zimg one-shot † → 1027×519 | 3,928.21 | 5,092.24 | 0.771 / 0.791 | 4,592,818 |
+| Lanczos3 prepared RGBA16 / zimg prepared † → 1027×519 | 3,886.11 | 4,227.94 | 0.919 / 0.948 | 4,264,760 |
 | Bicubic resize RGBA8 † → 256×129 | 431.10 | 454.16 | 0.949 / 0.956893 | 112 |
 | Bicubic upscale RGBA16 † → 1027×519 | 2,630.58 | 2,872.22 | 0.916 / 0.923 | 4,264,573 |
 | Bicubic RGBA8, width reduction / height enlargement, input+output+4 KiB † → 256×519 | 754.04 | 840.84 | 0.897 / 0.913422 | 113 |

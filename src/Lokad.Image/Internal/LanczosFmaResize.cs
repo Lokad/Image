@@ -338,6 +338,13 @@ internal static class LanczosFmaResize
             var next = typeof(TWindows) == typeof(PairedWordWindows) && x + 1 < windows.Length ? windows[x + 1] : default;
             var paired = typeof(TWindows) == typeof(PairedWordWindows) && x + 1 < windows.Length && next.First == window.First && next.Count == window.Count;
             if (paired) context.Cancellation.ThrowIfCancellationRequested();
+            if (paired && window.Count == 6)
+            {
+                FilterSixTapPair(input.Slice(window.First * 4, 24), weights.Slice(window.Offset, 6),
+                    weights.Slice(next.Offset, 6), replicate01, replicate23).CopyTo(output.Slice(x * 4, 8));
+                x++;
+                continue;
+            }
             var nextFirst = Vector512<double>.Zero; var nextSecond = Vector512<double>.Zero;
             var first = Vector512<double>.Zero; var second = Vector512<double>.Zero; var i = 0;
             for (; i <= window.Count - 4; i += 4)
@@ -385,6 +392,40 @@ internal static class LanczosFmaResize
             }
         }
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static Vector512<double> FilterSixTapPair(ReadOnlySpan<uint> input, ReadOnlySpan<int> first,
+        ReadOnlySpan<int> second, Vector512<long> replicate01, Vector512<long> replicate23)
+    {
+        var products = Vector512.Create(input);
+        var values01 = Avx512F.ConvertToVector512Double(products.GetLower());
+        var values23 = Avx512F.ConvertToVector512Double(products.GetUpper());
+        var sums = Vector512.Create(SumFour(values01, values23, first, replicate01, replicate23),
+            SumFour(values01, values23, second, replicate01, replicate23));
+        // Read and convert both tail taps together, keeping the two outputs in
+        // separate halves. Each half applies the last two taps in original order.
+        var tail = Avx512F.ConvertToVector512Double(Vector256.Create(input.Slice(16, 8)));
+        sums = AccumulateWordWindowPair(sums, tail.GetLower(), first[4], second[4]);
+        return AccumulateWordWindowPair(sums, tail.GetUpper(), first[5], second[5]);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static Vector256<double> SumFour(Vector512<double> values01, Vector512<double> values23,
+        ReadOnlySpan<int> weights, Vector512<long> replicate01, Vector512<long> replicate23)
+    {
+        var coefficients = Avx.ConvertToVector256Double(Vector128.Create(weights));
+        var wide = Vector512.Create(coefficients, coefficients).AsInt64();
+        var first = Avx512F.FusedMultiplyAdd(values01, Avx512F.PermuteVar8x64(wide, replicate01).AsDouble(), Vector512<double>.Zero);
+        var second = Avx512F.FusedMultiplyAdd(values23, Avx512F.PermuteVar8x64(wide, replicate23).AsDouble(), Vector512<double>.Zero);
+        var pair = Avx512F.Add(first, second);
+        return Avx.Add(pair.GetLower(), pair.GetUpper());
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static Vector512<double> AccumulateWordWindowPair(Vector512<double> sums, Vector256<double> values,
+        int firstWeight, int secondWeight)
+        => Avx512F.FusedMultiplyAdd(Vector512.Create(values, values),
+            Vector512.Create(Vector256.Create((double)firstWeight), Vector256.Create((double)secondWeight)), sums);
 
     internal static void Accumulate(ReadOnlySpan<double> row, Span<double> sums, int weight, OperationContext context)
     {

@@ -1,0 +1,67 @@
+{
+  "packageSha256": "22dd99fdf60e97a7adfb1ded21e7405bb1d3cdd8d1bb14f828a2f4ed5c9a3190",
+  "librarySha256": "170c77bd26a53fc7048574ca7119ba37d649084d009151a83f618385ebd95328",
+  "cases": {
+    "RepeatedEnlarge16": {
+      "managedUs": 3886.1060885416664,
+      "nativeUs": 4227.936609375,
+      "ratio": 0.9191495633885899,
+      "lower": 0.8886856530917271,
+      "upper": 0.9476683998688787,
+      "allocatedBytes": 4264760,
+      "actuals": 12,
+      "allOriginalGatesPassed": true
+    },
+    "OneShotEnlarge16": {
+      "managedUs": 3928.2127687499997,
+      "nativeUs": 5092.244725,
+      "ratio": 0.7714108376340848,
+      "lower": 0.7559054475447545,
+      "upper": 0.7914416542602356,
+      "allocatedBytes": 4592818,
+      "actuals": 12,
+      "allOriginalGatesPassed": true
+    }
+  },
+  "qualifiedPairedGain": {
+    "baselineUs": 4062.3220625,
+    "candidateUs": 3831.0138177083336,
+    "lower": 0.9280815187513404,
+    "upper": 0.9581422101157427,
+    "toolSha256": "e1ad7e50dae6bb70305234301e77ef42d3650a8906399de0abd12d46cf636014"
+  },
+  "retainedManagedBytes": 333396,
+  "nativeScratchBytes": 274240,
+  "raw": {
+    "lanczos-six-tap": {
+      "file": "results.tar.xz",
+      "sha256": "2273abfbc21b5df4097b17e574679e017eedfc1952f78bfd6a0b41e3cb9e1cc5",
+      "bytes": 408980,
+      "members": 35
+    },
+    "lanczos-six-tap-unrolled": {
+      "file": "results.tar.xz",
+      "sha256": "f1e4f264d5733fded96f0885b84e215be418eff249a1da941416f89f72f10634",
+      "bytes": 405040,
+      "members": 32
+    }
+  },
+  "allArchiveMembersVerifiedOnBothHosts": true,
+  "qualification": {
+    "fullEachOs": [
+      3391,
+      2526,
+      948
+    ],
+    "focusedInternalEachOs": 163,
+    "focusedPublicEachOsPerFallbackMode": 33,
+    "fallbackModes": [
+      "AVX512F disabled",
+      "Hardware intrinsics disabled"
+    ],
+    "usageExamplesEachOs": 3,
+    "sameActualPackageBothOs": true,
+    "timedDllPackedUnchanged": true,
+    "configuration": "Release"
+  }
+}

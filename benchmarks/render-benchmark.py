@@ -106,6 +106,12 @@ def apply_current_lanczos(editing):
     rows, seen = [], set()
     refresh = storage['cases']
     assert set(refresh) == set(current['cases']) - {'OneShotEnlarge16', 'RepeatedEnlarge16'}
+    word_windows = json.loads((ROOT / 'benchmarks/lanczos-six-tap-word-windows-evidence.json').read_text(encoding='utf-8'))
+    word_costs = word_windows['cases']
+    assert set(word_costs) == {'OneShotEnlarge16', 'RepeatedEnlarge16'}
+    assert word_windows['qualification']['sameActualPackageBothOs'] and word_windows['qualification']['timedDllPackedUnchanged']
+    assert word_windows['allArchiveMembersVerifiedOnBothHosts'] and word_windows['qualifiedPairedGain']['upper'] < 1
+    assert all(c['actuals'] == 12 and c['upper'] <= 1 and c['allOriginalGatesPassed'] for c in word_costs.values())
     for line in editing.splitlines():
         cells = [part.strip() for part in line.strip('|').split('|')]
         label = re.sub(r' \((?:gap|uncertain)\)', '', cells[0])
@@ -120,6 +126,8 @@ def apply_current_lanczos(editing):
                 assert c['librarySha256'] == storage['producers']['linuxSha256']
                 assert len(c['actualOperationCounts']) == 12 and c['upper'] <= 1 and c['status'] == 'pass'
                 assert all(c[k] for k in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed'))
+            elif case in word_costs:
+                c = word_costs[case]
             cells[:5] = [label, f"{c['managedUs']:,.2f}", f"{c['nativeUs']:,.2f}",
                          f"{c['ratio']:.3f} / {c['upper']:.3f}", f"{c['allocatedBytes']:,}"]
             line = '| ' + ' | '.join(cells) + ' |'
@@ -3907,6 +3915,11 @@ The shared identity-height executor also passes.
 RGBA8 128×64 reduction at **{tail_cost['managedUs']:.2f} / {tail_cost['nativeUs']:.2f} µs**,
 upper **{tail_cost['upper']:.6f}**, **{tail_cost['allocatedBytes']} B/op**.
 All 61 required direct bicubic controls now have passing evidence.
+[Six-tap Lanczos3 word windows](../benchmarks/LANCZOS-SIX-TAP-WORD-WINDOWS.md)
+qualify both RGBA16 enlargement boundaries on one actual package. The prepared
+path saves **231 µs** in matched managed comparisons. Exact output and capacity
+are preserved.
+
 [Current-package bilinear](../benchmarks/BILINEAR-CURRENT-PACKAGE.md) confirms
 the RGBA8 enlargement and both reductions. The interleaved RGBA8 reduction
 passes at upper **{bilinear_down8['upper']:.6f}** and **{bilinear_down8['allocatedBytes']:,} B/op**.
