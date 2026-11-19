@@ -1548,3 +1548,25 @@ ownership and both idle guards pass at **0 B/op**. Keep the current mover and
 the original full-group snapshot as the private lead. Standalone confidence
 remains open.
 [Sources, generated loop and matched observations](copy-vector-width-trials-evidence.json)
+
+## Word snapshot and FFmpeg on common caller storage
+
+The current BCL route, the private full-group snapshot and the unchanged
+FFmpeg plane-copy adapter use the same four pinned source/canvas pairs.
+Each runs the whole operation, observes a destination sample and uses the
+same outer clock. Both buffer roles and opposite execution orders run
+65,536 calls per subject. The native clock check puts the extra outer
+timing and invocation cost at 0.010 ns per operation in this capture.
+
+The snapshot saves **14.1 ns** against production and averages **20.5 ns**
+ahead of FFmpeg. All four backing means favor the snapshot against both
+subjects, and 15 of 16 groups favor it against FFmpeg. All backing pairs
+have the same relative page offset, 2,128 bytes in one direction and
+1,968 in the other. This limits what the experiment says about the
+standalone comparison. Exact full-frame pixels, the unchanged source,
+live ownership and both quiet guards pass at **0 B/op**.
+
+Keep the snapshot as the private lead and retain its two inconclusive
+complete-operation confidence intervals. This diagnostic adds evidence about
+placement sensitivity without repeating either confirmation.
+[Command, full observations and verified archive](copy-vector-width-trials-evidence.json)
