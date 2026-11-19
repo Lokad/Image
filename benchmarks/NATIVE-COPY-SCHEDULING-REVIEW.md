@@ -463,3 +463,18 @@ alpha, hidden RGB, unchanged source and independent surviving output
 match each historical gate. The previous crop evidence remains
 applicable at its recorded public boundary.
 [Commands, original validation and verified archive](benchmark-refresh-runtime-preparation-evidence.json)
+
+## Bicubic enlargement and one-shot storage refresh recipes
+
+The original RGBA16 enlargement and four displayed one-shot reductions
+reproduce their accepted pixels, native bounds and ownership checks on
+package `3e09246f`. Three runtime groups preserve 194 existing non-core
+files and five native workers. Each rehearsal calls the original
+generated workload once and discards its clocks.
+
+The enlargement reuses the verified direct-bicubic natural-GC driver.
+The four reductions use an explicit natural-GC job with their frozen
+generated consumers, pilot rule and both native brackets. The managed
+and native preparation and independent output lifetimes stay inside
+each one-shot operation, with zero retained managed plan bytes.
+[Recovered commands and verified validation archive](benchmark-refresh-runtime-preparation-evidence.json)

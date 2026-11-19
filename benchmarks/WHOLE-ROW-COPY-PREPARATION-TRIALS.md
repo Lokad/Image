@@ -1609,6 +1609,21 @@ snapshot. All 32 matched pairs across eight backings are adverse, at
 to replace the private full-group lead or reopen its standalone timing.
 [Source, generated instructions and complete observations](copy-vector-width-trials-evidence.json)
 
+## Default-token dispatch and post-tested word groups
+
+The private route moves the noncancelable check to dispatch and enters
+the transfer loop directly after its positive group-count proof.
+Cancelable calls use the production path with its original checkpoints.
+The 703-byte helper keeps the full 64-transfer snapshot and uses a
+single group test after the stores. Normal and scalar pixel and
+ownership checks pass.
+
+At **0 B/op**, the mean saving against the private full snapshot is
+**5.8 ns**. Six of eight backing means are favorable. One contributes
+32.6 ns, while the other seven average 2.0 ns. Both quiet guards pass.
+The result leaves the original standalone confidence open.
+[Source, generated instructions and full observations](copy-vector-width-trials-evidence.json)
+
 ## Descending stores after a full word snapshot
 
 The variant keeps all 32 source loads in ascending order and writes the
