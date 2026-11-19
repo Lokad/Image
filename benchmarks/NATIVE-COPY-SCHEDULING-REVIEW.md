@@ -543,3 +543,15 @@ driver in the runtime configuration argument. The correction keeps
 the exact configuration, original natural-GC tool, generated loops
 and all existing validation.
 [Commands, original counts and verified archive](benchmark-refresh-runtime-preparation-evidence.json)
+
+## Bilinear refresh recipes
+
+The four prepared-native bilinear recipes pass on package
+`3e09246f`. Each uses its original exact rational pixels, native
+RGB and alpha bounds, scalar and normal CLI checks and independent
+outputs. RGBA8 enlargement and RGBA16 reduction retain their
+generated natural-GC pilots. RGBA8 reduction and RGBA16 enlargement
+retain twelve units of 256 operations with the original 16
+subdivisions. Reuse the separate one-shot RGBA16 enlargement binding.
+All rehearsal clocks were discarded.
+[Commands, receipts and verified archive](benchmark-refresh-runtime-preparation-evidence.json)

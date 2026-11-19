@@ -81,10 +81,10 @@ passes the complete-operation comparisons. Separate RGBA8 is
 **1.578 / FFmpeg 1.895 µs**, upper **0.852137**.
 Clipped RGBA8 is **1.589 / FFmpeg 1.876 µs**,
 upper **0.855785**. Both use the original reference with dynamic clipping
-and address preparation. Separate RGBA16 is
-**3.827 / 3.817 µs**, interval
-**0.991834–1.011718**. Its [placement-balanced confirmation](../benchmarks/COPY-OPERATION-BOUNDARY.md#placement-balanced-rgba16-confirmation)
-also leaves parity uncertain. Byte overlap **3.885 / 4.183 µs**,
+and address preparation. [Separate RGBA16](../benchmarks/WORD-COPY-PAIRED-ROWS.md)
+passes at **3.423 / FFmpeg 3.788 µs**,
+interval **0.861085–0.945815**, on the immutable package.
+Byte overlap **3.885 / 4.183 µs**,
 upper **0.938291**, retains its passing evidence. These copies allocate
 **0 B/op** and borrow both buffers without owned workspace.
 
@@ -116,7 +116,7 @@ allocation uses a separate 3×128 normal/scalar diagnostic because its BDN drive
 emits no GC line. Added owned capacity per operation is zero; standing caller pixels,
 native graph/allocator retention and unmeasured physical/JIT peaks stay separate.
 Reuse unchanged **6,747 checks per OS/SAME actual package/all 3 examples**. The
-thirteen borrowed drawing controls have **twelve passes and one uncertainty**.
+thirteen borrowed drawing controls have **passing evidence**.
 [Authored default variation](../benchmarks/DEFAULT-VARIATION.md)
 now passes/stops at **3.551 / 20.357 µs**, upper **0.184945**,
 with **3,608 / 58,496 B/op**. Four reference public layout calls, outlines,
@@ -518,7 +518,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Bicubic RGBA8, width down / height up, default workspace † → 256×519 | 810.11 | 902.40 | 0.898 / 0.906412 | 199,938 |
 | Bicubic RGBA16, width down / height up, default workspace † → 256×519 | 732.70 | 825.62 | 0.887 / 0.898772 | 199,898 |
 | Exact rectangle copy into borrowed RGBA8 canvas (parity confirmed) | 1.58 | 1.90 | 0.833 / 0.852 | 0 |
-| Exact rectangle copy into borrowed RGBA16 canvas (confidence open) | 3.83 | 3.82 | 1.003 / 1.012 | 0 |
+| Exact rectangle copy into borrowed RGBA16 canvas (parity confirmed) | 3.42 | 3.79 | 0.904 / 0.946 | 0 |
 | Exact clipped fill into borrowed RGBA8 canvas (parity confirmed) | 1.24 | 1.57 | 0.789 / 0.793 | 0 |
 | Exact clipped fill into borrowed RGBA16 canvas (parity confirmed) | 2.09 | 4.10 | 0.511 / 0.513 | 0 |
 | Overlapping RGBA8 copy + reverse restoration, per pair (parity confirmed) | 3.88 | 4.18 | 0.929 / 0.938 | 0 |

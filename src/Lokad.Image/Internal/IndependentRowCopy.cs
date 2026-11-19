@@ -139,6 +139,131 @@ internal static class IndependentRowCopy
         }
     }
 
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    internal static void CopySnapshotWordRows(ReadOnlySpan<byte> input, Span<byte> output,
+        int inputOffset, int outputOffset, int rowBytes, int rows,
+        int inputStep, int outputStep)
+    {
+        const int groupBytes = 2048;
+        if (rowBytes < groupBytes || (rowBytes & (groupBytes - 1)) != 0)
+            throw new ArgumentOutOfRangeException(nameof(rowBytes));
+        RequireStagedFootprints(input.Length, output.Length, inputOffset, outputOffset,
+            rowBytes, rows, inputStep, outputStep);
+
+        ref var source = ref Unsafe.Add(ref MemoryMarshal.GetReference(input), inputOffset);
+        ref var destination = ref Unsafe.Add(ref MemoryMarshal.GetReference(output), outputOffset);
+        nint sourceAdvance = inputStep;
+        nint destinationAdvance = outputStep;
+        if (rowBytes == groupBytes)
+        {
+            var pairs = rows >> 1;
+            if ((rows & 1) != 0)
+            {
+                CopySnapshotWordGroup(ref source, ref destination);
+                if (pairs == 0) return;
+                source = ref Unsafe.Add(ref source, sourceAdvance);
+                destination = ref Unsafe.Add(ref destination, destinationAdvance);
+            }
+
+            // Complete each row before loading the next. The single group
+            // needs one pair test and no inner loop.
+            while (true)
+            {
+                CopySnapshotWordGroup(ref source, ref destination);
+                source = ref Unsafe.Add(ref source, sourceAdvance);
+                destination = ref Unsafe.Add(ref destination, destinationAdvance);
+                CopySnapshotWordGroup(ref source, ref destination);
+                if (--pairs == 0) return;
+                source = ref Unsafe.Add(ref source, sourceAdvance);
+                destination = ref Unsafe.Add(ref destination, destinationAdvance);
+            }
+        }
+
+        nint bytes = rowBytes;
+        while (true)
+        {
+            nint offset = 0;
+            do
+            {
+                ref var from = ref Unsafe.Add(ref source, offset);
+                ref var to = ref Unsafe.Add(ref destination, offset);
+                CopySnapshotWordGroup(ref from, ref to);
+            } while ((offset += groupBytes) < bytes);
+            if (--rows == 0) break;
+            source = ref Unsafe.Add(ref source, sourceAdvance);
+            destination = ref Unsafe.Add(ref destination, destinationAdvance);
+        }
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static void CopySnapshotWordGroup(ref byte from, ref byte to)
+    {
+        var samples0 = Vector512.LoadUnsafe(ref from);
+        var samples1 = Vector512.LoadUnsafe(ref from, 64);
+        var samples2 = Vector512.LoadUnsafe(ref from, 128);
+        var samples3 = Vector512.LoadUnsafe(ref from, 192);
+        var samples4 = Vector512.LoadUnsafe(ref from, 256);
+        var samples5 = Vector512.LoadUnsafe(ref from, 320);
+        var samples6 = Vector512.LoadUnsafe(ref from, 384);
+        var samples7 = Vector512.LoadUnsafe(ref from, 448);
+        var samples8 = Vector512.LoadUnsafe(ref from, 512);
+        var samples9 = Vector512.LoadUnsafe(ref from, 576);
+        var samples10 = Vector512.LoadUnsafe(ref from, 640);
+        var samples11 = Vector512.LoadUnsafe(ref from, 704);
+        var samples12 = Vector512.LoadUnsafe(ref from, 768);
+        var samples13 = Vector512.LoadUnsafe(ref from, 832);
+        var samples14 = Vector512.LoadUnsafe(ref from, 896);
+        var samples15 = Vector512.LoadUnsafe(ref from, 960);
+        var samples16 = Vector512.LoadUnsafe(ref from, 1024);
+        var samples17 = Vector512.LoadUnsafe(ref from, 1088);
+        var samples18 = Vector512.LoadUnsafe(ref from, 1152);
+        var samples19 = Vector512.LoadUnsafe(ref from, 1216);
+        var samples20 = Vector512.LoadUnsafe(ref from, 1280);
+        var samples21 = Vector512.LoadUnsafe(ref from, 1344);
+        var samples22 = Vector512.LoadUnsafe(ref from, 1408);
+        var samples23 = Vector512.LoadUnsafe(ref from, 1472);
+        var samples24 = Vector512.LoadUnsafe(ref from, 1536);
+        var samples25 = Vector512.LoadUnsafe(ref from, 1600);
+        var samples26 = Vector512.LoadUnsafe(ref from, 1664);
+        var samples27 = Vector512.LoadUnsafe(ref from, 1728);
+        var samples28 = Vector512.LoadUnsafe(ref from, 1792);
+        var samples29 = Vector512.LoadUnsafe(ref from, 1856);
+        var samples30 = Vector512.LoadUnsafe(ref from, 1920);
+        var samples31 = Vector512.LoadUnsafe(ref from, 1984);
+        samples0.StoreUnsafe(ref to);
+        samples1.StoreUnsafe(ref to, 64);
+        samples2.StoreUnsafe(ref to, 128);
+        samples3.StoreUnsafe(ref to, 192);
+        samples4.StoreUnsafe(ref to, 256);
+        samples5.StoreUnsafe(ref to, 320);
+        samples6.StoreUnsafe(ref to, 384);
+        samples7.StoreUnsafe(ref to, 448);
+        samples8.StoreUnsafe(ref to, 512);
+        samples9.StoreUnsafe(ref to, 576);
+        samples10.StoreUnsafe(ref to, 640);
+        samples11.StoreUnsafe(ref to, 704);
+        samples12.StoreUnsafe(ref to, 768);
+        samples13.StoreUnsafe(ref to, 832);
+        samples14.StoreUnsafe(ref to, 896);
+        samples15.StoreUnsafe(ref to, 960);
+        samples16.StoreUnsafe(ref to, 1024);
+        samples17.StoreUnsafe(ref to, 1088);
+        samples18.StoreUnsafe(ref to, 1152);
+        samples19.StoreUnsafe(ref to, 1216);
+        samples20.StoreUnsafe(ref to, 1280);
+        samples21.StoreUnsafe(ref to, 1344);
+        samples22.StoreUnsafe(ref to, 1408);
+        samples23.StoreUnsafe(ref to, 1472);
+        samples24.StoreUnsafe(ref to, 1536);
+        samples25.StoreUnsafe(ref to, 1600);
+        samples26.StoreUnsafe(ref to, 1664);
+        samples27.StoreUnsafe(ref to, 1728);
+        samples28.StoreUnsafe(ref to, 1792);
+        samples29.StoreUnsafe(ref to, 1856);
+        samples30.StoreUnsafe(ref to, 1920);
+        samples31.StoreUnsafe(ref to, 1984);
+    }
+
     // A self-copy shares its backing and packed-row step. Keep snapshot
     // traversal and checkpoints while passing that execution state once.
     [MethodImpl(MethodImplOptions.NoInlining)]

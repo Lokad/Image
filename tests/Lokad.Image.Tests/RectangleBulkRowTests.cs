@@ -30,6 +30,37 @@ public sealed class RectangleBulkRowTests
         }
     }
 
+    [Fact]
+    public void SeparateWordCopyKeepsCanariesAcrossPairedRows()
+    {
+        foreach (var width in new[] { 255, 256, 257, 512 })
+        foreach (var height in new[] { 1, 2, 3, 4, 5 })
+        {
+            using var source = OriginalPixels.Buffer(width + 5, height + 2, 16);
+            using var canvas = OriginalPixels.Buffer(width + 9, height + 3, 16);
+            var input = OriginalPixels.Bytes(source);
+            var before = OriginalPixels.Bytes(canvas);
+            var expected = before.ToArray();
+            for (var row = 0; row < height; row++)
+                input.AsSpan((1 + row) * source.Stride + 8, width * 8)
+                    .CopyTo(expected.AsSpan((2 + row) * canvas.Stride + 24, width * 8));
+
+            using var budget = new TestMemoryBudget(0);
+            var limits = new ImageLimits { MemoryBudget = budget, MaxWorkingBytes = input.LongLength + before.LongLength };
+            using var canceled = new CancellationTokenSource();
+            canceled.Cancel();
+            Assert.ThrowsAny<OperationCanceledException>(() => ImageDrawing.CopyRegion(source, 1, 1, width, height,
+                canvas, 3, 2, limits, canceled.Token));
+            Assert.Equal(before, OriginalPixels.Bytes(canvas));
+
+            ImageDrawing.CopyRegion(source, 1, 1, width, height, canvas, 3, 2, limits);
+            Assert.Equal(expected, OriginalPixels.Bytes(canvas));
+            Assert.Equal(input, OriginalPixels.Bytes(source));
+            Assert.Equal(0, budget.Bytes);
+            Assert.False(budget.IsDisposed);
+        }
+    }
+
     [Theory]
     [InlineData(8, -1)] [InlineData(8, 1)]
     [InlineData(16, -1)] [InlineData(16, 1)]

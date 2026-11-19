@@ -104,6 +104,13 @@ public static partial class ImageDrawing
                     rowBytes, region.Height, sourceRowStep, canvasRowStep, cancellationToken);
             return;
         }
+        if (!sameBuffer && pixelBytes == 8 && region.Width <= 4096 && rowBytes >= 2048 && (rowBytes & 2047) == 0
+            && !cancellationToken.CanBeCanceled && System.Runtime.Intrinsics.Vector512.IsHardwareAccelerated)
+        {
+            IndependentRowCopy.CopySnapshotWordRows(sourcePixels, canvasPixels, sourceRowOffset, canvasRowOffset,
+                rowBytes, region.Height, sourceRowStep, canvasRowStep);
+            return;
+        }
         var rowsRemaining = region.Height;
         while (true)
         {

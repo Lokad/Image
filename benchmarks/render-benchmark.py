@@ -311,7 +311,19 @@ def borrowed_copy_stage():
         assert case['librarySha256'] == aligned['librarySha256'] and case['status'] == 'pass'
         stage['caseProducerSha256'][name] = aligned['librarySha256']
     stage['cases'].update(aligned['cases'])
-    stage['currentBorrowedDrawingCounts'] = {'total': 13, 'passCount': 12, 'gaps': 0, 'uncertain': 1}
+    paired = json.loads((ROOT / 'benchmarks/word-copy-paired-rows-evidence.json').read_text(encoding='utf-8'))
+    word = paired['case']
+    assert paired['productionSourcesMatchPackage'] and paired['raw']['mirrored'] and paired['raw']['allMembersVerified']
+    assert paired['requiredMaterialPaths'] == 289 and paired['newRequiredPaths'] == 0
+    assert paired['standalone']['untouchedOriginalScoring'] and paired['standalone']['allActualsRetained']
+    assert word['librarySha256'] == paired['package']['librarySha256'] == paired['screen']['candidateDllSha256']
+    assert word['status'] == 'pass' and word['upper'] <= 1
+    for field in ('inputSha256', 'outputSha256', 'nativeBuild', 'nativeReady',
+                  'operationsPerSubject', 'subdivisionsPerUnit', 'referenceGeometryPreparedPerOperation'):
+        assert word[field] == current['cases']['DrawingCopy16'][field]
+    stage['caseProducerSha256']['DrawingCopy16'] = word['librarySha256']
+    stage['cases']['DrawingCopy16'] = word
+    stage['currentBorrowedDrawingCounts'] = {'total': 13, 'passCount': 13, 'gaps': 0, 'uncertain': 0}
     assert set(stage['cases']) == {'DrawingCopy8', 'DrawingCopy16', 'DrawingCopyOverlap8', 'OriginalWordOverlap', 'OriginalClippedCopy8'}
     for name, c in stage['cases'].items():
         assert c['librarySha256'] == stage['caseProducerSha256'][name]
@@ -2159,10 +2171,10 @@ passes the complete-operation comparisons. Separate RGBA8 is
 **{b8['managedUs']:.3f} / FFmpeg {b8['nativeUs']:.3f} µs**, upper **{b8['upper']:.6f}**.
 Clipped RGBA8 is **{clipped_byte['managedUs']:.3f} / FFmpeg {clipped_byte['nativeUs']:.3f} µs**,
 upper **{clipped_byte['upper']:.6f}**. Both use the original reference with dynamic clipping
-and address preparation. Separate RGBA16 is
-**{bw['managedUs']:.3f} / {bw['nativeUs']:.3f} µs**, interval
-**{bw['lower']:.6f}–{bw['upper']:.6f}**. Its [placement-balanced confirmation](../benchmarks/COPY-OPERATION-BOUNDARY.md#placement-balanced-rgba16-confirmation)
-also leaves parity uncertain. Byte overlap **{bo['managedUs']:.3f} / {bo['nativeUs']:.3f} µs**,
+and address preparation. [Separate RGBA16](../benchmarks/WORD-COPY-PAIRED-ROWS.md)
+passes at **{bw['managedUs']:.3f} / FFmpeg {bw['nativeUs']:.3f} µs**,
+interval **{bw['lower']:.6f}–{bw['upper']:.6f}**, on the immutable package.
+Byte overlap **{bo['managedUs']:.3f} / {bo['nativeUs']:.3f} µs**,
 upper **{bo['upper']:.6f}**, retains its passing evidence. These copies allocate
 **0 B/op** and borrow both buffers without owned workspace.
 """
@@ -3928,7 +3940,7 @@ allocation uses a separate 3×128 normal/scalar diagnostic because its BDN drive
 emits no GC line. Added owned capacity per operation is zero; standing caller pixels,
 native graph/allocator retention and unmeasured physical/JIT peaks stay separate.
 Reuse unchanged **6,747 checks per OS/SAME actual package/all 3 examples**. The
-thirteen borrowed drawing controls have **twelve passes and one uncertainty**.
+thirteen borrowed drawing controls have **passing evidence**.
 [Authored default variation](../benchmarks/DEFAULT-VARIATION.md)
 now passes/stops at **{dv['managedUs']:.3f} / {dv['referenceUs']:.3f} µs**, upper **{dv['upper']:.6f}**,
 with **3,608 / 58,496 B/op**. Four reference public layout calls, outlines,
