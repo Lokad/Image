@@ -3,8 +3,11 @@ using System.Text.Json;
 
 internal sealed partial class NativeWarmReference
 {
+    private readonly bool requireFillReset;
+
     public NativeWarmReference(JpegBenchmarkCase state, int cpu, WarmFillRectangleCase fillCase)
     {
+        requireFillReset = true;
         var depth = fillCase switch
         {
             WarmFillRectangleCase.DrawingFill8 or WarmFillRectangleCase.DrawingFill8OriginalClipped => 8,
@@ -38,7 +41,7 @@ internal sealed partial class NativeWarmReference
                 || Ready.GetProperty("fillHeight").GetInt32() != 129 || Ready.GetProperty("clippedX").GetInt32() != 0
                 || Ready.GetProperty("clippedY").GetInt32() != y || Ready.GetProperty("clippedWidth").GetInt32() != width + x
                 || Ready.GetProperty("clippedHeight").GetInt32() != 129
-                || new[] { "borrowedCanvas", "canvasMutationTimed", "colorNormalizationTimed", "clippingTimed" }.Any(key => !Ready.GetProperty(key).GetBoolean())
+                || new[] { "borrowedCanvas", "canvasMutationTimed", "colorNormalizationTimed", "clippingTimed", "resetBeforeEveryOperation" }.Any(key => !Ready.GetProperty(key).GetBoolean())
                 || new[] { "sourcePreparationTimed", "canvasPreparationTimed", "outputAllocationTimed" }.Any(key => Ready.GetProperty(key).GetBoolean()))
                 throw new InvalidOperationException("Rectangle-fill geometry/CPU/borrowed boundary differs.");
             completed = Ready.GetProperty("initialCompletedOperations").GetInt64();

@@ -75,6 +75,7 @@ internal static class WarmBenchmarks
                     new MsBuildArgument("/p:NuGetAudit=false"), new MsBuildArgument("/p:RestoreIgnoreFailedSources=true")]);
             if (!smoke) job = job.WithIterationTime(TimeInterval.FromMilliseconds(200));
             if (confirm) job = job.WithIterationCount(12);
+            if (family == "FillRectangle") job = job.WithInvocationCount(1).WithUnrollFactor(1);
             if (!smoke && family == "Png" && selection == "EncodePredictable16")
                 job = job.WithInvocationCount(4).WithUnrollFactor(1);
             var config = ManualConfig.Create(DefaultConfig.Instance).AddJob(job).AddExporter(JsonExporter.Full)
@@ -165,7 +166,8 @@ internal static class WarmBenchmarks
                             && value.GetProperty("nativeRgbMaximum").GetInt32() is >= 0 and <= 1 && value.GetProperty("nativeRgbRmse").GetDouble() is >= 0 and <= 0.25
                             && value.GetProperty("nativeCliNormalScalarPixelsExact").GetBoolean()
                             && value.GetProperty("nativeCliPixelsExact").GetBoolean() && value.GetProperty("nativePixelsDeterministic").GetBoolean()
-                        : value.GetProperty("allRgbaSamplesExact").GetBoolean();
+                        : value.GetProperty("allRgbaSamplesExact").GetBoolean()
+                            && (family != "FillRectangle" || value.GetProperty("resetBeforeEveryOperation").GetBoolean());
                     var ownershipVerified = family is "CopyRegion" or "FillRectangle" or "CopyOverlap"
                         ? (family != "CopyRegion" || value.GetProperty("borrowedSource").GetBoolean()) && value.GetProperty("borrowedCanvas").GetBoolean()
                             && value.GetProperty("callerBuffersAlive").GetBoolean()

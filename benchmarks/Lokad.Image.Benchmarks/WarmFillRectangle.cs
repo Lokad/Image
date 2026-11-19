@@ -21,7 +21,7 @@ public class WarmFillRectangle
     private byte[] input = [], expected = [];
     private NativeWarmSample[] before = [];
     private JsonElement sourceIdentity;
-    private bool smoke, ready;
+    private bool smoke, ready, restored;
     private int cpu, sampleCount, depth, x, y, width, clippedWidth;
     private bool original;
 
@@ -98,9 +98,24 @@ public class WarmFillRectangle
         if (!File.ReadAllBytes(state.NativeOutput).AsSpan().SequenceEqual(expected))
             throw new InvalidOperationException("Native rectangle-fill full canvas differs.");
     }
+
+    [IterationSetup]
+    public void RestoreCanvas()
+    {
+        var stride = canvas.Stride;
+        for (var row = 0; row < canvas.Height; row++)
+        {
+            var destination = depth == 8 ? canvas.GetRow8(row) : MemoryMarshal.AsBytes(canvas.GetRow16(row));
+            input.AsSpan(row * stride, stride).CopyTo(destination);
+        }
+        restored = true;
+    }
+
     [Benchmark]
     public int Managed()
     {
+        if (!restored) throw new InvalidOperationException("Every measured fill requires a fresh canvas reset.");
+        restored = false;
         ImageDrawing.FillRectangle(canvas, x, y, width, 129, color);
         return canvas.Stride * canvas.Height;
     }
@@ -129,10 +144,11 @@ public class WarmFillRectangle
                 allRgbaSamplesExact = true, alphaExact = true, hiddenRgbExact = true, untouchedCanvasExact = true,
                 sourceUnchanged = true, borrowedCanvas = true, callerBuffersAlive = true,
                 sourcePreparationTimed = false, canvasPreparationTimed = false, outputAllocationTimed = false, nativeExitCode = 0,
+                resetBeforeEveryOperation = true,
                 librarySha256 = JpegBenchmarkCase.HashFile(typeof(ImageBuffer).Assembly.Location),
                 benchmarkAssemblySha256 = JpegBenchmarkCase.HashFile(typeof(WarmFillRectangle).Assembly.Location),
                 nativeBuild = native.BuildIdentity, nativeReady = native.Ready, nativeBefore = before, nativeAfter = after,
-                boundary = $"One complete public FillRectangle into the resident original 513x259 RGBA{depth} canvas: requested x={x},y={y},w={width},h=129, clipped to x=0,y={y},w={clippedWidth},h=129. Color is RGBA8(23,57,91,128) expanded exactly to RGBA16 or RGBA16(12345,23456,34567,45678). Complete borrowed-canvas mutation, admission, validation, clipping, required color normalization, cancellation and scope cleanup. Native public FFmpeg av_image_fill_color receives the same 16-bit source color and performs required normalization and clipping inside every operation. Canvas preparation/reset, startup, IPC, I/O and verification excluded equally; overwrites are idempotent, no reset/output allocation/full-frame copy. Exact full canvas, alpha, hidden RGB and untouched pixels. One CPU, normal SIMD; only this rectangle/color per depth is measured."
+                boundary = $"One complete public FillRectangle into the resident original 513x259 RGBA{depth} canvas: requested x={x},y={y},w={width},h=129, clipped to x=0,y={y},w={clippedWidth},h=129. Color is RGBA8(23,57,91,128) expanded exactly to RGBA16 or RGBA16(12345,23456,34567,45678). Complete borrowed-canvas mutation, admission, validation, clipping, required color normalization, cancellation and scope cleanup. Native public FFmpeg av_image_fill_color receives the same 16-bit source color and performs required normalization and clipping inside every operation. Both sides restore the entire original canvas outside the timer before every operation. Startup, IPC, I/O and verification are excluded. Exact full canvas, alpha, hidden RGB and untouched pixels. One CPU, normal SIMD."
             }, new JsonSerializerOptions { WriteIndented = true }) + "\n");
         }
         finally { native?.Dispose(); canvas?.Dispose(); state?.Dispose(); ready = false; }

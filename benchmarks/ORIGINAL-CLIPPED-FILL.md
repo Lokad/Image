@@ -1,7 +1,12 @@
 # Original clipped-fill controls
 
-Both original required fill boundaries now pass and stop on the current immutable
-package DLL. No production change or speedup is claimed.
+Both original clipped fills passed on the historical package DLL with a resident
+canvas mutated repeatedly. The current harness restores the original canvas
+outside the timer before every fill on both sides, for the default and original
+geometries at both depths. The generated managed jobs enforce a single invocation
+per reset, and the native worker verifies one reset per timed call. Correctness
+smokes reproduce all four full canvases. The four costs on the corrected boundary
+await the final immutable-package refresh. Historical costs follow.
 
 | Original complete public operation | Lokad / FFmpeg µs | Ratio / upper | Managed GC B/op |
 | --- | ---: | ---: | ---: |
@@ -17,8 +22,8 @@ Each timed operation includes the complete public mutation: validation, clipping
 required16→8color normalization, cancellation checkpoints and borrowed ownership.
 The explicitly labeled **FFmpeg n8.1 public av_image_fill_color** performs the
 same normalization/clipping and mutates an equivalent prepared canvas. Allocation,
-canvas preparation, I/O, IPC and verification are excluded equally. Idempotent
-overwrites need no reset, output allocation or full-frame copy on either side.
+canvas preparation, I/O, IPC and verification were excluded equally. These
+historical runs timed repeated idempotent overwrites of the same canvas.
 
 Original colors and full16-bit samples remain. Independent scalar-built expected
 canvases establish every sample, alpha, hidden RGB and untouched pixels. The current

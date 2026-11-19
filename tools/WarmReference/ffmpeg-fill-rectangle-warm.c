@@ -61,6 +61,7 @@ static void apply(Work *work)
 }
 static void check_and_write(Work *work, const char *path)
 {
+    memcpy(work->canvas, work->original, work->bytes);
     apply(work);
     for (int y = 0; y < 259; y++)
     for (int x = 0; x < 513; x++)
@@ -97,9 +98,8 @@ int main(int argc, char **argv)
     if (fread(work.original, 1, work.bytes, input) != work.bytes || fgetc(input) != EOF || ferror(input))
         fail("Input geometry/precision differs.");
     if (fclose(input)) fail("Close input failed.");
-    memcpy(work.canvas, work.original, work.bytes);
     check_and_write(&work, argv[6]);
-    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"fill-rectangle\",\"width\":513,\"height\":259,\"depth\":%d,\"cpu\":%d,\"affinityCount\":1,\"workerThreads\":1,\"outputWidth\":513,\"outputHeight\":259,\"x\":%d,\"y\":%d,\"fillWidth\":%d,\"fillHeight\":129,\"clippedX\":0,\"clippedY\":%d,\"clippedWidth\":%d,\"clippedHeight\":129,\"borrowedCanvas\":true,\"canvasMutationTimed\":true,\"colorNormalizationTimed\":true,\"clippingTimed\":true,\"sourcePreparationTimed\":false,\"canvasPreparationTimed\":false,\"outputAllocationTimed\":false,\"initialCompletedOperations\":1,\"inputStride\":%d,\"ffmpegVersion\":\"%s\",\"avutilVersion\":%u}\n",
+    printf("{\"schemaVersion\":1,\"state\":\"ready\",\"operation\":\"fill-rectangle\",\"width\":513,\"height\":259,\"depth\":%d,\"cpu\":%d,\"affinityCount\":1,\"workerThreads\":1,\"outputWidth\":513,\"outputHeight\":259,\"x\":%d,\"y\":%d,\"fillWidth\":%d,\"fillHeight\":129,\"clippedX\":0,\"clippedY\":%d,\"clippedWidth\":%d,\"clippedHeight\":129,\"borrowedCanvas\":true,\"canvasMutationTimed\":true,\"colorNormalizationTimed\":true,\"clippingTimed\":true,\"sourcePreparationTimed\":false,\"canvasPreparationTimed\":false,\"outputAllocationTimed\":false,\"resetBeforeEveryOperation\":true,\"clockReadsPerOperation\":2,\"initialCompletedOperations\":1,\"inputStride\":%d,\"ffmpegVersion\":\"%s\",\"avutilVersion\":%u}\n",
            work.depth, work.cpu, work.x, work.y, work.width, work.y, work.x + work.width,
            work.stride, av_version_info(), avutil_version()); fflush(stdout);
     char line[128];
@@ -112,13 +112,18 @@ int main(int argc, char **argv)
         uint64_t count; char extra;
         if (sscanf(line, "sample %" SCNu64 " %c", &count, &extra) != 1 || !count || count > UINT64_C(10000000))
             fail("Invalid bounded sample request.");
-        uint64_t completed = work.completed, start = now_ns();
-        for (uint64_t i = 0; i < count; i++) apply(&work);
-        uint64_t elapsed = now_ns() - start;
-        if (sched_getcpu() != work.cpu || affinity_cpu() != work.cpu || work.completed - completed != count)
+        uint64_t completed = work.completed, elapsed = 0, resets = 0;
+        for (uint64_t i = 0; i < count; i++) {
+            memcpy(work.canvas, work.original, work.bytes);
+            resets++;
+            uint64_t start = now_ns();
+            apply(&work);
+            elapsed += now_ns() - start;
+        }
+        if (sched_getcpu() != work.cpu || affinity_cpu() != work.cpu || work.completed - completed != count || resets != count)
             fail("Sample CPU/counters differ.");
-        printf("{\"state\":\"sample\",\"operations\":%" PRIu64 ",\"elapsedNanoseconds\":%" PRIu64 ",\"completedOperations\":%" PRIu64 ",\"observed\":%" PRIu64 ",\"outputStride\":%d,\"cpu\":%d}\n",
-               count, elapsed, work.completed, work.observed, work.stride, work.cpu); fflush(stdout);
+        printf("{\"state\":\"sample\",\"operations\":%" PRIu64 ",\"elapsedNanoseconds\":%" PRIu64 ",\"completedOperations\":%" PRIu64 ",\"resetOperations\":%" PRIu64 ",\"observed\":%" PRIu64 ",\"outputStride\":%d,\"cpu\":%d}\n",
+               count, elapsed, work.completed, resets, work.observed, work.stride, work.cpu); fflush(stdout);
     }
     if (ferror(stdin)) fail("Protocol read failed.");
     free(work.canvas); free(work.original); return 0;

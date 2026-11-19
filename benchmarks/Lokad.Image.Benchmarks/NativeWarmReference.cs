@@ -424,6 +424,8 @@ internal sealed partial class NativeWarmReference : IDisposable
         process.StandardInput.Flush();
         var response = Read();
         var sample = response.Deserialize<NativeWarmSample>(Options) ?? throw new InvalidOperationException("Missing native sample.");
+        if (requireFillReset && response.GetProperty("resetOperations").GetInt64() != operations)
+            throw new InvalidOperationException("Every measured native fill requires a fresh canvas reset.");
         if (sample.State != "sample" || sample.Operations != operations || sample.CompletedOperations != completed + operations
             || sample.ElapsedNanoseconds <= 0 || !double.IsFinite(sample.ElapsedNanoseconds)
             || (sample.CpuElapsedNanoseconds is { } cpuElapsed && (cpuElapsed <= 0 || !double.IsFinite(cpuElapsed)))

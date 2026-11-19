@@ -102,10 +102,11 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
 retains inherited unmeasured names. Passing related inputs or different public
 boundaries do not retire those requirements; the full 289-path objective stays open.
 
-[Original clipped fills](../benchmarks/ORIGINAL-CLIPPED-FILL.md) and the
-[clipped byte copy](../benchmarks/WHOLE-ROW-COPY-PREPARATION-TRIALS.md#aligned-interior-with-one-vector-at-each-edge)
-pass. Both use the original 254×129 effective region. Earlier 256-pixel controls
-stay separate. The [original byte composite](../benchmarks/ORIGINAL-CLIPPED-COMPOSITE.md)
+The [clipped byte copy](../benchmarks/WHOLE-ROW-COPY-PREPARATION-TRIALS.md#aligned-interior-with-one-vector-at-each-edge)
+passes. The [clipped fill](../benchmarks/ORIGINAL-CLIPPED-FILL.md) costs retain
+the historical repeated-overwrite boundary. Both fill geometries at both depths
+pass exact output checks with an untimed canvas reset before each operation and
+await final-package timing. The [original byte composite](../benchmarks/ORIGINAL-CLIPPED-COMPOSITE.md)
 passes at **78.567 / 526.201 µs**, upper **0.159260**, over 510×254 pixels.
 Its reference is a **retained FFmpeg n8.1 overlay graph/static source**, with reset
 excluded before EVERY operation on both sides; graph preparation is outside this
@@ -115,8 +116,7 @@ All four original clipped operations allocate **0 B/public operation**; composit
 allocation uses a separate 3×128 normal/scalar diagnostic because its BDN driver
 emits no GC line. Added owned capacity per operation is zero; standing caller pixels,
 native graph/allocator retention and unmeasured physical/JIT peaks stay separate.
-Reuse unchanged **6,747 checks per OS/SAME actual package/all 3 examples**. The
-thirteen borrowed drawing controls have **passing evidence**.
+Reuse unchanged **6,747 checks per OS/SAME actual package/all 3 examples**.
 [Authored default variation](../benchmarks/DEFAULT-VARIATION.md)
 now passes/stops at **3.551 / 20.357 µs**, upper **0.184945**,
 with **3,608 / 58,496 B/op**. Four reference public layout calls, outlines,

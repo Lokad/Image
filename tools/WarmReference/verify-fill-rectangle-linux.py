@@ -36,17 +36,21 @@ for (depth, relative, pinned), original in itertools.product([
         def run(values, protocol='quit\n', cpus='0'):
             return subprocess.run(['taskset', '-c', cpus, *values], input=protocol, capture_output=True, text=True, timeout=30)
 
-        result = run(arguments, 'sample 1\ncheck\nquit\n')
+        result = run(arguments, 'sample 1\nsample 3\ncheck\nquit\n')
         assert result.returncode == 0 and not result.stderr, result.stderr
-        ready, sample, check = map(json.loads, result.stdout.splitlines())
+        ready, single, batch, check = map(json.loads, result.stdout.splitlines())
         assert ready['operation'] == 'fill-rectangle' and ready['depth'] == depth
         assert ready['affinityCount'] == ready['workerThreads'] == 1 and ready['cpu'] == 0
         assert ready['colorNormalizationTimed'] and ready['clippingTimed'] and ready['borrowedCanvas'] and ready['canvasMutationTimed']
         assert ready['y'] == top and ready['clippedWidth'] == clipped_width
         assert ready['x'] == (-3 if original else -17) and ready['fillWidth'] == (257 if original else 273)
         assert not ready['sourcePreparationTimed'] and not ready['canvasPreparationTimed'] and not ready['outputAllocationTimed']
-        assert sample['operations'] == 1 and sample['completedOperations'] == ready['initialCompletedOperations'] + 1
-        assert sample['outputStride'] == stride and check['exact'] and check['sourceUnchanged']
+        assert ready['resetBeforeEveryOperation'] and ready['clockReadsPerOperation'] == 2
+        assert single['operations'] == single['resetOperations'] == 1
+        assert batch['operations'] == batch['resetOperations'] == 3
+        assert single['completedOperations'] == ready['initialCompletedOperations'] + 1
+        assert batch['completedOperations'] == single['completedOperations'] + 3
+        assert single['outputStride'] == batch['outputStride'] == stride and check['exact'] and check['sourceUnchanged']
         assert output.read_bytes() == expected and source.read_bytes() == pixels
         controls = []
 
@@ -76,7 +80,7 @@ for (depth, relative, pinned), original in itertools.product([
         reject('multiple CPUs', arguments, cpus=','.join(map(str, allowed[:2])))
         records.append(dict(depth=depth, originalClipped=original, sourceSha256=pinned, outputSha256=hashlib.sha256(expected).hexdigest(),
                             fullCanvasExact=True, alphaExact=True, hiddenRgbExact=True, sourceUnchanged=True,
-                            countersExact=True, controls=controls))
+                            countersExact=True, resetBeforeEveryOperation=True, controls=controls))
 record = dict(schemaVersion=1, project='Lokad.Image', correctnessOnly=True, noTimingClaim=True,
               workerSha256=hashlib.sha256(worker.read_bytes()).hexdigest(), cases=records)
 (root / 'tmp/fill-rectangle-reference-controls.json').write_text(json.dumps(record, indent=2) + '\n')
