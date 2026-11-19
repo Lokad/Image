@@ -1373,3 +1373,20 @@ and all sixteen role/order pairs adverse. Both trials pass the original
 normal and scalar exactness, ownership and quiet guards at **0 B/op**.
 The candidates supply no standalone score.
 [Layouts, observations and verified archive](copy-vector-width-trials-evidence.json)
+
+## Earlier stores on disjoint rows
+
+Storing the head before the aligned middle frees one vector register for
+the rest of the RGBA8 row. The 398-byte helper retains the reversed tail,
+footprint checks and per-row cancellation. Both copies regress on every
+backing against the reversed-tail package, by **5.7 ns clipped** and
+**12.3 ns separate** on average.
+
+The separate RGBA16 follow-up alternates each load and store within its
+checked 512-byte blocks. The 328-byte body reuses one vector register
+and keeps the original cancellation checkpoints. Against current package
+`d52e53f2`, it loses **18.6 ns** on average and all four placement means
+are adverse. Both variants preserve original normal and scalar exactness
+and ownership and allocate **0 B/op** in the matched screens with passing
+idle guards. Close both variants.
+[Observations and generated code](copy-vector-width-trials-evidence.json)

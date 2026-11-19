@@ -283,3 +283,18 @@ receipt. The previous tool is reused, and the temporary runtime copies are
 released after verification. Gray8 retains its separate natural-GC driver.
 These checks establish executable bindings for the final refresh.
 [Verified preflight records](benchmark-refresh-runtime-preparation-evidence.json)
+
+The natural-GC batch driver now runs the original generated consumer directly.
+Untimed rehearsals verify four calls on each side for all 16 generated
+workloads on the actual `d52e53f2` package DLL. The managed count is observed
+through the original workload delegate, and the native worker reports its
+completed count. The rehearsals retain exact packets, pixels, native setup and
+output-ownership checks. They cover both fresh native state and the retained
+mixed-prediction encoder.
+
+The driver compiles the original scoring calculation with 12 units in each
+native before, paired and after group, keeping every actual. It bypasses the
+historical forced-GC engine while using the frozen generated operation. One
+private tool build serves every rehearsal. Scored execution remains part of
+the final immutable-package refresh.
+[Driver and verified rehearsal archive](benchmark-refresh-runtime-preparation-evidence.json)
