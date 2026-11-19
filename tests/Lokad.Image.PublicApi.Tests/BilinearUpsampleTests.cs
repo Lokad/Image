@@ -9,6 +9,7 @@ public sealed class BilinearUpsampleTests
     [InlineData(16, 1, 5, 3, 17)]
     [InlineData(8, 3, 9, 7, 19)]
     [InlineData(16, 3, 9, 7, 19)]
+    [InlineData(16, 19, 7, 22, 13)]
     [InlineData(8, 67, 13, 135, 27)]
     [InlineData(16, 67, 13, 135, 27)]
     [InlineData(8, 513, 9, 1027, 19)]

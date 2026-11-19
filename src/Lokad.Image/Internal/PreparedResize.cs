@@ -10,7 +10,7 @@ namespace Lokad.Image.Internal;
 internal static class PreparedResize
 {
     internal static void Apply<T>(ImageBuffer source, ImageBuffer result,
-        Span<double> horizontalWorkspace, ReadOnlySpan<int> horizontalOffsets,
+        Span<double> horizontalWorkspace, Span<int> horizontalOffsets,
         ReadOnlySpan<int> horizontalCounts, double scaleY, int radius, ResizeFilter filter,
 OperationContext context) where T : unmanaged, INumberBase<T>
     {

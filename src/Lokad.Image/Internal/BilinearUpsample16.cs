@@ -10,8 +10,7 @@ namespace Lokad.Image.Internal;
 internal static class BilinearUpsample16
 {
     internal static bool TryApply(ImageBuffer source, ImageBuffer result,
-        ReadOnlySpan<double> weights, ReadOnlySpan<int> offsets, ReadOnlySpan<int> counts,
-OperationContext context)
+        ReadOnlySpan<double> weights, Span<int> offsets, ReadOnlySpan<int> counts, OperationContext context)
     {
         var width = result.Width;
         var cacheElements = (long)width * 16;
@@ -22,6 +21,8 @@ OperationContext context)
         try
         {
             var cache = new long[(int)cacheElements];
+            if (Avx512F.VL.IsSupported && source.Width >= 4)
+                PrepareWindows(offsets, source.Width, width, context.Cancellation);
             Span<int> cachedRows = stackalloc int[4];
             cachedRows.Fill(-1);
             var height = result.Height;
@@ -82,6 +83,33 @@ OperationContext context)
         finally { context.Release(cacheBytes); }
     }
 
+    private static void PrepareWindows(Span<int> offsets, int sourceWidth, int width, CancellationToken cancellation)
+    {
+        var lastStart = (sourceWidth - 4) * 4;
+        for (var x = 0; x + 3 < width; x += 4)
+        {
+            cancellation.ThrowIfCancellationRequested();
+            var at = x * 8;
+            // Left/right offsets are clamped and monotonic, so the outer
+            // taps bound all eight references. Keep all four loaded pixels
+            // within the same row, including at the final clamped tap.
+            var start = Math.Min(offsets[at + 4], lastStart);
+            if (offsets[at + 29] - start >= 16) continue;
+            var selectors = 0;
+            for (var lane = 0; lane < 4; lane++)
+            {
+                var slot = at + lane * 8;
+                var left = (offsets[slot + 4] - start) / 4;
+                var right = (offsets[slot + 5] - start) / 4;
+                selectors |= left << (lane * 2) | right << (8 + lane * 2);
+            }
+            // These two geometry slots lie beyond both the original taps and
+            // the integer triangle inputs. Zero denotes the existing gather.
+            offsets[at + 6] = start + 1;
+            offsets[at + 7] = selectors;
+        }
+    }
+
     private static int Prepare(ImageBuffer source, int row, Span<long> cache, Span<int> cachedRows,
         ReadOnlySpan<int> offsets, int width, OperationContext context)
     {
@@ -101,11 +129,27 @@ OperationContext context)
             var f2 = offsets[at + 19]; var f3 = offsets[at + 27];
             var first = Vector512<long>.Zero;
             var second = Vector512<long>.Zero;
-            Tap(ref first, ref second, Gather(input, rowOffset,
-                offsets[at + 4], offsets[at + 12], offsets[at + 20], offsets[at + 28]),
-                dx - f0, dx - f1, dx - f2, dx - f3);
-            Tap(ref first, ref second, Gather(input, rowOffset,
-                offsets[at + 5], offsets[at + 13], offsets[at + 21], offsets[at + 29]), f0, f1, f2, f3);
+            Vector256<ulong> left, right;
+            var windowStart = offsets[at + 6];
+            if (Avx512F.VL.IsSupported && windowStart != 0)
+            {
+                var byteOffset = rowOffset + (windowStart - 1) * 2;
+                var window = MemoryMarshal.Read<Vector256<ulong>>(input.Slice(byteOffset, 32));
+                var selectors = (ulong)offsets[at + 7];
+                var shifts = Vector256.Create(0UL, 2UL, 4UL, 6UL);
+                // VPERMQ uses the low two bits of each variable selector.
+                var leftLanes = Avx2.ShiftRightLogicalVariable(Vector256.Create(selectors), shifts);
+                var rightLanes = Avx2.ShiftRightLogicalVariable(Vector256.Create(selectors >> 8), shifts);
+                left = Avx512F.VL.PermuteVar4x64(window, leftLanes);
+                right = Avx512F.VL.PermuteVar4x64(window, rightLanes);
+            }
+            else
+            {
+                left = Gather(input, rowOffset, offsets[at + 4], offsets[at + 12], offsets[at + 20], offsets[at + 28]);
+                right = Gather(input, rowOffset, offsets[at + 5], offsets[at + 13], offsets[at + 21], offsets[at + 29]);
+            }
+            Tap(ref first, ref second, left, dx - f0, dx - f1, dx - f2, dx - f3);
+            Tap(ref first, ref second, right, f0, f1, f2, f3);
             MemoryMarshal.Write(MemoryMarshal.AsBytes(cache.Slice(start + x * 4, 8)), in first);
             MemoryMarshal.Write(MemoryMarshal.AsBytes(cache.Slice(start + x * 4 + 8, 8)), in second);
         }

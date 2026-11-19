@@ -55,10 +55,9 @@ three current controls unless their evidence is affected.
 
 GC allocation is separate from the owned result payloads of 2,132,052 B,
 132,096 B and 264,192 B. Those results fit the existing 4 MiB idle limit.
-The RGBA16 enlargement's 4,264,104 B result bypasses that limit and retains
-its [passing partitioned evidence](BILINEAR-PARTITIONED-REFERENCE.md).
-Its [fresh-graph comparison](BILINEAR-EQUIVALENT-ONE-SHOT.md) has a separate
-operation boundary.
+The RGBA16 enlargement's 4,264,104 B result bypasses that limit. Its current
+[contiguous-window evidence](BILINEAR-WORD-CONTIGUOUS-WINDOWS.md) reports
+the prepared-graph and equivalent fresh-graph boundaries separately.
 
 One tooling build reused three frozen runtimes and the pinned FFmpeg worker.
 The first two launches stopped before sampling because the replay needed the

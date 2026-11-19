@@ -1,0 +1,220 @@
+{
+  "project": "Lokad.Image",
+  "requiredMaterialPaths": 289,
+  "newMaterialPaths": 0,
+  "source": {
+    "baseRevision": "56ce59cb23c69d2664863a2cde7353a43399cc6e",
+    "sourceArchiveSha256": "344a42ce86c14c074dceaaadcfac0942473521ad74afc0d304a85f7c27f96107",
+    "changedFiles": {
+      "src/Lokad.Image/Internal/BilinearUpsample16.cs": "59363314c191f41fa4d52d085d80313803a0be08433503a3de626f224e708b4b",
+      "src/Lokad.Image/Internal/PreparedResize.cs": "5d6a1f55838529ee56b466ecb16050226b00b54c1b9e1994c16f9ba35a2de49a"
+    },
+    "qualifiedRegressionSha256": "894428feefd96cece04ecae52104d418d9eed9ca37c678493e8bab57fab3fcd6"
+  },
+  "package": {
+    "version": "0.2.1",
+    "sha256": "7c5caff645c7b57a4b283ec8332e24f5955a9907609b9bc235dc2d91eac8032f",
+    "symbolsSha256": "5c7a2761642bb4f8fe3994cbdc99eece6a7fec1c70ca372b011239483a3d9586",
+    "librarySha256": "5f0186c798c9e756b744128aef3b5452521d87879ae6e7cbdfc2145de52862bf",
+    "timedLibraryIdentical": true,
+    "productionRebuildsAfterTiming": 0
+  },
+  "cases": {
+    "Up16": {
+      "caseId": "Up16",
+      "managedUs": 1894.7650791015626,
+      "nativeUs": 1994.8672340494793,
+      "ratio": 0.9498201417922363,
+      "lower": 0.9177426831722516,
+      "upper": 0.9734273479708913,
+      "status": "pass",
+      "allocatedBytes": 4498579,
+      "librarySha256": "5f0186c798c9e756b744128aef3b5452521d87879ae6e7cbdfc2145de52862bf",
+      "benchmarkAssemblySha256": "d02003b589807069760fecf99b46de7fa305a2d560cba9fb379ef263a912b255",
+      "driverSha256": "d0c5cc6c19dde60008dd8eadad4b35f6d72800f831a793d2346cc66ff7335a4b",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "operationsPerSubject": 256,
+      "subdivisionsPerUnit": 16,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "5ae263800eefd7ea0af689cb076f070ba544aacc7da71475e9a5705684069d29",
+      "nativeOutputSha256": "30fb7509b735cd2ebb5161c1dc5046a07e623ee9485762e9bc2cedc346c0e20a",
+      "metadata": {
+        "nativeRgbMaximum": 1,
+        "nativeRgbRmse": 0.04627403278265037,
+        "nativeAlphaMaximum": 1,
+        "nativeAlphaRmse": 0.04239492329328568
+      },
+      "nativeReady": {
+        "schemaVersion": 1,
+        "state": "ready",
+        "operation": "bilinear-resize",
+        "width": 513,
+        "height": 259,
+        "depth": 16,
+        "cpu": 0,
+        "affinityCount": 1,
+        "filterThreads": 1,
+        "threadType": 0,
+        "outputWidth": 1027,
+        "outputHeight": 519,
+        "kernel": "triangle",
+        "alphaMode": "straight",
+        "premultipliedAlphaTimed": true,
+        "encodedSampleSpace": true,
+        "independentLiveOutputs": true,
+        "alphaTolerance1": true,
+        "zeroAlphaNormalizationTimed": false,
+        "initialCompletedOperations": 3,
+        "inputStride": 4128,
+        "ffmpegVersion": "n8.1",
+        "avfilterVersion": 724580,
+        "avutilVersion": 3938916
+      },
+      "referenceWorkerSha256": "3a14b8570aa606c352fc1585b63d1b98d763a052cc01dbd32b4216b06686b1da",
+      "managedRationalReferenceExact": true,
+      "nativeCliNormalScalarPixelsExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true
+    },
+    "Up16OneShot": {
+      "caseId": "Up16OneShot",
+      "managedUs": 1865.9157428385417,
+      "nativeUs": 4801.275327148437,
+      "ratio": 0.38862919030863874,
+      "lower": 0.31123573838203394,
+      "upper": 0.513600406286083,
+      "status": "pass",
+      "allocatedBytes": 4498579,
+      "librarySha256": "5f0186c798c9e756b744128aef3b5452521d87879ae6e7cbdfc2145de52862bf",
+      "benchmarkAssemblySha256": "0763433e63c038e4672f5a989d41b16f9b42dde76e032a958bcb966709283533",
+      "driverSha256": "bc427928f73013c023d5f6c361f4df04eca59de19e2a06aa54fee7b07bc0049a",
+      "actualIterations": 12,
+      "nativeSamplesEachBracket": 12,
+      "operationsPerSubject": 256,
+      "subdivisionsPerUnit": 1,
+      "allActualsRetained": true,
+      "allOriginalGatesPassed": true,
+      "quietGuardsPassed": true,
+      "inputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9",
+      "outputSha256": "5ae263800eefd7ea0af689cb076f070ba544aacc7da71475e9a5705684069d29",
+      "nativeOutputSha256": "30fb7509b735cd2ebb5161c1dc5046a07e623ee9485762e9bc2cedc346c0e20a",
+      "metadata": {
+        "nativeRgbMaximum": 1,
+        "nativeRgbRmse": 0.04627403278265037,
+        "nativeAlphaMaximum": 1,
+        "nativeAlphaRmse": 0.04239492329328568
+      },
+      "nativeReady": {
+        "schemaVersion": 1,
+        "state": "ready",
+        "operation": "bilinear-resize",
+        "width": 513,
+        "height": 259,
+        "depth": 16,
+        "cpu": 0,
+        "affinityCount": 1,
+        "filterThreads": 1,
+        "threadType": 0,
+        "outputWidth": 1027,
+        "outputHeight": 519,
+        "kernel": "triangle",
+        "alphaMode": "straight",
+        "premultipliedAlphaTimed": true,
+        "encodedSampleSpace": true,
+        "independentLiveOutputs": true,
+        "alphaTolerance1": true,
+        "zeroAlphaNormalizationTimed": false,
+        "initialCompletedOperations": 3,
+        "inputStride": 4128,
+        "graphPreparationTimed": true,
+        "resultWrapperPreparationTimed": true,
+        "graphRetainedBetweenOperations": false,
+        "borrowedResidentSource": true,
+        "preparationCount": 3,
+        "ffmpegVersion": "n8.1",
+        "avfilterVersion": 724580,
+        "avutilVersion": 3938916
+      },
+      "referenceWorkerSha256": "de85c748ce26dc6b6fc180b8cc8190ac5b885831bc63394fe7d0c26e4fb0af18",
+      "managedRationalReferenceExact": true,
+      "nativeCliNormalScalarPixelsExact": true,
+      "sourceUnchanged": true,
+      "independentOwnedOutput": true
+    }
+  },
+  "paired": {
+    "baselineUs": 2069.584662760417,
+    "candidateUs": 1842.5345911458332,
+    "lower": 0.8823812353210027,
+    "upper": 0.8982836339310442,
+    "pairedRatio": 0.8902969294436065,
+    "savedUs": 227.05007161458366,
+    "actualPairs": 12,
+    "allActualsRetained": true
+  },
+  "qualification": {
+    "windows": {
+      "internal": 3391,
+      "public": 2524,
+      "liveFFmpeg": 948,
+      "total": 6863,
+      "packageConsumerPassed": true
+    },
+    "linux": {
+      "internal": 3391,
+      "public": 2524,
+      "liveFFmpeg": 948,
+      "total": 6863,
+      "packageConsumerPassed": true
+    },
+    "sameActualPackageBothOs": true,
+    "examplesPassedEachOs": 3,
+    "focusedChecksEachOsAndMode": {
+      "internal": 30,
+      "public": 34
+    },
+    "normalAndScalar": true,
+    "namedResizeStorageSuites": true,
+    "firstLinuxSmokeMissingFixture": true,
+    "linuxSmokeReusedSamePackage": true
+  },
+  "raw": {
+    "Up16": {
+      "file": "prototype-bilinear-window.tar.xz",
+      "sha256": "dd89475372fe92b3e1b3fe21f2d51b0b022e85e04127a91e78abf1c7eb9e2417",
+      "bytes": 852672,
+      "members": 14,
+      "mirrored": true,
+      "allMembersVerified": true
+    },
+    "Up16OneShot": {
+      "file": "prototype-bilinear-window.tar.xz",
+      "sha256": "59758e25e5107da020a736e6145baf3a183b4947634236a62e74540d5237c020",
+      "bytes": 18684,
+      "members": 10,
+      "mirrored": true,
+      "allMembersVerified": true
+    },
+    "paired": {
+      "file": "bilinear-window-paired.tar.xz",
+      "sha256": "2abdfb1b2389054ee9a74b7c4f584bc1a57018cfb6687bea85a374014ed3db30",
+      "bytes": 10416,
+      "members": 7,
+      "mirrored": true,
+      "allMembersVerified": true
+    },
+    "qualification": {
+      "file": "bilinear-window-qualification.tar.xz",
+      "sha256": "a569ecc183f1e218ad7c6b01dfc5dae798601f723e084dbd2cb1e43d712713d2",
+      "bytes": 795996,
+      "members": 23,
+      "mirrored": true,
+      "allMembersVerified": true
+    }
+  },
+  "finalRefreshPending": true
+}

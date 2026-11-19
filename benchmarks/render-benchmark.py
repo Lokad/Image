@@ -3305,49 +3305,35 @@ costs. The complete final-package refresh remains outstanding."""
         old, = (line for line in codecs.splitlines() if line.startswith(heading))
         codecs = codecs.replace(old, f'{heading} {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | '
                                 f'{c["ratio"]:.3f} / {c["upper"]:.6f} | {c["allocatedBytes"]:,} | — |')
-    bilinear_word_current = json.loads((ROOT / 'benchmarks/bilinear-partitioned-reference-evidence.json').read_text(encoding='utf-8'))
-    bilinear_word_case = bilinear_word_current['case']
-    assert bilinear_word_current['measurementAccepted'] and not bilinear_word_current['productionChanged'] and not bilinear_word_current['productionSpeedupClaim']
-    assert bilinear_word_current['builds']['productionEmbeddedPublicHarnessNativeFixturePackage'] == bilinear_word_current['qualificationReused']['newBroadPackageChecks'] == 0
-    assert bilinear_word_current['qualificationReused']['fullLiveEachOs'] == 6823
-    assert all(bilinear_word_current['sourceProof'].values())
-    assert bilinear_word_current['producers'] == owned_flip_reference_stage()['producers']
-    assert bilinear_word_current['measurement']['referenceGroupsInterleaved'] and bilinear_word_current['measurement']['operationsPerSubject'] == 256
-    bm = bilinear_word_current['measurement']
-    assert bm['statisticalUnitsPerGroup'] == bm['actualPairs'] == 12
-    assert bm['segmentsPerUnit'] * bm['operationsPerSegment'] == bm['operationsPerSubject']
-    assert bm['allSubdivisionCountsAndAggregationVerified'] and all(s['N'] == 12 for s in [bm['managedStatistics'], *bm['nativeStatistics']])
-    assert bilinear_word_current['raw']['mirrored'] and bilinear_word_current['raw']['allMembersVerified']
-    assert bilinear_word_case['librarySha256'] == bilinear_word_current['producers']['linuxSha256']
-    assert bilinear_word_case['allActualsRetained'] and bilinear_word_case['allOriginalGatesPassed'] and bilinear_word_case['quietGuardsPassed']
-    assert bilinear_word_case['managedRationalReferenceExact'] and bilinear_word_case['sourceUnchanged'] and bilinear_word_case['independentOwnedOutput']
-    assert bilinear_word_case['upper'] <= 1 and bilinear_word_case['status'] == 'pass'
-    assert math.isclose(bilinear_word_case['ratio'], bilinear_word_case['managedUs'] / bilinear_word_case['nativeUs'], rel_tol=1e-12)
-    assert bilinear_word_case['metadata']['nativeRgbMaximum'] <= 1 and bilinear_word_case['metadata']['nativeAlphaMaximum'] <= 1
-    assert bilinear_word_case['metadata']['nativeRgbRmse'] <= .25 and bilinear_word_case['metadata']['nativeAlphaRmse'] <= .25
+    bilinear_word = json.loads((ROOT / 'benchmarks/bilinear-word-contiguous-windows-evidence.json').read_text(encoding='utf-8'))
+    assert bilinear_word['requiredMaterialPaths'] == 289 and bilinear_word['newMaterialPaths'] == 0
+    assert bilinear_word['qualification']['sameActualPackageBothOs']
+    assert bilinear_word['qualification']['examplesPassedEachOs'] == 3
+    assert bilinear_word['paired']['upper'] < 1 and bilinear_word['paired']['allActualsRetained']
+    assert bilinear_word['paired']['actualPairs'] == 12
+    bilinear_word_case, bilinear_fresh_case = (bilinear_word['cases'][name] for name in ('Up16', 'Up16OneShot'))
+    for case in (bilinear_word_case, bilinear_fresh_case):
+        assert case['librarySha256'] == bilinear_word['package']['librarySha256']
+        assert case['actualIterations'] == case['nativeSamplesEachBracket'] == 12
+        assert case['operationsPerSubject'] == 256
+        assert all(case[key] for key in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed',
+                                         'managedRationalReferenceExact', 'sourceUnchanged', 'independentOwnedOutput'))
+        assert case['status'] == 'pass' and case['upper'] <= 1
+        assert math.isclose(case['ratio'], case['managedUs'] / case['nativeUs'], rel_tol=1e-12)
+        assert case['metadata']['nativeRgbMaximum'] <= 1 and case['metadata']['nativeAlphaMaximum'] <= 1
+        assert case['metadata']['nativeRgbRmse'] <= .25 and case['metadata']['nativeAlphaRmse'] <= .25
+    assert bilinear_word_case['subdivisionsPerUnit'] == 16
+    assert bilinear_fresh_case['nativeReady']['graphPreparationTimed']
+    assert not bilinear_fresh_case['nativeReady']['graphRetainedBetweenOperations']
+    assert bilinear_fresh_case['metadata'] == bilinear_word_case['metadata']
     anchor = next(line for line in editing.splitlines() if line.startswith('| Bilinear upscale RGBA8'))
     bilinear_word_row = (f'| Bilinear RGBA16 enlargement, fresh managed / prepared FFmpeg graph (parity confirmed) † → 1027×519 | '
                          f'{bilinear_word_case["managedUs"]:,.2f} | {bilinear_word_case["nativeUs"]:,.2f} | '
                          f'{bilinear_word_case["ratio"]:.3f} / {bilinear_word_case["upper"]:.6f} | {bilinear_word_case["allocatedBytes"]:,} |')
-    editing = editing.replace(anchor, anchor + '\n' + bilinear_word_row)
-    bilinear_one_shot = json.loads((ROOT / 'benchmarks/bilinear-equivalent-one-shot-evidence.json').read_text(encoding='utf-8'))
-    bilinear_fresh_case = bilinear_one_shot['case']
-    fresh_q = json.loads((ROOT / bilinear_one_shot['qualification']['provider']).read_text(encoding='utf-8'))
-    assert bilinear_one_shot['measurementAccepted'] and not bilinear_one_shot['productionChanged'] and not bilinear_one_shot['productionSpeedupClaim']
-    assert bilinear_one_shot['requiredMaterialPaths'] == 289 and bilinear_one_shot['newMaterialPaths'] == 0
-    assert bilinear_one_shot['raw']['mirrored'] and bilinear_one_shot['raw']['allMembersVerified']
-    assert bilinear_one_shot['producers'] == fresh_q['producers']
-    assert bilinear_fresh_case['librarySha256'] == fresh_q['qualification']['actualPackage']['librarySha256']
-    assert bilinear_fresh_case['actualIterations'] == bilinear_fresh_case['nativeSamplesEachBracket'] == 12
-    assert all(bilinear_fresh_case[k] for k in ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed', 'managedRationalReferenceExact', 'sourceUnchanged', 'independentOwnedOutput'))
-    assert bilinear_fresh_case['status'] == 'pass' and bilinear_fresh_case['upper'] <= 1
-    assert math.isclose(bilinear_fresh_case['ratio'], bilinear_fresh_case['managedUs'] / bilinear_fresh_case['nativeUs'], rel_tol=1e-12)
-    assert bilinear_fresh_case['nativeReady']['graphPreparationTimed'] and not bilinear_fresh_case['nativeReady']['graphRetainedBetweenOperations']
-    assert bilinear_fresh_case['metadata'] == bilinear_word_case['metadata']
     fresh_row = (f'| Bilinear one-shot RGBA16 / FFmpeg one-shot † → 1027×519 | '
                  f'{bilinear_fresh_case["managedUs"]:,.2f} | {bilinear_fresh_case["nativeUs"]:,.2f} | '
                  f'{bilinear_fresh_case["ratio"]:.3f} / {bilinear_fresh_case["upper"]:.3f} | {bilinear_fresh_case["allocatedBytes"]:,} |')
-    editing = editing.replace(bilinear_word_row, bilinear_word_row + '\n' + fresh_row)
+    editing = editing.replace(anchor, anchor + '\n' + bilinear_word_row + '\n' + fresh_row)
     codecs, read_table = apply_current_png_scan(codecs, read_table, resident_png)
     header_reference = jpeg_markers
     hq = header_reference['qualification']
@@ -4029,27 +4015,16 @@ stay in their original reports; the complete final-package refresh remains open.
 [Earlier bicubic comparisons](../benchmarks/BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md)
 and [streaming-column qualification](../benchmarks/STREAMING-COLUMN-REUSE.md)
 retain their original producer evidence.
-[RGBA16 bilinear enlargement](../benchmarks/BILINEAR-PARTITIONED-REFERENCE.md)
-passes/stops: **{bilinear_word_case['managedUs']:,.2f} / FFmpeg {bilinear_word_case['nativeUs']:,.2f}µs,
-upper {bilinear_word_case['upper']:.6f}**, **{bilinear_word_case['allocatedBytes']:,} B/op**.
-Finer interleaving partitions each256-operation actual into16subdivisions while
-retaining twelve statistical units per group, every operation and the unchanged
-warmups/conservative gate. Extra clock reads stay measured; more frequent native
-IPC/client work stays outside. Reuse6,823checks per OS/SAME actual C620/f034 package/
-all3examples; one small driver build, zero production/harness/native/package builds
-or broad repeats. The frozen manifest is restored as an independent file before
-timing, preserving current metadata. Old uncertainty remains history; no production
-speedup or host cause is claimed. Fresh managed preparation and retained native
-graph/geometry stay timed as declared, distinct from the equivalent view below.
-[Equivalent one-shot bilinear](../benchmarks/BILINEAR-EQUIVALENT-ONE-SHOT.md) now passes:
-**{bilinear_fresh_case['managedUs']:,.2f} / FFmpeg {bilinear_fresh_case['nativeUs']:,.2f} µs, upper {bilinear_fresh_case['upper']:.3f}**,
-**{bilinear_fresh_case['allocatedBytes']:,} B/op**. Fresh graph/context/geometry, lazy first use,
-result wrapper, filtering and owned-output disposal are timed. Both sides borrow resident
-source rasters. Exact managed/full-word/native/ownership gates remain; the existing
-qualified package is reused with no production rebuild. This qualifies the complete
-bilinear boundary; the eight earlier equivalent views cover bicubic. Both bilinear
-views pass/stop without a production speedup or historical phase-cost subtraction.
-No material path or settings grid is added.
+[RGBA16 bilinear enlargement](../benchmarks/BILINEAR-WORD-CONTIGUOUS-WINDOWS.md)
+saves **{bilinear_word['paired']['savedUs']:.2f} µs** across twelve matched
+complete resizes. With a prepared native graph it takes
+**{bilinear_word_case['managedUs']:,.2f} / FFmpeg {bilinear_word_case['nativeUs']:,.2f} µs**,
+upper **{bilinear_word_case['upper']:.6f}**, at **{bilinear_word_case['allocatedBytes']:,} B/op**.
+The equivalent fresh-graph comparison takes
+**{bilinear_fresh_case['managedUs']:,.2f} / FFmpeg {bilinear_fresh_case['nativeUs']:,.2f} µs**,
+upper **{bilinear_fresh_case['upper']:.6f}**, with the same allocation.
+Both timings use the DLL verified by Windows and Linux package consumers.
+Exact managed pixels and the native sample bounds remain in force.
 Longer-integration [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md) resolves
 uncertainty at **{png_gray8['managedUs']:,.2f} / FFmpeg {png_gray8['nativeUs']:,.2f}µs,
 upper {png_gray8['upper']:.6f}**, **{png_gray8['allocatedBytes']:,} B/op**. All 17

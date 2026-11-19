@@ -232,27 +232,16 @@ stay in their original reports; the complete final-package refresh remains open.
 [Earlier bicubic comparisons](../benchmarks/BICUBIC-CURRENT-ADJACENT-CONFIDENCE.md)
 and [streaming-column qualification](../benchmarks/STREAMING-COLUMN-REUSE.md)
 retain their original producer evidence.
-[RGBA16 bilinear enlargement](../benchmarks/BILINEAR-PARTITIONED-REFERENCE.md)
-passes/stops: **1,847.74 / FFmpeg 2,024.23µs,
-upper 0.944044**, **4,498,558 B/op**.
-Finer interleaving partitions each256-operation actual into16subdivisions while
-retaining twelve statistical units per group, every operation and the unchanged
-warmups/conservative gate. Extra clock reads stay measured; more frequent native
-IPC/client work stays outside. Reuse6,823checks per OS/SAME actual C620/f034 package/
-all3examples; one small driver build, zero production/harness/native/package builds
-or broad repeats. The frozen manifest is restored as an independent file before
-timing, preserving current metadata. Old uncertainty remains history; no production
-speedup or host cause is claimed. Fresh managed preparation and retained native
-graph/geometry stay timed as declared, distinct from the equivalent view below.
-[Equivalent one-shot bilinear](../benchmarks/BILINEAR-EQUIVALENT-ONE-SHOT.md) now passes:
-**1,973.05 / FFmpeg 5,139.83 µs, upper 0.434**,
-**4,498,574 B/op**. Fresh graph/context/geometry, lazy first use,
-result wrapper, filtering and owned-output disposal are timed. Both sides borrow resident
-source rasters. Exact managed/full-word/native/ownership gates remain; the existing
-qualified package is reused with no production rebuild. This qualifies the complete
-bilinear boundary; the eight earlier equivalent views cover bicubic. Both bilinear
-views pass/stop without a production speedup or historical phase-cost subtraction.
-No material path or settings grid is added.
+[RGBA16 bilinear enlargement](../benchmarks/BILINEAR-WORD-CONTIGUOUS-WINDOWS.md)
+saves **227.05 µs** across twelve matched
+complete resizes. With a prepared native graph it takes
+**1,894.77 / FFmpeg 1,994.87 µs**,
+upper **0.973427**, at **4,498,579 B/op**.
+The equivalent fresh-graph comparison takes
+**1,865.92 / FFmpeg 4,801.28 µs**,
+upper **0.513600**, with the same allocation.
+Both timings use the DLL verified by Windows and Linux package consumers.
+Exact managed pixels and the native sample bounds remain in force.
 Longer-integration [grayscale PNG](../benchmarks/PNG-GRAY-CURRENT-PATH.md) resolves
 uncertainty at **1,964.07 / FFmpeg 1,978.51µs,
 upper 0.999681**, **546,523 B/op**. All 17
@@ -538,8 +527,8 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Arabic OpenType layout / SixLabors public API (pass) | 88.93 | 337.84 | 0.263 / 0.421 | 28,658 |
 | Complete fitting search / SixLabors public API (pass) | 1,144.00 | 1,882.11 | 0.608 / 0.866 | 224,181 |
 | Bilinear upscale RGBA8 † → 1027×519 | 1,967.04 | 1,994.67 | 0.986 / 0.993357 | 102,891 |
-| Bilinear RGBA16 enlargement, fresh managed / prepared FFmpeg graph (parity confirmed) † → 1027×519 | 1,847.74 | 2,024.23 | 0.913 / 0.944044 | 4,498,558 |
-| Bilinear one-shot RGBA16 / FFmpeg one-shot † → 1027×519 | 1,973.05 | 5,139.83 | 0.384 / 0.434 | 4,498,574 |
+| Bilinear RGBA16 enlargement, fresh managed / prepared FFmpeg graph (parity confirmed) † → 1027×519 | 1,894.77 | 1,994.87 | 0.950 / 0.973427 | 4,498,579 |
+| Bilinear one-shot RGBA16 / FFmpeg one-shot † → 1027×519 | 1,865.92 | 4,801.28 | 0.389 / 0.514 | 4,498,579 |
 | Bilinear resize RGBA8 † → 256×129 | 375.69 | 386.26 | 0.973 / 0.997123 | 8,473 |
 | Bilinear resize RGBA16 † → 256×129 | 412.89 | 419.04 | 0.985 / 0.991838 | 8,473 |
 | Bicubic RGBA8, width reduction / same height, input+output+4 KiB † → 256×259 | 490.21 | 576.13 | 0.851 / 0.862076 | 113 |
