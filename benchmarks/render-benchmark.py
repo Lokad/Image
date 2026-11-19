@@ -2469,6 +2469,21 @@ peaks are unmeasured. No broader content/settings or historical-clock gain claim
         assert c['status'] == ('pass' if c['upper'] <= 1 else 'gap' if c['lower'] > 1 else 'uncertain')
         assert math.isclose(c['ratio'], c['managedUs'] / c['nativeUs'], rel_tol=1e-12)
     assert all(c['gainSeparated'] and c['pairs'] == 12 and c['operations'] == 32 for c in variable_prices['paired'].values())
+    selected_vector = json.loads((ROOT / 'benchmarks/vp8-selected-vector-transform-evidence.json').read_text(encoding='utf-8'))
+    vp8_vector_cost = selected_vector['case']
+    assert vp8_vector_cost['librarySha256'] == selected_vector['librarySha256']
+    assert vp8_vector_cost['status'] == 'pass' and vp8_vector_cost['upper'] <= 1
+    assert vp8_vector_cost['actualIterations'] == vp8_vector_cost['nativeSamplesEachBracket'] == 12
+    assert vp8_vector_cost['allActualsRetained'] and vp8_vector_cost['allOriginalGatesPassed'] and vp8_vector_cost['quietGuardsPassed']
+    assert vp8_vector_cost['completePacketExact'] and vp8_vector_cost['packetSha256'] == vp8_vector_cost['nativePacketSha256']
+    assert vp8_vector_cost['managedPacketBytes'] == vp8_vector_cost['nativePacketBytes'] == 7330
+    assert vp8_vector_cost['sourceUnchanged'] and vp8_vector_cost['independentOwnedOutput']
+    assert selected_vector['paired']['upper'] < 1 and selected_vector['paired']['pairs'] == 12
+    assert selected_vector['raw']['verifiedOnBothHosts']
+    assert selected_vector['qualification']['sameActualPackage'] and selected_vector['qualification']['timedDllPackedUnchanged']
+    for platform in selected_vector['qualification']['platforms'].values():
+        assert platform['full'] == [3392, 2526, 948] and platform['consumer'] and platform['examples'] == 3
+    vp8_encode_cases = {**vp8_encode_cases, 'distortion': vp8_vector_cost}
     for name in ['alpha', 'alpha16']:
         webp_owned['cases'][name] = vp8_encode_cases[name]
     streaming = json.loads((ROOT / 'benchmarks/packed-streaming-paired-byte-rows-evidence.json').read_text(encoding='utf-8'))
@@ -4061,8 +4076,13 @@ the photograph gap: **{vp8_encode_cases['photograph']['managedUs']:,.2f} / FFmpe
 **809,080 B/op**, exact **17,688 B**. All nine lossy and all eight lossless/alpha
 controls pass/stop. Independent controlled gains are **154.41µs/1.623%** photograph
 and **228.60µs/.433%** RGBA16alpha; allocations/retention remain unchanged.
-The longer trellis integration retains its original uncertain capture. Unchanged
-encoder paths reuse this source-valid evidence on the current qualified package.
+The longer trellis integration retains its original uncertain capture. The
+[selected-block transform](../benchmarks/VP8-SELECTED-VECTOR-TRANSFORM.md) qualifies
+distortion-only encoding on the packed DLL at **{distortion_cost['managedUs']:,.2f} /
+FFmpeg {distortion_cost['nativeUs']:,.2f} µs**, upper **{distortion_cost['upper']:.6f}**,
+with **{distortion_cost['allocatedBytes']:,} B/op** and the exact 7,330-byte packet.
+Its matched managed comparison saves **{selected_vector['paired']['baselineUs'] - selected_vector['paired']['candidateUs']:.2f} µs**.
+Unchanged RDO, trellis and alpha paths retain their source-specific evidence.
 This scoped refresh does not establish whole-library parity; publication is postponed.
 [Canonical Lanczos identity axes](../benchmarks/LANCZOS-IDENTITY-AXIS.md) remove
 zero-only coefficient storage and size working rows from actual taps.

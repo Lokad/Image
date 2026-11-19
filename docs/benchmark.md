@@ -259,8 +259,13 @@ the photograph gap: **9,385.67 / FFmpeg
 **809,080 B/op**, exact **17,688 B**. All nine lossy and all eight lossless/alpha
 controls pass/stop. Independent controlled gains are **154.41µs/1.623%** photograph
 and **228.60µs/.433%** RGBA16alpha; allocations/retention remain unchanged.
-The longer trellis integration retains its original uncertain capture. Unchanged
-encoder paths reuse this source-valid evidence on the current qualified package.
+The longer trellis integration retains its original uncertain capture. The
+[selected-block transform](../benchmarks/VP8-SELECTED-VECTOR-TRANSFORM.md) qualifies
+distortion-only encoding on the packed DLL at **2,575.76 /
+FFmpeg 2,659.65 µs**, upper **0.979850**,
+with **406,664 B/op** and the exact 7,330-byte packet.
+Its matched managed comparison saves **63.37 µs**.
+Unchanged RDO, trellis and alpha paths retain their source-specific evidence.
 This scoped refresh does not establish whole-library parity; publication is postponed.
 [Canonical Lanczos identity axes](../benchmarks/LANCZOS-IDENTITY-AXIS.md) remove
 zero-only coefficient storage and size working rows from actual taps.
@@ -426,7 +431,7 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | VP8 opaque RGBA16, including normalization † | 13,936.40 | 15,494.52 | 0.899 / 0.906 | 1,201,560 | 72,380 / 72,380 |
 | VP8 opaque photograph † | 9,385.67 | 9,729.91 | 0.965 / 0.971 | 809,080 | 17,688 / 17,688 |
 | VP8 opaque text/diagram † | 5,197.67 | 5,818.65 | 0.893 / 0.899 | 740,992 | 7,100 / 7,100 |
-| VP8 diagram, effort2 / distortion-only search † | 2,438.71 | 2,509.32 | 0.972 / 0.977 | 406,664 | 7,330 / 7,330 |
+| VP8 diagram, effort2 / distortion-only search † | 2,575.76 | 2,659.65 | 0.968 / 0.980 | 406,664 | 7,330 / 7,330 |
 | VP8 diagram, effort6 / trellis † | 9,111.36 | 9,762.54 | 0.933 / 0.935 | 754,352 | 6,818 / 6,818 |
 | VP8 RGBA8 + lossless alpha † | 52,704.44 | 53,106.80 | 0.992 / 0.998 | 6,241,792 | 98,590 / 98,590 |
 | VP8 RGBA16 + alpha, including normalization † | 52,346.05 | 53,555.75 | 0.977 / 0.988 | 6,241,792 | 98,590 / 98,590 |

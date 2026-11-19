@@ -168,10 +168,17 @@ internal static class Vp8DistortionDecision
             modes[b] = (byte)bestMode; score += best; header += costs[bestMode];
             if (score >= previous || header > headerLimit) return false;
             context.Cancellation.ThrowIfCancellationRequested();
-            if (packedPrediction) selectedPixels.CopyTo(selected);
-            for (var yy = 0; yy < 4; yy++) for (var xx = 0; xx < 4; xx++)
-                residual[yy * 4 + xx] = (short)(source[offset + yy * 16 + xx] - selected[yy * 4 + xx]);
-            Vp8ForwardTransform.Dct(residual, coefficients);
+            if (packedPrediction)
+            {
+                Vp8ForwardTransform.DctSelected(sourcePixels, selectedPixels, coefficients);
+                selectedPixels.CopyTo(selected);
+            }
+            else
+            {
+                for (var yy = 0; yy < 4; yy++) for (var xx = 0; xx < 4; xx++)
+                    residual[yy * 4 + xx] = (short)(source[offset + yy * 16 + xx] - selected[yy * 4 + xx]);
+                Vp8ForwardTransform.Dct(residual, coefficients);
+            }
             if (Vp8BlockQuantization.Apply(coefficients, levels.Slice(16 + b * 16, 16), matrix)) nz |= 1u << b;
             Vp8BlockReconstruction.Add(coefficients, selected, 4);
             for (var yy = 0; yy < 4; yy++) selected.Slice(yy * 4, 4).CopyTo(pixels.Slice(offset + yy * 16, 4));

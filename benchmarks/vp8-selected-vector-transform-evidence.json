@@ -1,0 +1,97 @@
+{
+  "packageSha256": "e5ef192cd8dd5ef6b185baa2c17bd849eb8801e2a8a322f02a82968e9e4947a1",
+  "symbolsSha256": "d04b153422b6f2e015247346078aaaac7117c9927a751170536d1f3f46095262",
+  "librarySha256": "d71ba2bc913c9112e0129f595067103d3fefb4bf515f7d34a62e4381980690bb",
+  "case": {
+    "caseId": "DiagramLossyDistortion8",
+    "librarySha256": "d71ba2bc913c9112e0129f595067103d3fefb4bf515f7d34a62e4381980690bb",
+    "managedUs": 2575.755791015625,
+    "nativeUs": 2659.648650390625,
+    "ratio": 0.9684571646850126,
+    "lower": 0.9541818296411833,
+    "upper": 0.9798501305763823,
+    "status": "pass",
+    "allocatedBytes": 406664,
+    "managedPacketBytes": 7330,
+    "nativePacketBytes": 7330,
+    "packetSha256": "325a9d5b55b300db2554681735642edcdc8dcb866a88760501d3fe95fac1423b",
+    "nativePacketSha256": "325a9d5b55b300db2554681735642edcdc8dcb866a88760501d3fe95fac1423b",
+    "completePacketExact": true,
+    "allOriginalGatesPassed": true,
+    "quietGuardsPassed": true,
+    "allActualsRetained": true,
+    "actualIterations": 12,
+    "nativeSamplesEachBracket": 12,
+    "operationsPerSubject": 128,
+    "sourceUnchanged": true,
+    "independentOwnedOutput": true
+  },
+  "paired": {
+    "baselineUs": 2656.5432024739584,
+    "candidateUs": 2593.1723424479164,
+    "lower": 0.9695153539839954,
+    "upper": 0.9828053969092359,
+    "pairs": 12,
+    "operations": 128,
+    "toolSha256": "df1ae677ee626defbfb4ef1af8de3bc9b80ba8471af81e98a25c51906b5072d6"
+  },
+  "sourceOverlay": {
+    "src/Lokad.Image/Internal/Vp8DistortionDecision.cs": "a99085fca70370b8ce2ebac05b27059d8d28458192955d9330b431a01d60ac5b",
+    "src/Lokad.Image/Internal/Vp8ForwardTransform.Four.cs": "bca59909792aeb37e02bb6c6954135c988b7a0e708977208f29c9e6fc2cb24f3",
+    "tests/Lokad.Image.Tests/Vp8ForwardTransformTests.cs": "7ce9abc3f8e93daca45182c7ca7f9a40f3440ed1a2338c572a23c8bf790586d4"
+  },
+  "raw": {
+    "path": "tmp/final-refresh/vp8-selected-vector/results.tar.xz",
+    "sha256": "0ebdff7083f4ea71b0df2c3d41f97b1ee4180242f4f8e4499cf7d92ab8723507",
+    "members": 38,
+    "verifiedOnBothHosts": true
+  },
+  "qualification": {
+    "platforms": {
+      "windows": {
+        "full": [
+          3392,
+          2526,
+          948
+        ],
+        "portable": {
+          "no-avx512": {
+            "Lokad.Image.Tests": 1043,
+            "Lokad.Image.PublicApi.Tests": 367
+          },
+          "scalar": {
+            "Lokad.Image.Tests": 1043,
+            "Lokad.Image.PublicApi.Tests": 367
+          }
+        },
+        "consumer": true,
+        "examples": 3
+      },
+      "linux": {
+        "full": [
+          3392,
+          2526,
+          948
+        ],
+        "portable": {
+          "no-avx512": {
+            "Lokad.Image.Tests": 1043,
+            "Lokad.Image.PublicApi.Tests": 367
+          },
+          "scalar": {
+            "Lokad.Image.Tests": 1043,
+            "Lokad.Image.PublicApi.Tests": 367
+          }
+        },
+        "consumer": true,
+        "examples": 3
+      }
+    },
+    "sameActualPackage": true,
+    "timedDllPackedUnchanged": true
+  },
+  "storage": {
+    "newOwnedHeapCapacityBytes": 0,
+    "newRetainedStateBytes": 0
+  }
+}

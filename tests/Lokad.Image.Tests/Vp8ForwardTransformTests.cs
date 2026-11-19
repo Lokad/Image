@@ -1,4 +1,6 @@
 using System.Buffers.Binary;
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
 using System.Security.Cryptography;
 using Lokad.Image.Internal;
 using Lokad.Image.Tooling;
@@ -7,6 +9,35 @@ namespace Lokad.Image.Tests;
 
 public sealed class Vp8ForwardTransformTests
 {
+    [Fact]
+    public void SelectedByteDifferenceMatchesCheckedTransform()
+    {
+        if (!(Avx2.IsSupported && Sse41.IsSupported)) return;
+        var random = new Random(4242);
+        Span<byte> source = stackalloc byte[16];
+        Span<byte> prediction = stackalloc byte[16];
+        Span<short> residual = stackalloc short[16];
+        Span<short> expected = stackalloc short[16];
+        Span<short> actual = stackalloc short[18];
+        for (var sample = 0; sample < 256; sample++)
+        {
+            random.NextBytes(source);
+            random.NextBytes(prediction);
+            source[sample % 16] = 255;
+            prediction[sample % 16] = 0;
+            source[(sample + 1) % 16] = 0;
+            prediction[(sample + 1) % 16] = 255;
+            for (var i = 0; i < residual.Length; i++)
+                residual[i] = (short)(source[i] - prediction[i]);
+            Vp8ForwardTransform.Dct(residual, expected);
+            actual.Fill(short.MaxValue);
+            Vp8ForwardTransform.DctSelected(Vector128.Create(source), Vector128.Create(prediction), actual[1..]);
+            Assert.True(expected.SequenceEqual(actual[1..17]));
+            Assert.Equal(short.MaxValue, actual[0]);
+            Assert.Equal(short.MaxValue, actual[^1]);
+        }
+    }
+
     [Fact]
     public void FourAdjacentBlocksMatchScalarWithStridesOffsetsAndOverlappingStorage()
     {

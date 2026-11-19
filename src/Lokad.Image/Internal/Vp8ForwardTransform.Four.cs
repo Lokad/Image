@@ -13,6 +13,49 @@ internal static partial class Vp8ForwardTransform
     internal static bool SupportsFour => Avx512F.IsSupported && Avx512BW.IsSupported;
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static void Transpose(ref Vector128<int> r0, ref Vector128<int> r1, ref Vector128<int> r2, ref Vector128<int> r3)
+    {
+        var a = Sse2.UnpackLow(r0, r1); var b = Sse2.UnpackHigh(r0, r1);
+        var c = Sse2.UnpackLow(r2, r3); var d = Sse2.UnpackHigh(r2, r3);
+        r0 = Sse2.UnpackLow(a.AsInt64(), c.AsInt64()).AsInt32();
+        r1 = Sse2.UnpackHigh(a.AsInt64(), c.AsInt64()).AsInt32();
+        r2 = Sse2.UnpackLow(b.AsInt64(), d.AsInt64()).AsInt32();
+        r3 = Sse2.UnpackHigh(b.AsInt64(), d.AsInt64()).AsInt32();
+    }
+
+    // The AVX2 distortion search has one selected prediction in register order.
+    // It depends on reconstructed neighbors, so the adjacent-block kernel cannot
+    // batch it. Byte provenance bounds every residual and coefficient.
+    internal static void DctSelected(Vector128<byte> source, Vector128<byte> prediction, Span<short> coefficients)
+    {
+        coefficients = coefficients[..16];
+        var residual = Avx2.ConvertToVector256Int16(source) - Avx2.ConvertToVector256Int16(prediction);
+        var low = residual.GetLower(); var high = residual.GetUpper();
+        var r0 = Sse41.ConvertToVector128Int32(low);
+        var r1 = Sse41.ConvertToVector128Int32(Sse2.ShiftRightLogical128BitLane(low.AsByte(), 8).AsInt16());
+        var r2 = Sse41.ConvertToVector128Int32(high);
+        var r3 = Sse41.ConvertToVector128Int32(Sse2.ShiftRightLogical128BitLane(high.AsByte(), 8).AsInt16());
+
+        Transpose(ref r0, ref r1, ref r2, ref r3);
+        var a = r0 + r3; var b = r1 + r2; var c = r0 - r3; var d = r1 - r2;
+        var sine = Vector128.Create(Sine); var cosine = Vector128.Create(Cosine);
+        r0 = (a + b) << 3;
+        r1 = (c * cosine + d * sine + Vector128.Create(1812)) >> 9;
+        r2 = (a - b) << 3;
+        r3 = (c * sine - d * cosine + Vector128.Create(937)) >> 9;
+
+        Transpose(ref r0, ref r1, ref r2, ref r3);
+        a = r0 + r3; b = r1 + r2; c = r0 - r3; d = r1 - r2;
+        var correction = Sse2.AndNot(Sse2.CompareEqual(c, Vector128<int>.Zero), Vector128.Create(1));
+        r0 = (a + b + Vector128.Create(7)) >> 4;
+        r1 = ((c * cosine + d * sine + Vector128.Create(12000)) >> 16) + correction;
+        r2 = (a - b + Vector128.Create(7)) >> 4;
+        r3 = (c * sine - d * cosine + Vector128.Create(51000)) >> 16;
+        Sse2.PackSignedSaturate(r0, r1).CopyTo(coefficients);
+        Sse2.PackSignedSaturate(r2, r3).CopyTo(coefficients[8..]);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     static void Transpose(ref Vector512<int> r0, ref Vector512<int> r1, ref Vector512<int> r2, ref Vector512<int> r3)
     {
         var a = Avx512F.UnpackLow(r0, r1); var b = Avx512F.UnpackHigh(r0, r1);
