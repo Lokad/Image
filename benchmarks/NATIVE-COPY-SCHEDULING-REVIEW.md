@@ -384,3 +384,20 @@ lifetime and independent output ownership. All clocks were discarded.
 Retain the frozen 12-unit schedule and 16 subdivisions of eight calls for
 the final refresh.
 [Restored commands, source identities and verified archive](benchmark-refresh-runtime-preparation-evidence.json)
+
+## Resident PNG decoder refresh recipes
+
+The three displayed resident decode cases share 73 verified non-core runtime
+files, two frozen natural-GC drivers, eight fixture files and one unchanged
+FFmpeg worker. The live-token and tight-limit RGBA8 cases retain their original
+12 managed actuals and both 12-sample native brackets. The tight-limit RGBA16
+case also retains 32 native calls on each side of every managed actual, with
+the original interleaved confidence calculation.
+
+On package `3e09246f`, one untimed call through each original generated
+consumer passes exact normal/scalar reference pixels, source integrity and
+independent ownership. The live-token case rejects prior cancellation and
+both tight-limit cases reject one byte below the exact allowance. All clocks
+were discarded. The original scoring drivers and fixture bytes are verified
+and retained for the final refresh.
+[Frozen commands, guards and verified archive](benchmark-refresh-runtime-preparation-evidence.json)
