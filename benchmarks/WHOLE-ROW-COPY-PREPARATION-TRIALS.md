@@ -1468,3 +1468,32 @@ shared backings, with all sixteen role/order pairs adverse. Exact normal
 and scalar preflights, ownership and both idle guards pass at **0 B/op**.
 The current runtime copy remains the production path.
 [Profile mapping, generated code and raw screen](copy-vector-width-trials-evidence.json)
+
+## Word-copy direction and full-group snapshot
+
+The direction screens use layouts with forward distances of 400–1,200 bytes
+modulo 4 KiB. The 32-byte transfer candidates keep forward row order and
+change the order inside each row. The forward version loses **41.3 ns** on
+average, and the right-to-left version loses **55.0 ns**. These measurements
+leave the effects of address aliasing and physical placement unresolved.
+
+The full-group snapshot loads all 32 vectors of a 2 KiB group before writing
+the first vector. The 737-byte JIT helper keeps them in registers. Four
+shared backing pairs show **25.5 ns** mean savings against the current
+`3e09246f` package. The original source, full canvas, ownership and
+cancellation checks pass at **0 B/op**. The candidate passes 66 exact and
+canary cases and rejects nine invalid footprints per mode on Windows and
+Linux. Linux also covers the AVX-512 route.
+
+| Snapshot on package `14a84030` | Lokad.Image / FFmpeg µs | Conservative ratio interval |
+| --- | ---: | ---: |
+| Original standalone comparison | 4.030 / 4.056 | 0.980493–1.006049 |
+| Placement-balanced comparison | 4.002 / 4.014 | 0.979971–1.014693 |
+
+Both confirmations retain all 12 units, 16 subdivisions, the exact
+operation, and the original confidence calculation. Their paired uppers
+are 0.995232 and 1.002429. The complete confidence view leaves both
+comparisons uncertain. The single-group refinement removes the inner loop
+and saves another **6.0 ns** on average with mixed results across backings.
+Keep the full-group snapshot as the private lead, with the existing BCL
+mover in production. [Sources, timings and verified archive](copy-vector-width-trials-evidence.json)

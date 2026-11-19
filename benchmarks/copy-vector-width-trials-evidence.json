@@ -3364,5 +3364,185 @@
       "directory": "tmp/frp1454",
       "mirrored": true
     }
+  },
+  "wordDirectionAndSnapshot": {
+    "basePackageSha256": "3e09246fd9b51a9728c57e706b4767f1497b1f2a50d3907305ab5ea50b7d6774",
+    "librarySha256": "af881e2514ce039c79a9d12d105ccc4249f12c68bc7912acba2e7d9d8aa20255",
+    "variants": {
+      "forwardNarrowerBlocks": {
+        "candidateSha256": "1684aba5d9303a85babc1a5c4526e64eaa85be9f7ba8cc048cfb718b8f2c9e30",
+        "normalScalarExact": true,
+        "checkedWidths": 127,
+        "codeSize": 382,
+        "meanSavedNs": -41.280579566955566,
+        "perPlacementSavedNs": [
+          -56.583370208740234,
+          -57.91196823120117,
+          25.46359634399414,
+          -76.090576171875
+        ],
+        "forwardDistanceModuloPageObservedBytes": [
+          400,
+          720,
+          880,
+          1200
+        ]
+      },
+      "backwardNarrowerBlocks": {
+        "candidateSha256": "62b6052c0726b710abbd3ae3d6899fad01119e51a0f036e7ce7732d4dd283382",
+        "normalScalarExact": true,
+        "checkedWidths": 127,
+        "codeSize": 383,
+        "meanSavedNs": -55.0018835067749,
+        "perPlacementSavedNs": [
+          -78.95111846923828,
+          -70.6342887878418,
+          -51.55524444580078,
+          -18.86688232421875
+        ],
+        "forwardDistanceModuloPageObservedBytes": [
+          400,
+          720,
+          880,
+          1200
+        ]
+      },
+      "fullGroupSnapshot": {
+        "candidateSha256": "639e308dabfc7756a93fe448c75e236dd45e0667ec1b507be6ad48264b6fffcf",
+        "normalScalarExact": true,
+        "checkedWidths": 16,
+        "codeSize": 737,
+        "meanSavedNs": 25.505691528320312,
+        "perPlacementSavedNs": [
+          42.86045837402344,
+          18.542102813720703,
+          24.51721954345703,
+          16.102985382080078
+        ],
+        "forwardDistanceModuloPageObservedBytes": [
+          176,
+          720,
+          880,
+          1424
+        ]
+      }
+    },
+    "trialsUseExactOriginalCopy": true,
+    "matchedBackings": 4,
+    "matchedOperationsPerSubject": 65536,
+    "allQuietGuardsPassed": true,
+    "scoredStandaloneCaptures": 1,
+    "standalone": {
+      "caseId": "DrawingCopy16",
+      "command": [
+        "taskset",
+        "-c",
+        "0",
+        "dotnet",
+        "exec",
+        "--depsfile",
+        "tmp/frp1458/root/runtime/Lokad.Image.Benchmarks-WarmConfirm-1.deps.json",
+        "--runtimeconfig",
+        "tmp/frp1458/root/runtime/Lokad.Image.Benchmarks-WarmConfirm-1.runtimeconfig.json",
+        "tmp/frp1458/root/runtime/CopyPartitioned.dll",
+        "tmp/frp1458/root/runtime/Lokad.Image.Benchmarks.dll",
+        "2a4b04d9600ab429c0ac13a360d76e59c841d193763ade26f0aa65bb562aa78d",
+        "639e308dabfc7756a93fe448c75e236dd45e0667ec1b507be6ad48264b6fffcf",
+        "WarmCopyRegion",
+        "DrawingCopy16",
+        "262144"
+      ],
+      "allOriginalGatesPassed": true,
+      "originalNativeDriver": true,
+      "quietGuardsPassed": true,
+      "allActualsRetained": true,
+      "managedUs": 4.029566346168518,
+      "nativeUs": 4.055782071113587,
+      "allocatedBytes": 0,
+      "operationsPerUnit": 262144,
+      "subdivisionsPerUnit": 16,
+      "immutablePackageSha256": "14a8403050a3a0d753a410b255f3fc8e0b6098b08f367c285e6cbb8c03c1b852",
+      "librarySha256": "639e308dabfc7756a93fe448c75e236dd45e0667ec1b507be6ad48264b6fffcf",
+      "ratio": 0.9935362096667412,
+      "lower": 0.9804928481630776,
+      "upper": 1.0060492124360014,
+      "status": "uncertain"
+    },
+    "singleSnapshotRefinement": {
+      "candidateSha256": "e57674ca562e5b1fdb2c2cf27764a6de3e52e1637d4aa0aff9acc8d13c6f9961",
+      "generatedCodeSize": 714,
+      "meanSavedNs": 6.001614570617676,
+      "perPlacementSavedNs": [
+        6.295001983642578,
+        17.381935119628906,
+        -0.5538902282714844,
+        0.8834114074707031
+      ],
+      "scoredCaptures": 0,
+      "allocatedBytes": 0
+    },
+    "placementBalanced": {
+      "managedUs": 4.002123213450114,
+      "nativeUs": 4.013609869639079,
+      "ratio": 0.9971380735641858,
+      "lower": 0.9799711127182064,
+      "upper": 1.014692538090328,
+      "status": "uncertain",
+      "pairedRatioConfidence": [
+        0.9916543827902524,
+        1.002429276920635
+      ],
+      "allocatedBytes": 0,
+      "originalScoringBlock": true,
+      "balancedRolesAndPairOrder": true
+    },
+    "placementBalancedDriverSha256": "a32dacc42b7b7fbb93d99999f1d1b40f59ac6494eb83a0e4c47c20ae8ae57b72",
+    "placementBalancedAdapterSha256": "c95c70fd443ffb42b72d7130605592e493171b1b62125c145e295c6101450a84",
+    "confidence": {
+      "standalone": {
+        "paired": [
+          0.9918476237837754,
+          0.9952321819719673
+        ],
+        "views": [
+          {
+            "label": "allActual",
+            "upper": 1.0060492124360014
+          },
+          {
+            "label": "upperOutlierDiagnostic",
+            "upper": 1.0060492124360014
+          }
+        ]
+      },
+      "placementBalanced": {
+        "paired": [
+          0.9916543827902524,
+          1.002429276920635
+        ],
+        "views": [
+          {
+            "label": "allActual",
+            "upper": 1.014692538090328
+          },
+          {
+            "label": "upperOutlierDiagnostic",
+            "upper": 1.0121823067398004
+          }
+        ]
+      }
+    },
+    "footprintsPerOsAndMode": 66,
+    "refusedFootprintsPerOsAndMode": 9,
+    "productionChanged": false,
+    "raw": {
+      "file": "word-direction-and-snapshot-copy-trials.tar.xz",
+      "bytes": 564280,
+      "sha256": "08e6436bd6d6b70b9c51ae333e6c816f0828e44c985891f63299a5a71119f04c",
+      "allMembersVerified": true,
+      "members": 130,
+      "directory": "tmp/frp1456",
+      "mirrored": true
+    }
   }
 }
