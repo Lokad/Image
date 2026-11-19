@@ -1099,3 +1099,33 @@ pass with normal and scalar execution. Both quiet guards pass.
 
 The measured savings leave the [placement-balanced word uncertainty](COPY-OPERATION-BOUNDARY.md#placement-balanced-rgba16-confirmation)
 open. The added specialization stays private. [Verified observations and code](copy-vector-width-trials-evidence.json)
+
+## Forward loop with a clamped end block
+
+This RGBA8 candidate replaces separate bulk and tail loops with one forward
+loop of 256-byte transfers. The last transfer starts at the checked row end
+minus 256 bytes. Each group loads four vectors before storing them. The row
+slices, cancellation checkpoint and overlapping-copy paths keep the existing
+rules. The model verifies all 1,009 eligible pixel widths, with less than 64
+bytes of overlap within a row.
+
+Across four shared backing pairs, each in both roles, the 311-byte helper
+saves **25.9 ns** for clipped RGBA8 and **1.5 ns** for separate RGBA8 in
+managed pairs. The two largest clipped savings occur in one role on each of
+two backings. Twelve independent matched placements put the clipped point
+saving at **33.0 ns**, with candidate/current ratio interval
+**0.952691–1.016084**. Savings by placement range from **−20.8 to 136.1 ns**.
+
+The JIT had emitted separate integer offset expansions for each vector. A
+revision uses two managed references to form the source and destination block
+addresses once. The helper shrinks to **269 bytes**. The matched screen saves
+**10.2 ns** clipped and **6.9 ns** separate across four backing pairs. These
+results do not establish a reliable improvement across placements. Both
+candidates stay private.
+
+Both original RGBA8 cases pass the full canvas, source and ownership checks
+in normal and scalar modes. All measured operations allocate
+**0 B/op** and both idle guards pass for each capture. The original separate
+and clipped FFmpeg results remain the scored comparisons. The verified archive
+retains all placements, role/order observations, assembly and reproduction
+commands. [Evidence](copy-vector-width-trials-evidence.json)
