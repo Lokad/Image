@@ -247,3 +247,19 @@ now include their pass status. The two stored PNG encoder aliases and the PNG
 header alias still use their previously verified providers. The audit covers
 the evidence used by the summary. Final timing still requires the original
 operation boundaries on the final immutable package.
+
+## PNG encoder refresh recipes
+
+All 17 displayed PNG encoder rows now resolve by case identity to their
+original commands, input and packet hashes, and native worker. The VM
+verified 1,342 runtime-file references and ten FFmpeg worker binaries
+against the frozen receipts. Sixteen workloads use fresh native encoder
+state. Predictable RGBA16 retains its original labeled native codec and
+frame preparation boundary.
+
+Gray8's adjacent driver already uses natural GC. The other 16 rows use the
+same historical BenchmarkDotNet generated runner. Preserve its workload
+loops and use explicit natural-GC orchestration for the final refresh.
+The current package and its embedded DLL hashes were checked. This step
+performed zero builds or workload runs.
+[Verified recipe archive](benchmark-refresh-runtime-preparation-evidence.json)

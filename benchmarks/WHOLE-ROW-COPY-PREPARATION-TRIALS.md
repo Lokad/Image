@@ -1165,3 +1165,40 @@ Original normal/scalar gates and both quiet guards pass. Both paths allocate
 **0 B/op**. The shared-backing results support comparing the emitted C and
 managed row loops, including bounds and cursor work, before selecting another
 production candidate. [Raw observations and verification](copy-vector-width-trials-evidence.json)
+
+## Checked footprints and staged row cursors
+
+The candidate checks the first and last row footprints once using 64-bit
+arithmetic, then advances the source and destination head and end references
+between rows. It retains the per-row cancellation checkpoint, five early edge
+loads and unaligned-safe SIMD transfers. The initial address phase is a
+scheduling hint. A relocated backing still produces in-bounds, exact copies.
+The staged route is scoped to disjoint RGBA8 buffers with 512-byte or larger
+rows in the existing AVX-512 dispatch. Its Linux JIT body is 419 bytes.
+
+The four-placement screen saved 33.5 ns clipped and 33.1 ns separate. The
+independent confirmation uses 12 fresh backing pairs, both assignments and
+opposite orders, at 65,536 operations per observation. Both workloads improve
+on every placement. Normal and scalar checks preserve every original pixel and
+the caller buffers. The width/phase model checks 254,016 combinations. On
+Windows and Linux the same DLL passes 282 exact and canary cases and rejects
+nine invalid footprints per mode. A canceled token is reported without mutation.
+The Windows host does not have AVX-512. Linux exercises that route and the
+disabled-intrinsics route.
+
+| Original workload | Managed savings | 99.9% candidate/current interval | Private package / FFmpeg | Conservative interval |
+| --- | ---: | ---: | ---: | ---: |
+| Clipped RGBA8 | 45.9 ns | 0.967704–0.988857 | 2.073438 / 2.038982 µs | 0.985762–1.049029 |
+| Separate RGBA8 | 39.6 ns | 0.964569–0.995639 | 1.919935 / 1.910608 µs | 0.997251–1.012576 |
+
+The standalone runs bind the confirmed candidate DLL to private Release
+package `afbe7915` and use the original FFmpeg adapter, complete operations
+and conservative confidence calculation. Both cases remain uncertain. All
+clocks use CPU 0 and passing idle guards, and every operation allocates 0 B.
+The managed gains are confirmed. The package remains private pending a
+justified path to passing standalone evidence.
+
+A follow-up inlined the address phase calculation and used the original
+loop for cancelable calls. The clipped preflight passed. Its JIT emitted a
+948-byte MinOpts body with vector stack traffic, so the variant stopped before
+timing. [Exact identities, receipts and replay archive](copy-vector-width-trials-evidence.json)
