@@ -1109,5 +1109,148 @@
       "tmp/frp1462/preparation-inventory.json": "1b6c3342c963eaea3f58b43f29defb76f0b1e1abc73e57fdc3ac9c6531bdede8",
       "tmp/frp1462/accepted-rgba8-recipes.json": "b190b194affdfc531392a7805a576e9c8c2c17bbe5b8ca990004da33d3111ae8"
     }
+  },
+  "jpegDecoderRefreshRecipes": {
+    "package": {
+      "packageSha256": "3e09246fd9b51a9728c57e706b4767f1497b1f2a50d3907305ab5ea50b7d6774",
+      "librarySha256": "af881e2514ce039c79a9d12d105ccc4249f12c68bc7912acba2e7d9d8aa20255"
+    },
+    "allNonCoreRuntimeFilesMatched": true,
+    "verifiedDistinctPaths": 452,
+    "verifiedNativeWorkerIdentities": 7,
+    "rawArchives": {
+      "owned": {
+        "file": "jpeg-owned-decode-current-package-confirmations.tar.xz",
+        "sha256": "a0ddcefd684842b0ba9cb56e809a4864ee4bf8751c3d810876ed0a8c31019f86"
+      },
+      "remainingOwned": {
+        "file": "jpeg-remaining-owned-decode-current-package.tar.xz",
+        "sha256": "4a0716ad5a2eb2039954d091fcdb342db631be226e54c018dff152b2585b8c66"
+      },
+      "horizontalAdjacent": {
+        "file": "jpeg-horizontal-current-interleaved-confirmation.tar.xz",
+        "sha256": "e3f67d8a7b38d1c9d727d13d34190fab1da3c0b524ad40577134a47edc7b07c5"
+      },
+      "sparse2DAdjacent": {
+        "file": "jpeg-sparse2d-current-adjacent.tar.xz",
+        "sha256": "455bfb35b9ffb715cba8c64523aa983beca7c504ca573da47ecca18e392c0136"
+      },
+      "callers": {
+        "file": "jpeg-horizontal-preparation-study.tar.xz",
+        "sha256": "8a9e69b1544c22b42e9d34c316463a8b3298f67a3d80ae8b6c91f8304607ab27"
+      }
+    },
+    "builds": 0,
+    "workloadOperations": 0,
+    "cases": {
+      "NativeDecode420": {
+        "originalSchedule": "bracketed",
+        "managedCallsPerHistoricalActual": 288,
+        "adjacentNativeCalls": null,
+        "bindsPreviousGeneratedConsumerUnderNaturalGc": false,
+        "receiptSha256": "3cb4517f383d71f3a809159620f89b6e50a632201fb37281376665917d3479f2"
+      },
+      "CmykCaller": {
+        "originalSchedule": "bracketed",
+        "managedCallsPerHistoricalActual": 624,
+        "adjacentNativeCalls": null,
+        "bindsPreviousGeneratedConsumerUnderNaturalGc": true,
+        "receiptSha256": "7c8a3cdc5132168b6ecebba5725893636512102c3d56fa45395a62e583d68154"
+      },
+      "CmykAdobeSparse2D": {
+        "originalSchedule": "adjacent",
+        "managedCallsPerHistoricalActual": 432,
+        "adjacentNativeCalls": 216,
+        "bindsPreviousGeneratedConsumerUnderNaturalGc": false,
+        "receiptSha256": "d55aefb73948cf9284f9f5a35c29e1189445aca29c97ab3a0030b0b47e978483"
+      },
+      "Ycck420": {
+        "originalSchedule": "bracketed",
+        "managedCallsPerHistoricalActual": 448,
+        "adjacentNativeCalls": null,
+        "bindsPreviousGeneratedConsumerUnderNaturalGc": false,
+        "receiptSha256": "a33ed97a78385d7b0eb9285c2ab6a289bdcca18a8c2c54da513fb8a75a352063"
+      },
+      "Decode411": {
+        "originalSchedule": "bracketed",
+        "managedCallsPerHistoricalActual": 496,
+        "adjacentNativeCalls": null,
+        "bindsPreviousGeneratedConsumerUnderNaturalGc": false,
+        "receiptSha256": "48e3da994ae421f5bfb208da5ddca03271a3c3e109385c35363725578d348da6"
+      },
+      "Decode410": {
+        "originalSchedule": "bracketed",
+        "managedCallsPerHistoricalActual": 560,
+        "adjacentNativeCalls": null,
+        "bindsPreviousGeneratedConsumerUnderNaturalGc": false,
+        "receiptSha256": "65190df89c8502688d48fa21d4d22daec9afc247438d9057672ea1fbd0c3faba"
+      },
+      "CmykAdobeGeneral": {
+        "originalSchedule": "bracketed",
+        "managedCallsPerHistoricalActual": 160,
+        "adjacentNativeCalls": null,
+        "bindsPreviousGeneratedConsumerUnderNaturalGc": false,
+        "receiptSha256": "c52ee846d5b0f03459e60693f6e3e9952d56b7761e572836e02934be11559a32"
+      },
+      "CmykAdobeAc": {
+        "originalSchedule": "adjacent",
+        "managedCallsPerHistoricalActual": 480,
+        "adjacentNativeCalls": 216,
+        "bindsPreviousGeneratedConsumerUnderNaturalGc": false,
+        "receiptSha256": "019fee22f60cef5489bc4617581bbf8fc4616c1038559d7afed04af698f41e40"
+      },
+      "Ycck420CallerRgb": {
+        "originalSchedule": "bracketed",
+        "managedCallsPerHistoricalActual": 480,
+        "adjacentNativeCalls": null,
+        "bindsPreviousGeneratedConsumerUnderNaturalGc": true,
+        "receiptSha256": "3bfd1afe65e7d21121f8f70497a55e45cf244aa080bb32063779504d201f4ab0"
+      },
+      "ProgressiveGray": {
+        "originalSchedule": "bracketed",
+        "managedCallsPerHistoricalActual": 128,
+        "adjacentNativeCalls": null,
+        "bindsPreviousGeneratedConsumerUnderNaturalGc": false,
+        "receiptSha256": "53829029ca070720e2e95e4101b35a5bdb68154995a3b1b9efa9dd0f456470d7"
+      },
+      "Progressive420": {
+        "originalSchedule": "bracketed",
+        "managedCallsPerHistoricalActual": 144,
+        "adjacentNativeCalls": null,
+        "bindsPreviousGeneratedConsumerUnderNaturalGc": false,
+        "receiptSha256": "f195c5343d4709c4aa9c28ac76340f163a42260ac7ca432fff9e012fe86e9c1a"
+      },
+      "Progressive422": {
+        "originalSchedule": "bracketed",
+        "managedCallsPerHistoricalActual": 112,
+        "adjacentNativeCalls": null,
+        "bindsPreviousGeneratedConsumerUnderNaturalGc": false,
+        "receiptSha256": "1ff1bf57d3a6608a4385101d0bee8e8529c68e6a0af094229e1d952f63f9280c"
+      },
+      "Progressive444": {
+        "originalSchedule": "bracketed",
+        "managedCallsPerHistoricalActual": 80,
+        "adjacentNativeCalls": null,
+        "bindsPreviousGeneratedConsumerUnderNaturalGc": false,
+        "receiptSha256": "ac9d82dc189a09836055cf281196da863063c2eebf79d5e1024a28af1d340839"
+      },
+      "ProgressiveCancelable444": {
+        "originalSchedule": "bracketed",
+        "managedCallsPerHistoricalActual": 64,
+        "adjacentNativeCalls": null,
+        "bindsPreviousGeneratedConsumerUnderNaturalGc": false,
+        "receiptSha256": "df771a6fbafd1061bec11b708001f126f31db75ae1122ddc8c47bdc4a9e0b70d"
+      }
+    },
+    "raw": {
+      "file": "word-head-staging-and-jpeg-decode-recipes.tar.xz",
+      "bytes": 410848,
+      "sha256": "91b5904654c4055def97afa1815dfba31e5df48871afc3c07580e5f15591ce78",
+      "allMembersVerified": true,
+      "directory": "tmp/frp1464",
+      "members": 28,
+      "mirrored": true
+    },
+    "scoredCaptures": 0
   }
 }

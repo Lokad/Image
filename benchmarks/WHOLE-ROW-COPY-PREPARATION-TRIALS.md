@@ -1518,3 +1518,17 @@ at the original 65,536 complete calls per subject. The generated loops
 retain all 32 snapshot values in registers and both idle guards pass. Keep
 the existing private full-group lead and the unresolved standalone confidence.
 [Matched observations and verified archive](copy-vector-width-trials-evidence.json)
+
+## Staging the next word-row head
+
+The staged snapshot carries four next-row vectors while committing the final
+28 stores of the current row. The JIT emits the intended load and store order
+without vector spills. The original mover handles live cancellation. Separate
+word rows use exact bounded loads, and the last row completes without staging
+a successor.
+
+Against package `14a84030`, the private candidate loses **6.9 ns** on average.
+Three of four backing means are adverse. Normal and scalar exactness, caller
+ownership and both idle guards pass at **0 B/op**. Keep the existing private
+snapshot lead and the original standalone confidence status.
+[Generated loop and matched observations](copy-vector-width-trials-evidence.json)

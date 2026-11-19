@@ -350,3 +350,19 @@ The photograph and opaque recipes already have adjacent natural-GC drivers
 with four and sixteen operations per side, respectively. This round retained
 the rehearsal and validation evidence with all clocks discarded.
 [Driver and verified rehearsal archive](benchmark-refresh-runtime-preparation-evidence.json)
+
+## JPEG decoder refresh recipes
+
+The 14 displayed JPEG decode recipes resolve to five verified source archives.
+The VM matches 452 non-core runtime paths and seven native worker binaries
+to the frozen receipts. Each receipt retains the original input and outputs,
+native settings, public operation, and all 12 historical actuals. The prior
+actuals used 64 to 624 managed operations each.
+
+Horizontal-only and sparse-2D CMYK retain their adjacent native schedules,
+with 216 operations per native sample. The other cases retain their bracketed
+schedules. The two caller-buffer recipes preserve their original generated
+consumers and select the existing natural-GC driver from the pinned runtime.
+This stage verifies identities and commands. Execute the original gates on
+the final immutable DLL during the refresh.
+[Verified archive and recipe identities](benchmark-refresh-runtime-preparation-evidence.json)
