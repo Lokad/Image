@@ -274,3 +274,12 @@ copies keep assembly resolution bound to the extracted package DLL. An
 initial symlink layout failed the assembly identity gate before encoding.
 One temporary tool build. All clocks were discarded.
 [Preflight and archive identities](benchmark-refresh-runtime-preparation-evidence.json)
+
+The remaining 14 generated PNG cases pass the same preflight on package
+`d52e53f2`, completing all 16 historical generated encode workloads. That
+includes the live-token and forward-only RGBA16 Fastest controls. Every
+packet, input, native setting and ownership check matches its frozen
+receipt. The previous tool is reused, and the temporary runtime copies are
+released after verification. Gray8 retains its separate natural-GC driver.
+These checks establish executable bindings for the final refresh.
+[Verified preflight records](benchmark-refresh-runtime-preparation-evidence.json)

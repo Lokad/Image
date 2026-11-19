@@ -1348,3 +1348,28 @@ with all four placement means adverse. All captures preserve the original
 pixels and source at 0 B/op with both idle guards passing. Keep the existing
 word mover and its [uncertain comparison](COPY-OPERATION-BOUNDARY.md#placement-balanced-rgba16-confirmation).
 [Screen and verified archive](copy-vector-width-trials-evidence.json)
+
+## Native direction and alternating row traversal
+
+The VM still resolves the inspected libc `memcpy` body and the same
+FFmpeg adapter. The retained address data predicts the forward branch for
+all 144 measured source/canvas roles. Direction changes do not explain the
+observed variation. Even the two common clipped address deltas each show
+both gains and losses against FFmpeg across different backings.
+
+The alternating-row candidate copies even and odd rows in separate passes
+through the unchanged 398-byte reversed-tail mover. It applies to disjoint
+buffers with noncancelable tokens. The modeled overlap modulo 4 KiB between
+adjacent transfers drops from 68 or 60 bytes to zero for the two common
+clipped layouts. This describes virtual addresses, with physical placement
+and cache events unmeasured. The matched screen loses **75.9 ns clipped**
+and **62.4 ns separate**. Every placement regresses. Keep forward row order.
+
+A separate word candidate uses whole 512-byte blocks, with eight loads and
+eight stores per group and no repeated edge transfer. Its 328-byte JIT
+body preserves checked footprints and per-row cancellation. The matched
+screen loses **25.8 ns** to the current RGBA16 mover, with all four placements
+and all sixteen role/order pairs adverse. Both trials pass the original
+normal and scalar exactness, ownership and quiet guards at **0 B/op**.
+The candidates supply no standalone score.
+[Layouts, observations and verified archive](copy-vector-width-trials-evidence.json)
