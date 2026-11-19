@@ -1,4 +1,6 @@
 using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics;
+using System.Runtime.Intrinsics.X86;
 
 namespace Lokad.Image.Internal;
 
@@ -44,12 +46,22 @@ internal sealed class Vp8AlphaEncoding : IDisposable
         Span<ushort> bins = stackalloc ushort[4]; bins.Clear();
         for (var y = 2; y < alpha.Length / width - 1; y += 2)
         {
-            var mean = (int)alpha[y * width];
+            var row = alpha.Slice(y * width, width);
+            var above = alpha.Slice((y - 1) * width, width);
+            var mean = (int)row[0];
             for (var x = 2; x < width - 1; x += 2)
             {
-                context.Cancellation.ThrowIfCancellationRequested(); var at = y * width + x; var value = alpha[at];
+                context.Cancellation.ThrowIfCancellationRequested();
+                // This sampling grid never touches a border. The three filters
+                // share the same left and top samples at each interior point.
+                var value = row[x];
+                var left = row[x - 1];
+                var top = above[x];
+                var gradient = Math.Clamp(left + top - above[x - 1], 0, 255);
                 bins[0] |= (ushort)(1 << (Math.Abs(value - mean) >> 4));
-                for (var f = 1; f < 4; f++) bins[f] |= (ushort)(1 << (Math.Abs(value - Predict(alpha, width, at, f)) >> 4));
+                bins[1] |= (ushort)(1 << (Math.Abs(value - left) >> 4));
+                bins[2] |= (ushort)(1 << (Math.Abs(value - top) >> 4));
+                bins[3] |= (ushort)(1 << (Math.Abs(value - gradient) >> 4));
                 mean = (3 * mean + value + 2) >> 2;
             }
         }
@@ -60,6 +72,69 @@ internal sealed class Vp8AlphaEncoding : IDisposable
             if (sum < score) { score = sum; best = f; }
         }
         return (method > 3 || count > 192 ? 1 : 0) | (1 << best);
+    }
+
+    private static void PrepareFilter(ReadOnlySpan<byte> alpha, int width, int filter,
+        Span<uint> working, OperationContext context)
+    {
+        if (!Avx512F.IsSupported || context.Cancellation.CanBeCanceled || filter == 3)
+        {
+            for (var i = 0; i < alpha.Length; i++)
+            {
+                context.Cancellation.ThrowIfCancellationRequested();
+                working[i] = (uint)((alpha[i] - Predict(alpha, width, i, filter)) & 255) << 8;
+            }
+            return;
+        }
+        if (filter == 0)
+        {
+            WriteGreenResiduals(alpha, default, working);
+            return;
+        }
+
+        // RFC 9649 ALPH borders share their prediction across filters: left in
+        // the first row, top in the first column, and zero at the origin.
+        var row = alpha[..width];
+        working[0] = (uint)row[0] << 8;
+        WriteGreenResiduals(row[1..], row[..^1], working[1..width]);
+        for (var at = width; at < alpha.Length; at += width)
+        {
+            var above = row;
+            row = alpha.Slice(at, width);
+            var output = working.Slice(at, width);
+            if (filter == 2)
+            {
+                WriteGreenResiduals(row, above, output);
+            }
+            else
+            {
+                output[0] = (uint)((row[0] - above[0]) & 255) << 8;
+                WriteGreenResiduals(row[1..], row[..^1], output[1..]);
+            }
+        }
+    }
+
+    private static void WriteGreenResiduals(ReadOnlySpan<byte> row, ReadOnlySpan<byte> prediction, Span<uint> output)
+    {
+        var at = 0;
+        if (prediction.IsEmpty)
+        {
+            for (; at <= row.Length - 16; at += 16)
+            {
+                var values = Vector128.Create(row[at..]);
+                (Avx512F.ConvertToVector512Int32(values).AsUInt32() << 8).CopyTo(output[at..]);
+            }
+            for (; at < row.Length; at++) output[at] = (uint)row[at] << 8;
+        }
+        else
+        {
+            for (; at <= row.Length - 16; at += 16)
+            {
+                var residuals = Vector128.Create(row[at..]) - Vector128.Create(prediction[at..]);
+                (Avx512F.ConvertToVector512Int32(residuals).AsUInt32() << 8).CopyTo(output[at..]);
+            }
+            for (; at < row.Length; at++) output[at] = (uint)((row[at] - prediction[at]) & 255) << 8;
+        }
     }
 
     internal static Vp8AlphaEncoding Create(ReadOnlySpan<byte> alpha, int width, OperationContext context, int method = 4, int coefficientLength = 0)
@@ -90,13 +165,9 @@ internal sealed class Vp8AlphaEncoding : IDisposable
                 for (var filter = 0; filter < 4; filter++)
                 {
                     if ((candidates & (1 << filter)) == 0) continue;
-                    for (var i = 0; i < alpha.Length; i++)
-                    {
-                        context.Cancellation.ThrowIfCancellationRequested();
-                        // A/R/B are deliberately zero, including when alpha is
-                        // carried in green: this is an internal exact image.
-                        working[i] = (uint)((alpha[i] - Predict(alpha, width, i, filter)) & 255) << 8;
-                    }
+                    // A/R/B remain zero while the internal image carries the
+                    // exact byte residual in green.
+                    PrepareFilter(alpha, width, filter, working, context);
                     var seed = spare; spare = null;
                     using var prepared = Vp8lPreparedEncoding.Prepare(working, width, method, context, quality: method == 6 ? 100 : 8 * method, greenOnly: true, matchingSeed: seed, matchStorage: matchStorage);
                     try

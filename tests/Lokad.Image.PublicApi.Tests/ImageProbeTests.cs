@@ -78,6 +78,41 @@ public sealed class ImageProbeTests
     }
 
     [Theory]
+    [InlineData(false)] [InlineData(true)]
+    public async Task JpegDimensionBoundaryMatchesSharedFrameAndPrefixRules(bool asynchronous)
+    {
+        var color = OriginalExif.Attach(OriginalExif.Create(MetadataProfile.JpegBaseline420, 17, 11),
+            ImageOrientation.Rotate90, false);
+        var gray = AuthoredJpegCompatibility.Create(13, 7, [128]);
+        var shared = new ImageProbeOptions { Facts = ImageProbeFacts.Dimensions | ImageProbeFacts.Animation };
+        var cmyk = AuthoredJpegCompatibility.Create(9, 7, [32, 64, 96, 128], adobe: 0);
+        foreach (var jpeg in new[] { color, gray, cmyk })
+        {
+            using var exact = new ObservedInput(jpeg, asynchronous, false, chunk: 1, mixed: true);
+            using var reference = new ObservedInput(jpeg, asynchronous, false, chunk: 1, mixed: true);
+            var result = await Run(exact, asynchronous);
+            Assert.Equal(await Run(reference, asynchronous, shared), result);
+            Assert.Equal(reference.Offset, exact.Offset);
+            Assert.Equal(reference.BytesRead, exact.BytesRead);
+            Assert.False(exact.WasDisposed || reference.WasDisposed);
+        }
+
+        byte[][] invalidPrefixes = [[255, 216, 255, 217], [255, 216, 255, 208],
+            [255, 216, 255, 218, 0, 6, 1, 1, 0, 0]];
+        foreach (var prefix in invalidPrefixes)
+        {
+            using var exact = new ObservedInput(prefix, asynchronous, false, chunk: 1, mixed: true);
+            using var reference = new ObservedInput(prefix, asynchronous, false, chunk: 1, mixed: true);
+            var actual = await Assert.ThrowsAsync<ImageDataException>(() => Run(exact, asynchronous).AsTask());
+            var expected = await Assert.ThrowsAsync<ImageDataException>(() => Run(reference, asynchronous, shared).AsTask());
+            Assert.Equal(expected.Message, actual.Message);
+            Assert.Equal(reference.Offset, exact.Offset);
+            Assert.Equal(reference.BytesRead, exact.BytesRead);
+            Assert.False(exact.WasDisposed || reference.WasDisposed);
+        }
+    }
+
+    [Theory]
     [InlineData(0)] [InlineData(1)] [InlineData(2)]
     public async Task JpegMarkerFillsAndTruncationAgreeAcrossReadCompletionModes(int mode)
     {
@@ -148,6 +183,40 @@ public sealed class ImageProbeTests
         var result = await Run(recovered, asynchronous, new() { Limits = limits });
         Assert.Equal((17, 11), (result.Width, result.Height));
         Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed); Assert.False(recovered.WasDisposed);
+    }
+
+    [Theory]
+    [InlineData(false)] [InlineData(true)]
+    public async Task SeekableJpegProbeSeparatesReadAndTraversedLimits(bool asynchronous)
+    {
+        var original = OriginalExif.Create(MetadataProfile.JpegBaseline420, 17, 11).Encoded;
+        // COM bytes are skipped by seek and do not consume the read allowance.
+        byte[] jpeg = [.. original.AsSpan(0, 2), 255, 254, 0, 8, 1, 2, 3, 4, 5, 6, .. original.AsSpan(2)];
+        using var input = new ObservedInput(jpeg, asynchronous, true, chunk: 2, mixed: true);
+        var descriptor = await Run(input, asynchronous);
+        Assert.True(input.Seeks > 0);
+        Assert.True(descriptor.BytesTraversed > descriptor.BytesRead);
+        var inputLimit = checked((int)descriptor.BytesTraversed);
+        var options = new ImageProbeOptions
+        {
+            MaxAcquiredBytes = descriptor.BytesRead,
+            Limits = new() { MaxInputBytes = inputLimit }
+        };
+        using var exact = new ObservedInput(jpeg, asynchronous, true, chunk: 2, mixed: true);
+        Assert.Equal(descriptor, await Run(exact, asynchronous, options));
+
+        using var readLimited = new ObservedInput(jpeg, asynchronous, true, chunk: 2, mixed: true);
+        var readError = await Assert.ThrowsAsync<ImageLimitException>(() =>
+            Run(readLimited, asynchronous, options with { MaxAcquiredBytes = descriptor.BytesRead - 1 }).AsTask());
+        Assert.Equal(ImageLimitKind.AcquiredBytes, readError.Limit);
+        Assert.Equal(descriptor.BytesRead - 1, readLimited.BytesRead);
+
+        using var traversalLimited = new ObservedInput(jpeg, asynchronous, true, chunk: 2, mixed: true);
+        var traversalError = await Assert.ThrowsAsync<ImageLimitException>(() =>
+            Run(traversalLimited, asynchronous, options with { Limits = new() { MaxInputBytes = inputLimit - 1 } }).AsTask());
+        Assert.Equal(ImageLimitKind.InputBytes, traversalError.Limit);
+        Assert.True(traversalLimited.Offset <= inputLimit);
+        Assert.False(exact.WasDisposed || readLimited.WasDisposed || traversalLimited.WasDisposed);
     }
 
     [Theory]

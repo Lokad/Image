@@ -28,35 +28,37 @@ public static partial class ImageDrawing
         var region = Clip(canvas, 0, 0, x, y, width, height);
         if (region.Width == 0 || region.Height == 0) return;
         ValidateRegion(region, limits);
-        var r = canvas.BitDepth == 8 ? (color.R + 128) / 257 : color.R;
-        var g = canvas.BitDepth == 8 ? (color.G + 128) / 257 : color.G;
-        var b = canvas.BitDepth == 8 ? (color.B + 128) / 257 : color.B;
-        var a = canvas.BitDepth == 8 ? (color.A + 128) / 257 : color.A;
+        var pixels = canvas.Pixels;
         // Read the native channel order once, then let Span.Fill replicate
         // complete pixels with the runtime's vectorized or portable kernel.
-        uint pixel8 = 0; ulong pixel16 = 0;
         if (canvas.BitDepth == 8)
-            pixel8 = MemoryMarshal.Read<uint>(stackalloc byte[] { (byte)r, (byte)g, (byte)b, (byte)a });
+        {
+            Span<byte> channels = stackalloc byte[]
+            {
+                (byte)((color.R + 128) / 257), (byte)((color.G + 128) / 257),
+                (byte)((color.B + 128) / 257), (byte)((color.A + 128) / 257)
+            };
+            FillPixels(MemoryMarshal.Cast<byte, uint>(pixels), canvas.Width, region,
+                MemoryMarshal.Read<uint>(channels), cancellationToken);
+        }
         else
         {
-            Span<ushort> channels = stackalloc ushort[] { (ushort)r, (ushort)g, (ushort)b, (ushort)a };
-            pixel16 = MemoryMarshal.Read<ulong>(MemoryMarshal.AsBytes(channels));
+            Span<ushort> channels = stackalloc ushort[] { color.R, color.G, color.B, color.A };
+            FillPixels(MemoryMarshal.Cast<byte, ulong>(pixels), canvas.Width, region,
+                MemoryMarshal.Read<ulong>(MemoryMarshal.AsBytes(channels)), cancellationToken);
         }
-        for (var row = 0; row < region.Height; row++)
+    }
+
+    private static void FillPixels<T>(Span<T> pixels, int stride, Region region, T color,
+        CancellationToken cancellationToken) where T : unmanaged
+    {
+        var offset = region.DestinationY * stride + region.DestinationX;
+        for (var row = 0; row < region.Height; row++, offset += stride)
         for (var first = 0; first < region.Width;)
         {
-            var count = Math.Min(4096, region.Width - first); cancellationToken.ThrowIfCancellationRequested();
-            var yRow = region.DestinationY + row;
-            if (canvas.BitDepth == 8)
-            {
-                var samples = canvas.GetRow8(yRow).Slice((region.DestinationX + first) * 4, count * 4);
-                MemoryMarshal.Cast<byte, uint>(samples).Fill(pixel8);
-            }
-            else
-            {
-                var samples = canvas.GetRow16(yRow).Slice((region.DestinationX + first) * 4, count * 4);
-                MemoryMarshal.Cast<ushort, ulong>(samples).Fill(pixel16);
-            }
+            var count = Math.Min(4096, region.Width - first);
+            cancellationToken.ThrowIfCancellationRequested();
+            pixels.Slice(offset + first, count).Fill(color);
             first += count;
         }
     }

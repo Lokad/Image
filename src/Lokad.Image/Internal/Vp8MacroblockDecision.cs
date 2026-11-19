@@ -21,6 +21,7 @@ internal static class Vp8MacroblockDecision
     // entry. The common source retains every score/prune/tie rule; plain mode
     // carries no trellis execution state or DP workspace in its pixel loops.
     private readonly struct PlainMode { }
+    private readonly struct PlainUncancelableMode { }
     private readonly struct TrellisMode { }
 
     private readonly record struct Metric(long D, long S, long H, long R, long Total = 0)
@@ -141,6 +142,11 @@ internal static class Vp8MacroblockDecision
         Span<byte> modes, OperationContext context, out Metric result, out uint nonzero) where TMode : struct
     {
         var trellis = typeof(TMode) == typeof(TrellisMode);
+        // Selection proves an uncancelable token has no source. Keep every
+        // per-mode poll on the live-token entry and the original trellis routes.
+        var checksCancellation = typeof(TMode) != typeof(PlainUncancelableMode);
+        var canBeCanceled = checksCancellation && context.Cancellation.CanBeCanceled;
+        var pure = !trellis && !canBeCanceled;
         // Borrow stable views for this synchronous search. The frame owns the
         // charged rate plan through every candidate and refreshes only between
         // macroblocks; no view escapes this method or survives a refresh.
@@ -156,13 +162,15 @@ internal static class Vp8MacroblockDecision
         Span<short> trellisScratch = trellis ? stackalloc short[64] : default;
         var execution = trellis ? new Vp8TrellisQuantization.Execution(matrix, rate, trellisWeights, context, trellisScratch) : default;
         Span<byte> predictions = stackalloc byte[192]; Span<short> transforms = stackalloc short[192];
-        var fourTrellis = trellis && Vp8ForwardTransform.SupportsFour && !context.Cancellation.CanBeCanceled;
+        var fourTrellis = trellis && Vp8ForwardTransform.SupportsFour && !canBeCanceled;
         Span<short> fourLevels = fourTrellis ? stackalloc short[64] : default;
         contexts[..4].CopyTo(topNz); contexts.Slice(9, 4).CopyTo(leftNz); long headers = 0;
         var fused = !trellis && Avx512F.IsSupported && Avx2.IsSupported;
         var fullQuantizer = fused ? new Vp8BlockQuantization.FullBlockQuantizer(matrix) : default;
         var preparedPrices = fused ? rate.Luma4Prices : default;
         var packedPixels = Avx2.IsSupported && Sse41.IsSupported;
+        var lambda = costs.Luma4;
+        var useRateFloor = fused && !canBeCanceled && lambda > 0;
         for (var b = 0; b < 16; b++)
         {
             var bx = b % 4; var by = b / 4; var x = bx * 4; var y = by * 4; var offset = Block(b);
@@ -180,12 +188,11 @@ internal static class Vp8MacroblockDecision
             // Equal boundary samples make all ten predictions the same constant.
             // Only header prices and the non-DC flat-level surcharge differ.
             // Uniform-score reuse stays disabled for cancellable/trellis searches.
-            var pure = !trellis && !context.Cancellation.CanBeCanceled;
             var uniform = pure && top.IndexOfAnyExcept(corner) < 0 && left.IndexOfAnyExcept(corner) < 0;
             Metric uniformScore = default; var uniformFlat = false;
             // Prediction/forward math can batch before ordered trellis decisions.
             // Its extra 576 stack bytes fit ScratchBytes above.
-            var batch = Vp8ForwardTransform.SupportsFour && !context.Cancellation.CanBeCanceled && !uniform;
+            var batch = Vp8ForwardTransform.SupportsFour && !canBeCanceled && !uniform;
             if (batch)
             {
                 Vp8Prediction.SmallCandidates(top, left, corner, predictions);
@@ -194,15 +201,17 @@ internal static class Vp8MacroblockDecision
                     Vp8ForwardTransform.DctFourPredictions(source[offset..], 16,
                         predictions.Slice(mode * 16, 64), transforms.Slice(mode * 16, 64));
             }
+            var useBlockFloor = useRateFloor && !uniform;
+            var rateFloor = useBlockFloor ? (long)Vp8RatePlan.Luma4MinimumResidual(rateValues, initialContext) * lambda : 0;
             uint fourNonzero = 0;
             for (var mode = 0; mode < 10; mode++)
             {
-                context.Cancellation.ThrowIfCancellationRequested();
+                if (checksCancellation) context.Cancellation.ThrowIfCancellationRequested();
                 if (uniform && mode != 0)
                 {
                     var modeHeader = modeHeaders[mode];
                     var repeatedRate = uniformScore.R + (uniformFlat ? 140 : 0);
-                    var repeatedTotal = TotalPrice(uniformScore.D, uniformScore.S, modeHeader, repeatedRate, costs.Luma4);
+                    var repeatedTotal = TotalPrice(uniformScore.D, uniformScore.S, modeHeader, repeatedRate, lambda);
                     if (repeatedTotal < best.Total)
                     {
                         bestMode = mode;
@@ -210,6 +219,10 @@ internal static class Vp8MacroblockDecision
                     }
                     continue;
                 }
+                var header = modeHeaders[mode];
+                // The continuing ordered search may skip a mode only if its
+                // minimum rate/header charge cannot beat the earlier winner.
+                if (useBlockFloor && bestMode >= 0 && rateFloor + (long)header * lambda >= best.Total) continue;
                 var candidate = batch ? transforms.Slice(mode * 16, 16) : coefficients;
                 var candidateLevels = fourTrellis ? fourLevels.Slice((mode & 3) * 16, 16) : trialLevels;
                 if (fourTrellis && (mode & 3) == 0)
@@ -241,11 +254,10 @@ internal static class Vp8MacroblockDecision
                     flat = mode > 0 && Flat(candidateLevels, 1, 3);
                     rateCost = rate.Residual(candidateLevels, 3, 0, initialContext, out _);
                 }
-                var header = modeHeaders[mode];
                 if (mode > 0 && flat) rateCost += 140;
                 // Reconstruction and texture add nonnegative distortion. This
                 // rate/header bound cannot discard a strictly better candidate.
-                if (bestMode >= 0 && (rateCost + header) * costs.Luma4 >= best.Total) continue;
+                if (bestMode >= 0 && (rateCost + header) * lambda >= best.Total) continue;
                 var reconstructed = Vector128<byte>.Zero;
                 int distortion;
                 if (packedPixels)
@@ -263,10 +275,10 @@ internal static class Vp8MacroblockDecision
                 }
                 // Texture is nonnegative. Once rate plus reconstructed SSD
                 // cannot win, the candidate spectral transform cannot change that.
-                if (bestMode >= 0 && (rateCost + header) * costs.Luma4 + 256L * distortion >= best.Total) continue;
+                if (bestMode >= 0 && (rateCost + header) * lambda + 256L * distortion >= best.Total) continue;
                 var texture = costs.Texture == 0 ? 0 : Spectral(costs.Texture, packedPixels
                     ? textureSource.Compare4(b, reconstructed) : textureSource.Compare4(b, trial, 4));
-                var total = TotalPrice(distortion, texture, header, rateCost, costs.Luma4);
+                var total = TotalPrice(distortion, texture, header, rateCost, lambda);
                 if (bestMode >= 0 && total >= best.Total) continue;
                 var score = new Metric(distortion, texture, header, rateCost, total);
                 // Uniform mode0 is the first candidate and always wins, so its
@@ -479,8 +491,11 @@ internal static class Vp8MacroblockDecision
         var intra16 = !(method == 6
             ? Luma4<TrellisMode>(sourceCopy, neighborsCopy, modeCopy, coefficientCopy, luma, costs, rate, textureSource, headerLimit,
                 best.Total, smallPixels, smallLevels, smallModes, context, out smallScore, out smallNz)
-            : Luma4<PlainMode>(sourceCopy, neighborsCopy, modeCopy, coefficientCopy, luma, costs, rate, textureSource, headerLimit,
-                best.Total, smallPixels, smallLevels, smallModes, context, out smallScore, out smallNz));
+            : context.Cancellation.CanBeCanceled
+                ? Luma4<PlainMode>(sourceCopy, neighborsCopy, modeCopy, coefficientCopy, luma, costs, rate, textureSource, headerLimit,
+                    best.Total, smallPixels, smallLevels, smallModes, context, out smallScore, out smallNz)
+                : Luma4<PlainUncancelableMode>(sourceCopy, neighborsCopy, modeCopy, coefficientCopy, luma, costs, rate, textureSource, headerLimit,
+                    best.Total, smallPixels, smallLevels, smallModes, context, out smallScore, out smallNz));
         if (intra16) modes[..16].Clear();
         else
         {

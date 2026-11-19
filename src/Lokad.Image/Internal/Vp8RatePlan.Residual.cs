@@ -29,6 +29,17 @@ internal sealed partial class Vp8RatePlan
             nonzero?(31-BitOperations.LeadingZeroCount(mask))/2:-1,LevelsAt+type*8*3*68,ushort.MaxValue);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static int Luma4MinimumResidual(ReadOnlySpan<ushort> values, int initialContext)
+    {
+        var firstRow = (3 * 8 + Vp8Tables.CoefficientBand(0)) * 3 + initialContext;
+        var eob = EobAt + firstRow * 2;
+        // Empty blocks price the first EOB. A nonempty block always pays the
+        // first continuation, even when its first coefficient is zero, plus
+        // at least one 256-unit sign. All other charges are nonnegative.
+        return Math.Min(values[eob], values[eob + 1] + 256);
+    }
+
     // Prepared quantization already supplies exact diagonal levels/nonzero bits.
     // Retain range/context rejection even for independently constructed matrices.
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

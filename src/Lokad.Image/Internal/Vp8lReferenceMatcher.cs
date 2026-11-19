@@ -204,7 +204,12 @@ internal static class Vp8lReferenceMatcher
                     // This query publishes no index entries until its search
                     // finishes. Read the owned successor before comparing pixels.
                     var nextCandidate = previous[candidate];
-                    if (pixels[candidate + length] == pixels[position + length])
+                    // Beating the incumbent requires matching these two
+                    // adjacent samples as well as every earlier one.
+                    var sameEnd = typeof(TCancellation) == typeof(Uncancelable) && length != 0
+                        ? EqualPair(pixels, candidate + length - 1, position + length - 1)
+                        : pixels[candidate + length] == pixels[position + length];
+                    if (sameEnd)
                     {
                         var found = Length<TCancellation>(pixels, candidate, position, 0, limit, context);
                         if (found > length)
@@ -227,6 +232,11 @@ internal static class Vp8lReferenceMatcher
         }
         finally { if (scratch != 0) context.Release(scratch); }
     }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static bool EqualPair(ReadOnlySpan<uint> pixels, int first, int second)
+        => MemoryMarshal.Cast<uint, ulong>(pixels.Slice(first, 2))[0]
+            == MemoryMarshal.Cast<uint, ulong>(pixels.Slice(second, 2))[0];
 
     private static int Length<TCancellation>(ReadOnlySpan<uint> pixels, int first, int second,
         int already, int limit, OperationContext context) where TCancellation : struct

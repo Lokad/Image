@@ -6,18 +6,45 @@ namespace Lokad.Image.Internal;
 // RFC9649 RIFF/VP8 headers and CIPA Exif IFD0. Pixel syntax and PNG CRCs are opaque.
 internal static class StreamInspection
 {
-    internal static async ValueTask<TResult> InspectAsync<TResult, TFactory>(InspectionReader r, ProbeReader? probe = null,
+    internal static ValueTask<TResult> InspectAsync<TResult, TFactory>(InspectionReader r, ProbeReader? probe = null,
         ImageMetadataPolicy metadataPolicy = ImageMetadataPolicy.Strict)
         where TResult : struct where TFactory : struct, IInspectionResult<TResult>
     {
-        await r.ReadAsync(2).ConfigureAwait(false);
+        var signature = r.ReadAsync(2);
+        if (!signature.IsCompletedSuccessfully)
+            return AwaitSignatureAsync<TResult, TFactory>(signature, r, probe, metadataPolicy);
+        signature.GetAwaiter().GetResult();
+        return InspectFormat<TResult, TFactory>(r, probe, metadataPolicy);
+    }
+
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
+    private static async ValueTask<TResult> AwaitSignatureAsync<TResult, TFactory>(ValueTask signature,
+        InspectionReader r, ProbeReader? probe, ImageMetadataPolicy metadataPolicy)
+        where TResult : struct where TFactory : struct, IInspectionResult<TResult>
+    {
+        await signature.ConfigureAwait(false);
+        return await InspectFormat<TResult, TFactory>(r, probe, metadataPolicy).ConfigureAwait(false);
+    }
+
+    private static ValueTask<TResult> InspectFormat<TResult, TFactory>(InspectionReader r,
+        ProbeReader? probe, ImageMetadataPolicy metadataPolicy)
+        where TResult : struct where TFactory : struct, IInspectionResult<TResult>
+    {
+        if (r.Header[0] == 255 && r.Header[1] == 216)
+            return JpegAsync<TResult, TFactory>(r, probe, metadataPolicy);
+        return InspectPngOrWebpAsync<TResult, TFactory>(r, probe, metadataPolicy);
+    }
+
+    private static async ValueTask<TResult> InspectPngOrWebpAsync<TResult, TFactory>(InspectionReader r,
+        ProbeReader? probe, ImageMetadataPolicy metadataPolicy)
+        where TResult : struct where TFactory : struct, IInspectionResult<TResult>
+    {
         if (r.Header[0] == 137 && r.Header[1] == 80)
         {
             await r.ReadAsync(6).ConfigureAwait(false);
             if (!r.Header.AsSpan(0, 6).SequenceEqual(PngCodec.Signature[2..])) throw new ImageDataException("Invalid PNG signature.");
             return await PngAsync<TResult, TFactory>(r, probe, metadataPolicy).ConfigureAwait(false);
         }
-        if (r.Header[0] == 255 && r.Header[1] == 216) return await JpegAsync<TResult, TFactory>(r, probe, metadataPolicy).ConfigureAwait(false);
         if (r.Header[0] == 'R' && r.Header[1] == 'I')
         {
             await r.ReadAsync(10).ConfigureAwait(false);

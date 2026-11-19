@@ -331,12 +331,24 @@ internal sealed partial class PngDeflater : Stream
         chainHeads[key] = checked((ushort)at); return prior;
     }
 
+    private readonly struct ScalarGreedySearch { }
+    private readonly struct WordPrefixGreedySearch { }
+
     private void Process(bool final)
     {
-        if (level == 1) ProcessFast(final); else ProcessLazy(final);
+        if (level != 1)
+        {
+            ProcessLazy(final);
+            return;
+        }
+
+        // Cancellation capability is fixed for this operation. Keep its
+        // scalar search and checkpoints outside the uncancelable word search.
+        if (context.Cancellation.CanBeCanceled) ProcessFast<ScalarGreedySearch>(final);
+        else ProcessFast<WordPrefixGreedySearch>(final);
     }
 
-    private void ProcessFast(bool final)
+    private void ProcessFast<TSearch>(bool final) where TSearch : struct
     {
         // The acquired history extent and owned arrays survive this sweep.
         // Slides change their contents, not their identity. Keep bounded window
@@ -366,25 +378,47 @@ internal sealed partial class PngDeflater : Stream
                 if (prior > 0 && current - prior <= Window - Lookahead)
                 {
                     var searches = 4; var limit = Math.Max(0, current - (Window - Lookahead));
-                    var prefixPair = BinaryPrimitives.ReadUInt16LittleEndian(bytes.Slice(current, 2));
-                    var tail = bytes[current + length];
-                    do
+                    if (typeof(TSearch) == typeof(WordPrefixGreedySearch) && available >= 8)
                     {
-                        cancellation.ThrowIfCancellationRequested();
-                        if (length < available && bytes[prior + length] == tail
-                            && BinaryPrimitives.ReadUInt16LittleEndian(bytes.Slice(prior, 2)) == prefixPair)
+                        // Before the first match of eight or more bytes, the
+                        // best length is below eight and fits in one comparison.
+                        var prefix = BinaryPrimitives.ReadUInt64LittleEndian(bytes.Slice(current, 8));
+                        do
                         {
-                            var found = 2;
-                            while (found < available && bytes[prior + found] == bytes[current + found]) found++;
                             cancellation.ThrowIfCancellationRequested();
+                            var different = BinaryPrimitives.ReadUInt64LittleEndian(bytes.Slice(prior, 8)) ^ prefix;
+                            var found = BitOperations.TrailingZeroCount(different) >> 3;
                             if (found > length)
                             {
-                                length = found; start = prior; if (found >= Math.Min(8, available)) break;
-                                tail = bytes[current + length];
+                                length = found == 8 ? MatchLength(bytes, prior, current, found, available) : found;
+                                start = prior;
+                                if (length >= 8) break;
                             }
-                        }
-                        prior = links[prior & (Window - 1)];
-                    } while (prior > limit && --searches != 0);
+                            prior = links[prior & (Window - 1)];
+                        } while (prior > limit && --searches != 0);
+                    }
+                    else
+                    {
+                        var prefixPair = BinaryPrimitives.ReadUInt16LittleEndian(bytes.Slice(current, 2));
+                        var tail = bytes[current + length];
+                        do
+                        {
+                            cancellation.ThrowIfCancellationRequested();
+                            if (length < available && bytes[prior + length] == tail
+                                && BinaryPrimitives.ReadUInt16LittleEndian(bytes.Slice(prior, 2)) == prefixPair)
+                            {
+                                var found = 2;
+                                while (found < available && bytes[prior + found] == bytes[current + found]) found++;
+                                cancellation.ThrowIfCancellationRequested();
+                                if (found > length)
+                                {
+                                    length = found; start = prior; if (found >= Math.Min(8, available)) break;
+                                    tail = bytes[current + length];
+                                }
+                            }
+                            prior = links[prior & (Window - 1)];
+                        } while (prior > limit && --searches != 0);
+                    }
                 }
                 var copied = length >= Minimum;
                 if (copied)
@@ -455,22 +489,35 @@ internal sealed partial class PngDeflater : Stream
                     var searches = pendingLength >= goodLength ? chainLimit / 4 : chainLimit;
                     var best = pendingLength; var limit = Math.Max(0, current - (Window - Lookahead));
                     var available = Math.Min(Maximum, inputEnd - current); var enough = Math.Min(niceLength, available);
-                    var prefixPair = Pair(bytes, current);
-                    var tailPair = best < available ? Pair(bytes, current + best - 1) : (ushort)0;
+                    var wordPrefix = available >= 8;
+                    var prefix = wordPrefix ? BinaryPrimitives.ReadUInt64LittleEndian(bytes.Slice(current, 8)) : Pair(bytes, current);
+                    var tailPair = best >= Minimum && best < available ? Pair(bytes, current + best - 1) : (ushort)0;
                     do
                     {
                         cancellation.ThrowIfCancellationRequested();
-                        if (best < available && Pair(bytes, prior + best - 1) == tailPair && Pair(bytes, prior) == prefixPair)
+                        if (best < available && (best < Minimum || Pair(bytes, prior + best - 1) == tailPair))
                         {
-                            var found = 2;
-                            var prefix = Math.Min(8, available);
-                            while (found < prefix && bytes[prior + found] == bytes[current + found]) found++;
-                            if (found == 8 && found < available) found = MatchLength(bytes, prior, current, found, available);
-                            cancellation.ThrowIfCancellationRequested();
-                            if (found > best)
+                            var found = 0;
+                            if (wordPrefix)
                             {
-                                best = found; start = prior; if (found >= enough) break;
-                                tailPair = Pair(bytes, current + best - 1);
+                                var different = BinaryPrimitives.ReadUInt64LittleEndian(bytes.Slice(prior, 8)) ^ prefix;
+                                if ((ushort)different == 0) found = BitOperations.TrailingZeroCount(different) >> 3;
+                            }
+                            else if (Pair(bytes, prior) == prefix)
+                            {
+                                // Equal first two bytes in the same hash bucket fix the third.
+                                found = Minimum;
+                                while (found < available && bytes[prior + found] == bytes[current + found]) found++;
+                            }
+                            if (found >= 2)
+                            {
+                                if (found == 8 && found < available) found = MatchLength(bytes, prior, current, found, available);
+                                cancellation.ThrowIfCancellationRequested();
+                                if (found > best)
+                                {
+                                    best = found; start = prior; if (found >= enough) break;
+                                    tailPair = Pair(bytes, current + best - 1);
+                                }
                             }
                         }
                         prior = links[prior & (Window - 1)];

@@ -40,7 +40,7 @@
 
 Declared exact encoder packets and managed pixel contracts remain unchanged.
 Resource limits, cooperative memory admission, cancellation and portable
-fallbacks remain supported. Performance scope and remaining gaps are recorded in
+fallbacks remain supported. The qualified performance scope is recorded in
 [benchmarks](docs/benchmark.md).
 
 ## 0.2.0 — 2026-10-27
