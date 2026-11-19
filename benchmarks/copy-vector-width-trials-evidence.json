@@ -3242,5 +3242,127 @@
       "directory": "tmp/frp1443",
       "mirrored": true
     }
+  },
+  "wordAlignedPrefixAndJoins": {
+    "referenceOperation": "DrawingCopy16",
+    "packageSha256": "3e09246fd9b51a9728c57e706b4767f1497b1f2a50d3907305ab5ea50b7d6774",
+    "librarySha256": "af881e2514ce039c79a9d12d105ccc4249f12c68bc7912acba2e7d9d8aa20255",
+    "operationsPerSubject": 65536,
+    "independentBackingsPerCase": 4,
+    "rolesPerBacking": 2,
+    "ordersPerRole": 2,
+    "allQuietGuardsPassed": true,
+    "allocatedBytes": 0,
+    "scoredCaptures": 0,
+    "productionChanged": false,
+    "variants": {
+      "fixedAlignedPrefix": {
+        "candidateSha256": "1ce6413707f17fbe66bac9225c467c8831ba744e2d52dbdfc2439dea3ca70ca0",
+        "potentialWidthAndPhaseCombinations": 8128,
+        "exactNormalAndScalar": true,
+        "matchedPhases": [
+          16,
+          48
+        ],
+        "generatedCodeSizes": [
+          477
+        ],
+        "meanSavedNs": -23.100092887878418,
+        "perPlacementSavedNs": [
+          -12.525222778320312,
+          -14.474586486816406,
+          -6.24725341796875,
+          -59.1533088684082
+        ]
+      },
+      "variableQwordJoin": {
+        "candidateSha256": "8c4efd7d7d10ba8535ac0e0f954a342b7faf8f303c5bb260367cce0af2071b81",
+        "potentialWidthAndPhaseCombinations": 1806784,
+        "exactNormalAndScalar": true,
+        "matchedPhases": [
+          16,
+          48
+        ],
+        "generatedCodeSizes": [
+          677
+        ],
+        "meanSavedNs": -6.728547096252441,
+        "perPlacementSavedNs": [
+          11.474559783935547,
+          -36.19658660888672,
+          14.847576141357422,
+          -17.039737701416016
+        ]
+      },
+      "constantQwordJoin": {
+        "candidateSha256": "7635021ff50c24882f92865cec12258d8377ec9311c89ac65bfa2287689b20f3",
+        "potentialWidthAndPhaseCombinations": 774336,
+        "exactNormalAndScalar": true,
+        "matchedPhases": [
+          16,
+          48
+        ],
+        "generatedCodeSizes": [
+          512,
+          512
+        ],
+        "meanSavedNs": -26.087915420532227,
+        "perPlacementSavedNs": [
+          -1.7952041625976562,
+          -15.624996185302734,
+          -66.30008316040039,
+          -20.631378173828125
+        ]
+      }
+    },
+    "raw": {
+      "file": "word-prefix-and-join-copy-trials.tar.xz",
+      "bytes": 513728,
+      "sha256": "554a8fb5bbbc6916d364557b4d68c0d617ebf0243f6fe3868e0c171d345b049a",
+      "allMembersVerified": true,
+      "members": 61,
+      "directory": "tmp/frp1451",
+      "mirrored": true
+    }
+  },
+  "currentSeparateWordRuntime": {
+    "packageSha256": "3e09246fd9b51a9728c57e706b4767f1497b1f2a50d3907305ab5ea50b7d6774",
+    "librarySha256": "af881e2514ce039c79a9d12d105ccc4249f12c68bc7912acba2e7d9d8aa20255",
+    "corelibSha256": "e6f53b00de3488acc8f0c72c9a8bc6349cbbac39f5dfedc8aebf4f22ce4ef7ac",
+    "source": "Complete public DrawingCopy16 on CPU0, one 999 Hz software capture. Samples are instruction locations.",
+    "totalSamples": 1996,
+    "corelibSamples": 1880,
+    "inRecordedInstructionBody": 1880,
+    "inNarrowLoop": 1777,
+    "allOriginalNormalScalarChecksPassed": true,
+    "scoredCaptures": 0,
+    "sourceOrPackageBuilds": 0,
+    "totalLostSamples": 0,
+    "narrowRowTrial": {
+      "candidateSha256": "85d837a3ab36fa0299c575a9b6d14b81d93c18028e6a3761ad57a7e13ed6ca0d",
+      "privateCoreBuilds": 1,
+      "widthPhaseCombinations": 4048,
+      "helperCodeBytes": 534,
+      "meanSavedNs": -152.72936916351318,
+      "perPlacementSavedNs": [
+        -116.05644989013672,
+        -155.9379005432129,
+        -218.40724563598633,
+        -120.5158805847168
+      ],
+      "originalNormalScalarPass": true,
+      "exactQuietMatchedScreen": true,
+      "allocatedBytes": 0,
+      "scoredCaptures": 0
+    },
+    "raw": {
+      "file": "separate-word-copy-runtime-profile.tar.xz",
+      "bytes": 436576,
+      "sha256": "4c29faf9f7071249eae63889b6382b5f4d1dfbb8b68085ec06079570e3200d9e",
+      "allMembersVerified": true,
+      "members": 45,
+      "directory": "tmp/frp1454",
+      "mirrored": true
+    }
   }
 }

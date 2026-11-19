@@ -1427,3 +1427,44 @@ the matched screen, with three of four backing means adverse. Keep its
 existing mover and open reference confidence. The rejected word route and
 first byte implementation retain their complete observations and checks.
 [Accepted scores, qualification and verified archive](aligned-middle-copy-evidence.json)
+
+## Word-copy aligned prefix and register joins
+
+For separate RGBA16 rows that are a multiple of 256 bytes, a three-vector
+prefix leaves full four-vector groups in the aligned middle. This removes
+the extra aligned overlap used by the accepted byte loop. The word-only
+candidate loses **23.1 ns** on average. All four backing means are adverse.
+
+The tested backing roles have source-to-canvas phase differences of 16 or
+48 bytes. Two other candidates load consecutive aligned source vectors and
+join their 64-bit lanes before aligned stores. The variable `vpermt2q` version
+reloads its index vector once per bulk group and loses **6.7 ns** on average,
+with two favorable and two adverse backing means. The constant `valignq`
+version removes that reload and loses **26.1 ns**, with all four backing
+means adverse. The initial disassembly check produced no file. The matched
+driver's warmup captures the two active constant bodies before timing.
+
+All three screens compare complete operations with the accepted package
+`3e09246f`. They use four shared backings, both roles, and both orders at
+65,536 calls per subject. Normal and scalar exact pixels, source, ownership
+and idle checks pass at **0 B/op**. Keep the existing word mover and the
+standalone RGBA16 uncertainty. These screens close the three implementations.
+[Verified source, assembly and observations](copy-vector-width-trials-evidence.json)
+
+## Current word-copy runtime attribution
+
+A two-second software profile of the actual `3e09246f` package maps 1,880
+of 1,996 leaf samples to the precompiled .NET 10.0.8 `Memmove` body. Of those,
+1,777 land in the 64-byte loop, which uses four alternating 128-bit loads
+and stores. The 2,048-byte rows take the managed loop at its size boundary.
+Exact canvas, source, ownership and idle checks pass. The profile retains
+instruction locations and discards the instrumented clocks.
+
+A private word candidate preserves 128-bit transfers, aligns the middle to
+16 bytes and advances in 128-byte groups. Matching source and destination
+phases modulo 16 allow the central loads and stores to align without
+permutations. This candidate loses **152.7 ns** on average across four
+shared backings, with all sixteen role/order pairs adverse. Exact normal
+and scalar preflights, ownership and both idle guards pass at **0 B/op**.
+The current runtime copy remains the production path.
+[Profile mapping, generated code and raw screen](copy-vector-width-trials-evidence.json)
