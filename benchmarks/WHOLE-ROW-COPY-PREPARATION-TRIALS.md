@@ -1570,3 +1570,27 @@ Keep the snapshot as the private lead and retain its two inconclusive
 complete-operation confidence intervals. This diagnostic adds evidence about
 placement sensitivity without repeating either confirmation.
 [Command, full observations and verified archive](copy-vector-width-trials-evidence.json)
+
+## RGBA16 snapshot across eight relative page offsets
+
+Eleven of twelve backing pairs in the earlier placement-balanced run had
+the same relative page offset. This confirmation preassigns pairs by
+allocation order before reading addresses. Each of the twelve units runs
+both roles of eight backing pairs, rotating their order. The nearest
+relative page distances span 160–1,648 bytes. Each side still runs
+262,144 complete calls per unit in 16 subdivisions, with equal warmup and
+the original confidence calculation. The comparison uses the frozen
+fixture, harness, native adapter and full-group snapshot.
+
+The snapshot measures **3.787096 µs** against the FFmpeg adapter’s
+**3.780683 µs**, with conservative interval **0.996937–1.006168** and
+paired interval **0.999409–1.003679**. Three backing means favor the
+snapshot. The eight placement differences range from 9.7 ns ahead to
+25.5 ns behind. The spread persists with equal representation within
+every unit, and its hardware cause remains unresolved.
+
+Normal and scalar pixel and ownership checks pass for all 16 assignments.
+Both quiet guards pass and the complete managed cases allocate **0 B/op**.
+The result leaves parity uncertain. Keep the BCL route in production and
+require a distinct transfer improvement before another direct confirmation.
+[Predeclared layout, all observations and verified archive](copy-vector-width-trials-evidence.json)

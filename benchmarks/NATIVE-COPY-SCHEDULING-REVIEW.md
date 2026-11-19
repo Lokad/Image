@@ -401,3 +401,19 @@ both tight-limit cases reject one byte below the exact allowance. All clocks
 were discarded. The original scoring drivers and fixture bytes are verified
 and retained for the final refresh.
 [Frozen commands, guards and verified archive](benchmark-refresh-runtime-preparation-evidence.json)
+
+## VP8 encoder refresh recipes
+
+The eight displayed VP8 encodes and the already qualified selected-trellis
+control use two frozen runtimes. The VM verifies 237 non-core files, 15
+fixture files and six native workers. Retain the original 12 natural-GC
+units and three native groups, with 16, 32 or 128 complete operations per
+subject according to the case. The trellis recipe comes from the accepted
+128-call confirmation.
+
+One untimed public operation per case passes the original complete-packet,
+alpha, source, reconstruction and independent ownership gates on package
+`3e09246f`. All packets match by length and hash. The native workers and
+fixtures match their pins before and after. Both scoring drivers and their
+reference boundaries remain available for the final refresh.
+[Commands, per-case packet identities and archive](benchmark-refresh-runtime-preparation-evidence.json)
