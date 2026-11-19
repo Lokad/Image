@@ -1291,3 +1291,60 @@ This variant is 46.7 ns slower clipped and 30.8 ns slower separate against
 the reversed-tail candidate. Every matched placement regresses on both
 workloads. Exact checks and idle guards pass at 0 B/op. The smaller body
 does not isolate the poll's cost. Close the variant.
+
+## Endpoint proof and placement sensitivity
+
+The simplified footprint check compares both signed-stride row starts
+against the last legal start. The replacement matches the original proof
+on 238,240 modeled cases. The actual DLL passes 285 exact and canary cases,
+15 rejected footprints and precancellation in each normal and scalar mode
+on Windows and Linux. Inlining the proof grows the optimized body from
+398 to 515 bytes.
+
+In independent pairs against current package `d52e53f2`, the inline candidate
+saves **53.3 ns clipped** and **29.0 ns separate**. Its paired ratio intervals
+are 0.958823–0.986908 and 0.978571–0.991825, respectively. All 12 backings
+per case improve. These are gains against the current managed package.
+The original complete-operation reference yields different results for
+immutable private package `43fe63b6`.
+
+| Original complete borrowed operation | Lokad.Image / FFmpeg | Conservative ratio interval | Status |
+| --- | ---: | ---: | --- |
+| Clipped RGBA8 | 1.900549 / 1.906975 µs | 0.991718–1.000265 | Uncertain |
+| Separate RGBA8 | 1.944582 / 1.895245 µs | 1.019522–1.032142 | Gap |
+
+A three-way comparison runs the inline candidate, reversed-tail candidate and
+the frozen FFmpeg adapter on eight shared backing pairs. The inline separate
+gap disappears there. The two candidates average 5.8 and 3.0 ns faster than
+FFmpeg on separate copy, with intervals including parity. The inline proof
+has no clear advantage over the reversed-tail candidate on either workload.
+Keep the smaller reversed-tail candidate as the lead.
+
+A placement-balanced clipped confirmation then uses the reversed-tail
+package `d6f7c252`, 12 fresh backings, both source and canvas assignments,
+and all original confidence groups. It gives **1.884298 / 1.876155 µs**,
+conservative interval **0.972811–1.036619**, and differences from **24.1 ns
+faster to 39.5 ns slower** across paired backings. Preflight checks pass on
+all 24 assignments. Pairing the backings controls placement differences
+between subjects while variation across backings remains material.
+
+Putting the simpler proof in the existing no-inline helper preserves the
+398-byte copy-loop instructions. That four-backing screen saves 7.2 ns
+clipped with mixed signs and loses 16.4 ns separate, with every separate
+placement adverse. Close the helper variant. All eligible runs use passing
+idle guards, exact frames and ownership checks at **0 B/op**. One standalone
+attempt stopped at the CPU0 I/O-wait guard before timing.
+[Raw observations and verification](copy-vector-width-trials-evidence.json)
+
+## Shared staged mover for separate RGBA16
+
+The reversed-tail mover can cover separate RGBA16 buffers within the same
+4,096-pixel cancellation chunk. The range model verifies 512,128 byte and word
+width/phase combinations. The original word workload passes normal and scalar
+exactness and ownership preflights. The JIT emits the same 398-byte mover.
+
+The four-backing screen is **24.8 ns slower** than the current package,
+with all four placement means adverse. All captures preserve the original
+pixels and source at 0 B/op with both idle guards passing. Keep the existing
+word mover and its [uncertain comparison](COPY-OPERATION-BOUNDARY.md#placement-balanced-rgba16-confirmation).
+[Screen and verified archive](copy-vector-width-trials-evidence.json)

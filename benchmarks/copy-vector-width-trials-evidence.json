@@ -2890,5 +2890,224 @@
       "mirrored": true,
       "directory": "tmp/frp1432"
     }
+  },
+  "endpointProofAndPlacementSensitivity": {
+    "productionChanged": false,
+    "methodBytes": 515,
+    "signedFootprintChecksPassed": true,
+    "compilerInlinedEndpointChecks": true,
+    "immutablePrivatePackageSha256": "43fe63b643f5cc3d97ed4d016a2886a10c509295cc34c6eba8d96fd8ed0e71c6",
+    "librarySha256": "0061eeba621f738279968ec8d2a0ac432c7786e1a4ec16853f6fe131bffc3856",
+    "reversedTailPackageSha256": "d6f7c25288db7b21cb1bb50ba107817bfefb5c9fa52fb1b9d8313a29546dec7c",
+    "currentPackageSha256": "d52e53f26295a8a807941b9d22aabde91c7d801169fcea2302cf729d0b108332",
+    "modelPairs": 238240,
+    "exactCanaryCasesPerMode": 285,
+    "invalidFootprintsPerMode": 15,
+    "precancellationVerified": true,
+    "allUsableRunsPassedQuietGuards": true,
+    "preguardRejectedBeforeTiming": true,
+    "allocationsBytesPerOperation": 0,
+    "outOfLineCheckCandidateSha256": "494d1d23f572af04a2f915d66133b0d97308083fec8ea73b124599ff4f784e2b",
+    "outOfLineCopyBodyUnchanged": true,
+    "placementControlledConfirmation": {
+      "managedUs": 1.8842982101440429,
+      "nativeUs": 1.8761546452840168,
+      "ratio": 1.004340561627207,
+      "lower": 0.9728112385238257,
+      "upper": 1.036618951235749,
+      "status": "uncertain",
+      "pairedRatioConfidence": [
+        0.9917324180015574,
+        1.0164862346815917
+      ],
+      "case": "OriginalClippedCopy8",
+      "package": "d6f7c25288db7b21cb1bb50ba107817bfefb5c9fa52fb1b9d8313a29546dec7c",
+      "perPlacementDifferenceNs": [
+        -0.7415313720703125,
+        14.928298950195312,
+        21.39239501953125,
+        14.364410400390625,
+        39.51271057128906,
+        2.9790496826171875,
+        14.863357543945312,
+        -20.833038330078125,
+        23.027587890625,
+        6.49365234375,
+        -1.486297607421875,
+        -24.0821533203125
+      ],
+      "fullScoring": true,
+      "placements": 12,
+      "operationsPerUnit": 65536,
+      "subdivisionsPerUnit": 16
+    },
+    "cases": {
+      "OriginalClippedCopy8": {
+        "matchedAgainstReversedTail": {
+          "meanSavedNs": 6.945176124572754
+        },
+        "independentAgainstCurrent": {
+          "meanSavedNs": 53.29963239034017,
+          "pairedRatio": 0.9727639876699915,
+          "lower": 0.9588226374288363,
+          "upper": 0.9869080461482693
+        },
+        "packagedVsFfmpeg": {
+          "managedUs": 1.9005493036905925,
+          "nativeUs": 1.9069752515157063,
+          "ratio": 0.9966302930150739,
+          "lower": 0.9917176178851752,
+          "upper": 1.0002654593984377,
+          "status": "uncertain",
+          "operationsPerUnit": 65536,
+          "subdivisionsPerUnit": 16
+        },
+        "independentBackingsSaving": [
+          82.11555099487305,
+          60.1144905090332,
+          8.14630126953125,
+          70.17621612548828,
+          49.31306457519531,
+          43.92607879638672,
+          33.7243537902832,
+          73.21603393554688,
+          66.79624938964844,
+          51.38112258911133,
+          29.435298919677734,
+          71.25082778930664
+        ],
+        "threeSubjectsSameBackings": {
+          "currentOverFfmpeg": {
+            "differenceNs": -24.321152369181306,
+            "lower": 0.9754410797567936,
+            "ratio": 0.9871981620876633,
+            "upper": 0.9990969536286569
+          },
+          "candidateOverFfmpeg": {
+            "differenceNs": -16.566129366556822,
+            "lower": 0.9629644510214271,
+            "ratio": 0.9912368975224461,
+            "upper": 1.0203394174808031
+          },
+          "candidateOverCurrent": {
+            "differenceNs": 7.755023002624483,
+            "lower": 0.9756414684172285,
+            "ratio": 1.0040911091510158,
+            "upper": 1.0333703395282143
+          }
+        },
+        "outOfLineCheckScreen": {
+          "meanSavedNs": 7.239500045776367,
+          "perPlacementSavedNs": [
+            -21.356460571289062,
+            43.82051467895508,
+            19.569774627685547,
+            -13.075828552246094
+          ]
+        }
+      },
+      "DrawingCopy8": {
+        "matchedAgainstReversedTail": {
+          "meanSavedNs": 23.853391647338867
+        },
+        "independentAgainstCurrent": {
+          "meanSavedNs": 29.006098747253418,
+          "pairedRatio": 0.9851755509756612,
+          "lower": 0.9785710468440874,
+          "upper": 0.9918246297704285
+        },
+        "packagedVsFfmpeg": {
+          "managedUs": 1.9445822474161785,
+          "nativeUs": 1.895244691212972,
+          "ratio": 1.0260322883013222,
+          "lower": 1.0195221146968882,
+          "upper": 1.0321417627904295,
+          "status": "gap",
+          "operationsPerUnit": 65536,
+          "subdivisionsPerUnit": 1
+        },
+        "independentBackingsSaving": [
+          38.057395935058594,
+          22.879478454589844,
+          35.91173553466797,
+          14.828289031982422,
+          24.035736083984375,
+          39.97590255737305,
+          44.745304107666016,
+          22.329998016357422,
+          35.52413558959961,
+          30.72077178955078,
+          26.812034606933594,
+          12.252403259277344
+        ],
+        "threeSubjectsSameBackings": {
+          "currentOverFfmpeg": {
+            "differenceNs": -2.983953475952177,
+            "lower": 0.9864429796382251,
+            "ratio": 0.9984113649325314,
+            "upper": 1.0105249611001568
+          },
+          "candidateOverFfmpeg": {
+            "differenceNs": -5.762729644775391,
+            "lower": 0.9792534993900618,
+            "ratio": 0.9969666967576803,
+            "upper": 1.0150002987612585
+          },
+          "candidateOverCurrent": {
+            "differenceNs": -2.7787761688232138,
+            "lower": 0.9740662983037607,
+            "ratio": 0.9985530331228264,
+            "upper": 1.0236553319780808
+          }
+        },
+        "outOfLineCheckScreen": {
+          "meanSavedNs": -16.40175724029541,
+          "perPlacementSavedNs": [
+            -28.025348663330078,
+            -4.309776306152344,
+            -11.807781219482422,
+            -21.464122772216797
+          ]
+        }
+      }
+    },
+    "raw": {
+      "file": "inline-footprint-copy-trials.tar.xz",
+      "bytes": 1889392,
+      "sha256": "118e6847f417df0c081a5b190c9c802ddd0b1842db9a230d1ad9d548b2db6c77",
+      "allMembersVerified": true,
+      "members": 138,
+      "mirrored": true,
+      "directory": "tmp/frp1434"
+    }
+  },
+  "sharedStagedMoverForSeparateWord": {
+    "productionChanged": false,
+    "packageSha256": "d52e53f26295a8a807941b9d22aabde91c7d801169fcea2302cf729d0b108332",
+    "baselineSha256": "6ac84ac61e98222b7fef7653a99bd45b30cf932a5dd8c54509cb68a3758c4a1e",
+    "candidateSha256": "9b3970ad58c10d5c391499241144e1fa7b864a266caf03742720212e6f178043",
+    "methodBytes": 398,
+    "modeledWidthPhaseCombinations": 512128,
+    "allOriginalGatesPassed": true,
+    "allocationsBytesPerOperation": 0,
+    "quietGuardsPassed": true,
+    "meanSavedNs": -24.848915100097656,
+    "perPlacementSavedNs": [
+      -51.509765625,
+      -4.341327667236328,
+      -35.567054748535156,
+      -7.977512359619141
+    ],
+    "standaloneScored": false,
+    "sameSourceCanvasPerPair": true,
+    "raw": {
+      "file": "shared-word-mover-screen.tar.xz",
+      "bytes": 393556,
+      "sha256": "397fb7ab5828f614f9e0257f15c4178e1631efca11856053c8582c49dc7dc5dd",
+      "allMembersVerified": true,
+      "members": 22,
+      "mirrored": true,
+      "directory": "tmp/frp1438"
+    }
   }
 }
