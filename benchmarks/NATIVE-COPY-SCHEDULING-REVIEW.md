@@ -500,3 +500,20 @@ retains the first VP8L launch, which found that its frozen runtime only
 ships the generated driver's runtime configuration. Sharing the
 identical preparation proof resolved that launch dependency.
 [Commands, historical counts and validation archive](benchmark-refresh-runtime-preparation-evidence.json)
+
+## PNG and WebP inspection refresh recipes
+
+The three PNG Identify boundaries, the PNG and VP8L dimension probes,
+and complete PNG header inspection pass their original generated
+setup, public operation and cleanup on package `3e09246f`. Each uses
+its frozen reference and matches its accepted descriptor, source and
+ownership checks. The seekable, asynchronous nonseekable and
+header-only deliveries retain their original public-operation scopes.
+
+The dimension probes share the regenerated read-boundary proof. The
+other four reuse their archived 21-control prerequisites with the
+package identity bound in private copies. Their original direct
+validation runs on the current package. All clocks were discarded.
+The final recipes preserve the generated loops and use the original
+12-actual pilot jobs with explicit natural GC.
+[Frozen receipts, operations and verified archive](benchmark-refresh-runtime-preparation-evidence.json)
