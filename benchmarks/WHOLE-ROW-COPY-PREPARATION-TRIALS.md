@@ -1594,3 +1594,17 @@ Both quiet guards pass and the complete managed cases allocate **0 B/op**.
 The result leaves parity uncertain. Keep the BCL route in production and
 require a distinct transfer improvement before another direct confirmation.
 [Predeclared layout, all observations and verified archive](copy-vector-width-trials-evidence.json)
+
+## Consecutive 1 KiB word snapshots
+
+This variant snapshots each 2 KiB group in two consecutive halves of
+the same row. It halves the number of live vector values and reduces the
+generated helper from 737 to 513 bytes. Each half emits 16 vector loads
+then 16 stores, with no spills. Exact row footprints and the original
+cancellation, source and ownership checks pass in normal and scalar runs.
+
+The variant loses **36.2 ns** per complete call against the full-group
+snapshot. All 32 matched pairs across eight backings are adverse, at
+**0 B/op**. Both quiet guards pass. The shorter helper gives no reason
+to replace the private full-group lead or reopen its standalone timing.
+[Source, generated instructions and complete observations](copy-vector-width-trials-evidence.json)

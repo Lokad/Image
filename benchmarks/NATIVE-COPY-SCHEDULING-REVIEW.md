@@ -417,3 +417,19 @@ alpha, source, reconstruction and independent ownership gates on package
 fixtures match their pins before and after. Both scoring drivers and their
 reference boundaries remain available for the final refresh.
 [Commands, per-case packet identities and archive](benchmark-refresh-runtime-preparation-evidence.json)
+
+## Direct bicubic refresh recipes
+
+All 16 displayed direct bicubic recipes in the selected storage
+confirmations are recovered in one runtime with 133 verified non-core
+files and 15 pinned zimg reference workers. Fourteen retain their
+original generated delegates, natural-GC pilot and both reference
+brackets. Wide8 and TightWide16 use separate pinned adjacent drivers
+with 256 and 64 operations per subject, respectively.
+
+The original public benchmark methods pass untimed on package
+`3e09246f`. Input, managed and native output hashes, exact managed
+pixels, reference bounds, working limits, and source and output
+ownership match the accepted receipts. The drivers and configurations
+are ready for the final refresh.
+[Recovered commands, validation and verified archive](benchmark-refresh-runtime-preparation-evidence.json)
