@@ -1623,3 +1623,18 @@ Six of eight backing means favor the variant, and one contributes
 pass. Keep the ascending full-group snapshot as the private lead and
 retain the existing standalone uncertainty.
 [Generated instructions and all matched observations](copy-vector-width-trials-evidence.json)
+
+## Early destination reads before a full word snapshot
+
+Four byte reads touch the destination at offsets 0, 512, 1,024 and
+1,536 before each full source snapshot. The first JIT build elides the
+discarded reads. The measured build returns a register-only observation
+from the internal helper, and the disassembly verifies all four loads
+and the original 64 vector transfers. Normal and scalar exactness,
+caller ownership and cancellation checks pass.
+
+The mean saving against the full snapshot is **1.0 ns** at **0 B/op**.
+Four backing means favor the variant and four are adverse. Both quiet
+guards pass. This bounds the tested early-read implementation and
+leaves the original word-copy comparison open.
+[Source, generated instructions and complete observations](copy-vector-width-trials-evidence.json)

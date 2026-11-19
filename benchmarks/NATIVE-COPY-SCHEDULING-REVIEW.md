@@ -448,3 +448,18 @@ The existing horizontal and vertical one-axis bindings match their
 accepted output hashes, native bounds and ownership checks. Reuse the
 original 32-call adjacent schedule for both.
 [Recovered recipes and qualification evidence](benchmark-refresh-runtime-preparation-evidence.json)
+
+## Owned-edit refresh recipes
+
+Seven displayed owned edits share 143 verified non-core runtime files
+and five frozen FFmpeg workers. The two plain transposes, two
+counterclockwise rotations, RGBA8 mirrored transpose and RGBA8 half
+turn retain the original 256-call driver. The vertical flip uses the
+qualified 16,384-call interleaved driver. Each recipe retains all 12
+units and three native groups.
+
+The original methods pass untimed on package `3e09246f`. Full pixels,
+alpha, hidden RGB, unchanged source and independent surviving output
+match each historical gate. The previous crop evidence remains
+applicable at its recorded public boundary.
+[Commands, original validation and verified archive](benchmark-refresh-runtime-preparation-evidence.json)
