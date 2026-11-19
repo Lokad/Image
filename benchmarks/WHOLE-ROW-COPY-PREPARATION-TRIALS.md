@@ -1081,3 +1081,21 @@ with matching instruction text and block offsets. The default records two
 zero-byte alignment slots. There is no useful runtime-switch timing comparison
 for this body. The archive retains all layouts, observations, build logs, hashes
 and verification commands. [Verified evidence](copy-vector-width-trials-evidence.json)
+
+## Prepared rows for the existing RGBA16 runtime mover
+
+This scope keeps the existing `SpanHelpers.Memmove` call and dispatches once
+for a separate RGBA16 rectangle whose rows fit a 4,096-pixel cancellation
+chunk. The helper prepares row offsets and byte count once, retains one
+cancellation checkpoint per row, and emits one runtime copy per row. It reuses
+the 180-byte helper from the separate-byte investigation. Byte copies and
+overlap paths stay on their existing routes.
+
+Four shared backing pairs each run both assignments and opposite execution
+orders. The private DLL saves **6.4 ns** on average at **0 B/op**. The means by
+backing pair are **−0.8, 17.7, 4.5 and 4.2 ns**. The same immutable development
+package supplies the baseline. Exact full-frame, source and ownership checks
+pass with normal and scalar execution. Both quiet guards pass.
+
+The measured savings leave the [placement-balanced word uncertainty](COPY-OPERATION-BOUNDARY.md#placement-balanced-rgba16-confirmation)
+open. The added specialization stays private. [Verified observations and code](copy-vector-width-trials-evidence.json)

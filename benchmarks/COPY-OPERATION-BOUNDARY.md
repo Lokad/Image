@@ -71,3 +71,30 @@ reproduce the round with its named dependencies. Superseded measurements remain
 in [self-row history](SELF-ROW-STORAGE.md), [byte reconciliation](BYTE-COPY-REFERENCE-RECONCILIATION.md)
 and [partitioned diagnostics](COPY-PARTITIONED-REFERENCE.md); rejected managed
 experiments remain in their own reports.
+
+## Placement-balanced RGBA16 confirmation
+
+The current `d52e53f2` package measures **3.812207 µs** against **3.792899 µs**
+for the same FFmpeg plane-copy operation. The conservative interval is
+**0.995051–1.014625** and the adjacent-pair interval is **0.999432–1.010360**.
+The word result remains uncertain at **0 B/op**.
+
+The driver allocates twelve independent source/canvas backing pairs before
+timing. Each statistical unit uses one pair, with equal counts in both roles
+and alternating managed/native order. It retains 16 subdivisions and 262,144
+calls per unit. All before, paired and after reference groups stay in the
+original confidence calculation. Original whole-run warmups remain and each
+backing assignment receives equal managed and native warmup before timing.
+
+The frozen managed delegate and consumer invoke the complete public operation.
+The reference uses the previously verified in-process adapter with the frozen
+`apply` and FFmpeg plane-copy instruction bodies. The benchmark holds both sides’
+backing arrays live and pinned outside the clocks. It resets each assignment
+before its warmup and checks the exact full frame and unchanged source afterward.
+Original normal and scalar checks pass on all 24 assignments. All quiet guards
+and sample counts pass. The standalone comparison above records the earlier
+independently allocated boundary.
+
+Eleven of twelve matched units have higher managed means. The result leaves
+parity unresolved after controlling the sampled backing roles.
+[Observations, driver and archive](copy-vector-width-trials-evidence.json)

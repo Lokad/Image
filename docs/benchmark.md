@@ -88,7 +88,8 @@ Separate byte is **1.953 / 1.906 µs**, upper
 **3.827 / 3.817 µs**, interval
 **0.991834–1.011718**, uncertain. All twelve units/group, original
 65,536/262,144 operations, case-specific drivers, subdivisions, warmups and
-conservative gates stay. No favorable replay or assumed word optimization need.
+conservative gates stay. The [placement-balanced RGBA16 confirmation](../benchmarks/COPY-OPERATION-BOUNDARY.md#placement-balanced-rgba16-confirmation)
+also leaves confidence open across twelve independent borrowed backing pairs.
 Byte overlap **3.885 / 4.183 µs**, upper
 **0.938291**, passes/stops. Both self-copy passes retain identified
 source-valid shared-self-row evidence; the three corrected comparisons use the
