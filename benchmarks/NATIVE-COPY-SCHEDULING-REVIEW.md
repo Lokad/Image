@@ -517,3 +517,29 @@ validation runs on the current package. All clocks were discarded.
 The final recipes preserve the generated loops and use the original
 12-actual pilot jobs with explicit natural GC.
 [Frozen receipts, operations and verified archive](benchmark-refresh-runtime-preparation-evidence.json)
+
+## PNG stream, retained-result and composition refresh recipes
+
+Six existing recipes pass their untimed correctness gates on package
+`3e09246f`. They cover two decodes with both results retained, seekable
+RGBA8 and RGBA16 decode, asynchronous nonseekable RGBA8 decode and
+encode, and fresh RGBA16 decode/orient/crop/fit. The original retained
+charges, cancellation, terminal refusal and recovery pass. The async
+encoder emits the exact 210,973-byte packet. The composition matches
+the original full-word pixels, EOF and stream ownership, with fresh
+decoder and graph preparation in the reference operation.
+
+The four generated recipes keep the original natural-GC job and
+consumer, including the fixed four-call async encode. Both adjacent
+recipes keep twelve alternating 64-operation pairs. The untimed
+run used the original complete public benchmark methods and frozen
+reference checks. The prior async input and packet preparation proofs
+were reused. The archive retains the async encoder's initial missing
+proof error and the successful check with the frozen proof supplied.
+
+Use the corrected scoring commands in this archive for the four PNG
+coding validators above. Their saved command had put the historical
+driver in the runtime configuration argument. The correction keeps
+the exact configuration, original natural-GC tool, generated loops
+and all existing validation.
+[Commands, original counts and verified archive](benchmark-refresh-runtime-preparation-evidence.json)

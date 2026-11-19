@@ -2368,5 +2368,136 @@
       "members": 28,
       "mirrored": true
     }
+  },
+  "pngStreamStorageAndCompositionRecipes": {
+    "packageSha256": "3e09246fd9b51a9728c57e706b4767f1497b1f2a50d3907305ab5ea50b7d6774",
+    "librarySha256": "af881e2514ce039c79a9d12d105ccc4249f12c68bc7912acba2e7d9d8aa20255",
+    "ancillaryBuilds": 1,
+    "naturalCheckToolSha256": "ec377a4d78965dbea0322d5c03d51bb8f0e4e1b0c5f81eff3173cd386eb1d6fa",
+    "productionHarnessReferenceBuilds": 0,
+    "scoredCaptures": 0,
+    "originalRuntimeAndInputsUnchanged": true,
+    "allClocksDiscarded": true,
+    "cases": {
+      "retained": {
+        "logicalCase": "root/Png8Retained2",
+        "schedule": "generated",
+        "originalReceiptSha256": "145bb00b3794cad9a3e62d66de447d3887e4b52de3da2d9e66a7ef26b78b21b5",
+        "originalArchive": "png-storage-current-package-confirmations.tar.xz",
+        "originalActuals": 12,
+        "historicalOperationCounts": [
+          80
+        ],
+        "inputSha256": "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f",
+        "nativeWorkerSha256": "16fb3910f0b01480c3dc89f61290fb3388122516a90806757c35181c1849b057",
+        "scoringDriverSha256": "ec377a4d78965dbea0322d5c03d51bb8f0e4e1b0c5f81eff3173cd386eb1d6fa",
+        "validationSha256": "aa2272f198c48046660a0b05f405861fb8c9c1cca4f7b89325a1777eb4861301",
+        "originalGatesPassed": true,
+        "eachOutputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "rootPeakBytes": 1766641,
+        "callerInputChargedBytes": 218775
+      },
+      "seekable": {
+        "logicalCase": "pngStream/Png8",
+        "schedule": "generated",
+        "originalReceiptSha256": "6d7fe48aae7421b9f8fb236d098d64f74cbd2a26ff0b368be83d8f2102cd57e9",
+        "originalArchive": "png-storage-current-package-confirmations.tar.xz",
+        "originalActuals": 12,
+        "historicalOperationCounts": [
+          176
+        ],
+        "inputSha256": "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f",
+        "nativeWorkerSha256": "987ac7e4a91050878ab725d83d4f3d3a85587e361f6c3f715a31c309c6b39da8",
+        "scoringDriverSha256": "ec377a4d78965dbea0322d5c03d51bb8f0e4e1b0c5f81eff3173cd386eb1d6fa",
+        "validationSha256": "eb28cbd44658e63b59c427b5a1737a9bd672238d466aa1bd477cc423ae67b832",
+        "originalGatesPassed": true,
+        "outputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80"
+      },
+      "async-decode": {
+        "logicalCase": "pngStream/Png8AsyncNonSeekable",
+        "schedule": "generated",
+        "originalReceiptSha256": "0f8dcb10ba09c7c87262947f5570198af34398dbd8c3b47481adabe620b9603a",
+        "originalArchive": "png-storage-current-package-confirmations.tar.xz",
+        "originalActuals": 12,
+        "historicalOperationCounts": [
+          176
+        ],
+        "inputSha256": "4c0c823a1b84d7619f784ace6c2749ed10c0d54b7dc353beed3ad4888e0af57f",
+        "nativeWorkerSha256": "624884cb26a087783c044d2caad4b44e153d725b3d9aba196f7954b39afce775",
+        "scoringDriverSha256": "ec377a4d78965dbea0322d5c03d51bb8f0e4e1b0c5f81eff3173cd386eb1d6fa",
+        "validationSha256": "8efea1eecb808986ca09fe06df6b587b7ed572cfa934a6e61976698bafac27f0",
+        "originalGatesPassed": true,
+        "outputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80"
+      },
+      "async-encode": {
+        "logicalCase": "Png8AsyncNonSeekable",
+        "schedule": "generated",
+        "originalReceiptSha256": "9730a49e80da9a18057fad77b5ab00b703ade6add8dc85ff6296e914666356b0",
+        "originalArchive": "png-storage-current-package-confirmations.tar.xz",
+        "originalActuals": 12,
+        "historicalOperationCounts": [
+          4
+        ],
+        "inputSha256": "70f0fb18c341e2740b875a5a34e21ca63f0821b3386352fe2971020c5a6aac80",
+        "nativeWorkerSha256": "625305d7eabaad75a585b6d35bf919795c28b01c0a1581e51a8d7f993257c131",
+        "scoringDriverSha256": "ec377a4d78965dbea0322d5c03d51bb8f0e4e1b0c5f81eff3173cd386eb1d6fa",
+        "validationSha256": "3c4bdc62a6dc96986dc1b5718f2365140d708eda37f9c8f8915bf70845a94b30",
+        "originalGatesPassed": true,
+        "managedOutputSha256": "ad9ed127da583d68bdb749bb983b73966e8e814527216449c4557fdd89668920"
+      },
+      "word-stream": {
+        "logicalCase": "pngStream/Png16",
+        "schedule": "adjacent",
+        "originalReceiptSha256": "2f342bfeeab03e4050b47c174b307e15e69376d21b3794f951b6c8df7b4f63aa",
+        "originalArchive": "png-word-stream-current-package.tar.xz",
+        "originalActuals": 12,
+        "historicalOperationCounts": [
+          64
+        ],
+        "inputSha256": "3e4b64d778c395392451d5331d2a11b541d262e2f39826e1322d22d6f03bb4a8",
+        "nativeWorkerSha256": "f3d20743b03060ad8ec1751857fea5c6b55cf8b5b9656897d60a6049c508056e",
+        "scoringDriverSha256": "546fdf27be0f454dbc587b2467802bd87e0983a1d6bad7685b150779b7c62c0b",
+        "validationSha256": "c26117d98fbcfe38a303ff46b7a4f0b46d06bbe5725ec4917463f17196d809a3",
+        "originalGatesPassed": true,
+        "outputSha256": "3f861b61360b442c84063e7a6e1cb4f35957dcaa16f898048beaa36bbf4272f9"
+      },
+      "composition": {
+        "logicalCase": "PngCropFit16OneShot",
+        "schedule": "adjacent",
+        "originalReceiptSha256": "0df6aec0d91d1fb03468a7d52e91aa43c1a34f88d81530a002b76de71e8b6245",
+        "originalArchive": "png-composition-fresh-current-package.tar.xz",
+        "originalActuals": 12,
+        "historicalOperationCounts": [
+          64
+        ],
+        "inputSha256": "3e4b64d778c395392451d5331d2a11b541d262e2f39826e1322d22d6f03bb4a8",
+        "nativeWorkerSha256": "22f0f118c94b7cc6208075a9bcea7a48214c47f5f69eaf69d39a26aabecce24f",
+        "scoringDriverSha256": "546fdf27be0f454dbc587b2467802bd87e0983a1d6bad7685b150779b7c62c0b",
+        "validationSha256": "f71ef138eb24749eb7aeffdb67fb454aef4e7530c9abefb79453d69bf703458f",
+        "originalGatesPassed": true,
+        "outputSha256": "4ee60a74d23fcf4977f0d0563b43fd660dda214610371b67246202049bfe86df"
+      }
+    },
+    "correctedCodingValidationScoreCommands": {
+      "member": "tmp/frp1484/corrected-coding-validation-score-commands.json",
+      "originalRecipeSha256": "1479c1e029ee40403d95e3a5deaa6315e5aa5b68eab7dc9c329ad7f6775769e9",
+      "supersedesOnlyScoringCommands": true,
+      "correctedCases": [
+        "ValidatePng8",
+        "ValidatePng16",
+        "ValidateIndexedAdam7",
+        "ValidatePng16Async"
+      ],
+      "originalValidationUnchanged": true
+    },
+    "raw": {
+      "file": "png-stream-storage-composition-refresh-recipes.tar.xz",
+      "bytes": 62332,
+      "sha256": "ebc34d1b3400d74f7a4699e356a7874181adb87098bc3b7460ffe06afd867a08",
+      "allMembersVerified": true,
+      "directory": "tmp/frp1484",
+      "members": 28,
+      "mirrored": true
+    }
   }
 }
