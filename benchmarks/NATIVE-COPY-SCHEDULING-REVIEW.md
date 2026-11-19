@@ -298,3 +298,26 @@ historical forced-GC engine while using the frozen generated operation. One
 private tool build serves every rehearsal. Scored execution remains part of
 the final immutable-package refresh.
 [Driver and verified rehearsal archive](benchmark-refresh-runtime-preparation-evidence.json)
+
+## JPEG generated workloads with natural GC
+
+All seven generated JPEG encode workloads pass untimed batch rehearsals on
+package `d52e53f2`. The batch sizes range from 64 to 224 operations, as
+recorded in all 12 historical actuals per workload. The original generated
+delegate and native worker reports confirm the same call count on each side.
+The two async recipes select their original `Encode420_8` and `Encode8`
+runner parameters through the frozen async settings. Their comparison labels
+are distinct from those parameters. The initial failed selection is retained.
+
+Packet hashes and sizes, quality, reference settings and public output
+ownership match the original gates. Both single-component grayscale controls
+keep their approved SIMD libjpeg-turbo workers. The authorized JPEG metadata
+differences on the color controls are unchanged. The async proof overrides
+are applied inside the rehearsal directories, and the original proof files
+are unchanged.
+
+One private driver build uses the original generated operation and the same
+conservative 12-unit before, paired and after scoring as the PNG driver.
+These rehearsals discard all clocks. Scored execution belongs to the final
+immutable-package refresh.
+[Driver, per-case counts and verified archive](benchmark-refresh-runtime-preparation-evidence.json)
