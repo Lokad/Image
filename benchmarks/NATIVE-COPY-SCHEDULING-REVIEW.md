@@ -321,3 +321,24 @@ conservative 12-unit before, paired and after scoring as the PNG driver.
 These rehearsals discard all clocks. Scored execution belongs to the final
 immutable-package refresh.
 [Driver, per-case counts and verified archive](benchmark-refresh-runtime-preparation-evidence.json)
+
+## Lossless WebP generated workloads with natural GC
+
+Four untimed rehearsals bind the frozen generated operations to package
+`d52e53f2`. All 12 historical actuals per case use 32 calls per side for the
+diagram and two each for RGBA8, normalized RGBA16, and async nonseekable
+RGBA8. The generated delegate and native worker confirm those counts. The
+diagram uses generated runner 1, and the async recipe uses `Encode8` with
+its frozen async selection flag.
+
+The diagram packet is exactly 7,234 bytes, and the other three packets are
+exactly 183,812 bytes each. Hashes, settings, decoded pixels, source and
+output ownership checks match the original gates against the labeled libwebp
+reference. The async checks rerun admission refusal, cancellation and output
+failure on the actual package. Its proof lives in the rehearsal directory.
+
+The private driver reuses the JPEG scoring calculation for the final refresh.
+The photograph and opaque recipes already have adjacent natural-GC drivers
+with four and sixteen operations per side, respectively. This round retained
+the rehearsal and validation evidence with all clocks discarded.
+[Driver and verified rehearsal archive](benchmark-refresh-runtime-preparation-evidence.json)
