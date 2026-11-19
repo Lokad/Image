@@ -1129,3 +1129,39 @@ in normal and scalar modes. All measured operations allocate
 and clipped FFmpeg results remain the scored comparisons. The verified archive
 retains all placements, role/order observations, assembly and reproduction
 commands. [Evidence](copy-vector-width-trials-evidence.json)
+
+## Native replay of the RGBA8 transfer schedules
+
+A test-only C loop mirrors the current four-vector bulk groups and one-vector
+tail sequence. It uses the original clipping and address preparation and
+compares with the frozen FFmpeg adapter on the same borrowed arrays. The loop
+retains the four-load/four-store groups and alternating one-vector tail.
+This replay isolates native transfer and loop scheduling from managed public
+validation. It keeps compiler instruction selection as part of the diagnostic.
+
+On native allocations with page offsets of 16, the current schedule is
+**50.1 ns slower** for clipped RGBA8 and **68.4 ns slower** for separate RGBA8.
+Staging the head and four end vectors around destination-aligned middle stores
+makes the C loop **35.2 ns faster** and **13.4 ns faster**, respectively, than the
+reference in that run. Unaligned-safe store instructions retain the advantage
+in the next run, **44.6 ns** and **22.7 ns**. These are matched effects within
+each capture.
+
+The two C schedules also run against the same reference on four natural
+.NET-owned backing pairs, using both source/canvas assignments. Each row below
+reports the difference from FFmpeg for the two original shapes.
+
+| Native schedule on shared .NET backings | Clipped RGBA8 | Separate RGBA8 |
+| --- | ---: | ---: |
+| Current managed transfer order | 49.1 ns slower | 42.5 ns slower |
+| Staged edges and aligned middle, unaligned-safe stores | 13.8 ns faster | 9.6 ns slower |
+
+The managed version uses a borrow-local alignment hint and unaligned-safe
+transfers. The 425-byte JIT helper emits all five early edge loads and preserves
+their registers across the middle loop. The width/phase model checks 254,016
+combinations. In complete managed pairs it saves **7.7 ns clipped** and
+**11.6 ns separate**, with mixed directions across the four backing pairs.
+Original normal/scalar gates and both quiet guards pass. Both paths allocate
+**0 B/op**. The shared-backing results support comparing the emitted C and
+managed row loops, including bounds and cursor work, before selecting another
+production candidate. [Raw observations and verification](copy-vector-width-trials-evidence.json)
