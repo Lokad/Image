@@ -433,3 +433,18 @@ pixels, reference bounds, working limits, and source and output
 ownership match the accepted receipts. The drivers and configurations
 are ready for the final refresh.
 [Recovered commands, validation and verified archive](benchmark-refresh-runtime-preparation-evidence.json)
+
+## Lanczos3 refresh recipes
+
+Six two-axis rows share 34 verified runtime files including the original
+natural-GC driver. Their complete operations pass untimed on package
+`3e09246f` with the original exact managed and bounded native pixels,
+independent outputs, frozen fixture data and reported plan retention.
+Retain 12 managed actuals and both native brackets. The one-shot
+operations include preparation on both sides. The repeated operations
+retain prepared state.
+
+The existing horizontal and vertical one-axis bindings match their
+accepted output hashes, native bounds and ownership checks. Reuse the
+original 32-call adjacent schedule for both.
+[Recovered recipes and qualification evidence](benchmark-refresh-runtime-preparation-evidence.json)

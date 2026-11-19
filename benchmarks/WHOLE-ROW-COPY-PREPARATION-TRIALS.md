@@ -1608,3 +1608,18 @@ snapshot. All 32 matched pairs across eight backings are adverse, at
 **0 B/op**. Both quiet guards pass. The shorter helper gives no reason
 to replace the private full-group lead or reopen its standalone timing.
 [Source, generated instructions and complete observations](copy-vector-width-trials-evidence.json)
+
+## Descending stores after a full word snapshot
+
+The variant keeps all 32 source loads in ascending order and writes the
+destination vectors in descending order. This changes the addresses of
+the last stores before the next row starts loading. The 737-byte helper
+keeps all vectors in registers. Normal and scalar exactness, cancellation
+checkpoints and caller ownership pass.
+
+The mean saving against the full snapshot is **9.8 ns** at **0 B/op**.
+Six of eight backing means favor the variant, and one contributes
+62.7 ns. The other seven average 2.2 ns of savings. Both quiet guards
+pass. Keep the ascending full-group snapshot as the private lead and
+retain the existing standalone uncertainty.
+[Generated instructions and all matched observations](copy-vector-width-trials-evidence.json)
