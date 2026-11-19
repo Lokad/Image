@@ -1252,3 +1252,42 @@ pairs are adverse and all four separate pairs improve. The screen preserves
 the original normal/scalar exactness and ownership checks. Both quiet guards
 passed. The separate result is a lead pending independent evidence. The
 392-byte private package remains the confirmed complete-operation candidate.
+
+## Staged head and tail store order
+
+On the checked-cursor loop, carrying one next-row head vector while the
+current row stores its tail makes clipped RGBA8 13.0 ns slower on average.
+All four clipped placements regress. Separate RGBA8 changes by 0.3 ns in
+the adverse direction. The 464-byte JIT body stages the load without vector
+spills. Close this variant. The initial build error required applying the
+signed stride to the managed reference before loading the vector.
+
+The 398-byte alignment-lead candidate from the preceding round independently
+measures 1.900753 / 1.902291 µs for separate RGBA8 from private package
+`cee82fb2`. Its 0.981394–1.014001 interval leaves parity uncertain.
+
+Reversing only the four staged tail stores moves the store that can overlap
+the last middle group to the end of the tail. The generated body stays at
+398 bytes. The four-placement screen saves 24.6 ns clipped and 27.6 ns
+separate against the alignment-lead candidate. The clipped savings are
+positive on all four placements. The independent comparisons on actual
+private package `d6f7c252` give the following results.
+
+| Original complete borrowed operation | Lokad.Image / FFmpeg | Conservative ratio interval |
+| --- | ---: | ---: |
+| Clipped RGBA8 | 1.905412 / 1.901147 µs | 0.991227–1.011864 |
+| Separate RGBA8 | 1.900057 / 1.905821 µs | 0.983869–1.008326 |
+
+Both intervals still include parity. The adjacent-pair upper bounds are
+1.007077 clipped and 1.004669 separate. All-actual confidence determines the
+reported upper bounds. Both private packages pass all 282 exact/canary cases,
+nine invalid footprints and precancellation per mode on Windows and Linux.
+All copy runs preserve exact canvas, source and caller ownership at 0 B/op
+with passing idle guards. [Evidence and replay archive](copy-vector-width-trials-evidence.json)
+
+Dispatching only noncancelable calls to the staged loop removes its row poll
+and reduces the body to 360 bytes. The original live-token route remains.
+This variant is 46.7 ns slower clipped and 30.8 ns slower separate against
+the reversed-tail candidate. Every matched placement regresses on both
+workloads. Exact checks and idle guards pass at 0 B/op. The smaller body
+does not isolate the poll's cost. Close the variant.

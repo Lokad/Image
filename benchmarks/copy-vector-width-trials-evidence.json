@@ -2738,5 +2738,157 @@
       "directory": "tmp/frp1428"
     },
     "standaloneRun": false
+  },
+  "stagedHeadAndTailStoreOrder": {
+    "productionChanged": false,
+    "allocationsBytesPerOperation": 0,
+    "allGuardsPassed": true,
+    "nextHeadBuildCorrection": "Use the signed managed reference step before loading the first vector.",
+    "nextHeadScreen": {
+      "candidateSha256": "4f4e9c52883bf6b8873b879ebb1dec967a0384201183072dbf1ce42f41fc13fd",
+      "previousLibrarySha256": "f5184193a5bc866b5a59948f14ca9f3c8b2afdc1e490c979a41aaa8d9153e545",
+      "methodBytes": 464,
+      "cases": {
+        "OriginalClippedCopy8": {
+          "meanSavedNs": -13.0215482711792,
+          "pairedBackings": [
+            -12.301380157470703,
+            -11.356254577636719,
+            -6.4717864990234375,
+            -21.956771850585938
+          ]
+        },
+        "DrawingCopy8": {
+          "meanSavedNs": -0.2620353698730469,
+          "pairedBackings": [
+            10.705940246582031,
+            -4.314373016357422,
+            -6.747013092041016,
+            -0.6926956176757812
+          ]
+        }
+      }
+    },
+    "earlierLeadStandalone": {
+      "packageSha256": "cee82fb2d66d289cdeb31b1adc824d931ac4785e569801d8360791fc32b23f13",
+      "librarySha256": "16da87129a5f2cab3233246929872362dcd41ec5a4b0acbf0da816ce2f4d7f86",
+      "exactFootprintsPerMode": 282,
+      "invalidFootprintsRejectedPerMode": 9,
+      "allFourNormalAndScalarChecksPassed": true,
+      "cases": {
+        "DrawingCopy8": {
+          "managedUs": 1.90075332514445,
+          "nativeUs": 1.9022912623087567,
+          "ratio": 0.9991915343382064,
+          "lower": 0.9813939457064667,
+          "upper": 1.0140011484384346,
+          "status": "uncertain",
+          "operationsPerUnit": 65536,
+          "subdivisionsPerUnit": 1
+        }
+      }
+    },
+    "reversedTailScreen": {
+      "candidateSha256": "ebefa80d677398214c883c4fbd8f0698a5b5d220ee3a5833586fd19378b9370f",
+      "previousLibrarySha256": "16da87129a5f2cab3233246929872362dcd41ec5a4b0acbf0da816ce2f4d7f86",
+      "methodBytes": 398,
+      "cases": {
+        "OriginalClippedCopy8": {
+          "meanSavedNs": 24.594757080078125,
+          "pairedBackings": [
+            41.107208251953125,
+            33.39181900024414,
+            9.56045150756836,
+            14.319549560546875
+          ]
+        },
+        "DrawingCopy8": {
+          "meanSavedNs": 27.62544059753418,
+          "pairedBackings": [
+            55.65483856201172,
+            28.74557876586914,
+            28.720897674560547,
+            -2.6195526123046875
+          ]
+        }
+      }
+    },
+    "reversedTailStandalone": {
+      "packageSha256": "d6f7c25288db7b21cb1bb50ba107817bfefb5c9fa52fb1b9d8313a29546dec7c",
+      "librarySha256": "ebefa80d677398214c883c4fbd8f0698a5b5d220ee3a5833586fd19378b9370f",
+      "exactFootprintsPerMode": 282,
+      "invalidFootprintsRejectedPerMode": 9,
+      "allFourNormalAndScalarChecksPassed": true,
+      "cases": {
+        "OriginalClippedCopy8": {
+          "managedUs": 1.9054118169148762,
+          "nativeUs": 1.9011473185221355,
+          "ratio": 1.0022431183271245,
+          "lower": 0.9912273906729618,
+          "upper": 1.0118642831960756,
+          "status": "uncertain",
+          "operationsPerUnit": 65536,
+          "subdivisionsPerUnit": 16
+        },
+        "DrawingCopy8": {
+          "managedUs": 1.9000569699605305,
+          "nativeUs": 1.9058207651774088,
+          "ratio": 0.9969756887309695,
+          "lower": 0.9838694234892558,
+          "upper": 1.0083264700722943,
+          "status": "uncertain",
+          "operationsPerUnit": 65536,
+          "subdivisionsPerUnit": 1
+        }
+      }
+    },
+    "raw": {
+      "file": "copy-tail-store-order-trials.tar.xz",
+      "bytes": 3087672,
+      "sha256": "67a057e49b9a29455e4dc6cf503ec11f2f5e64e55e25ce3528ca4ce9eb40c329",
+      "allMembersVerified": true,
+      "members": 124,
+      "mirrored": true,
+      "directory": "tmp/frp1431"
+    }
+  },
+  "stagedDefaultTokenDispatch": {
+    "productionChanged": false,
+    "candidateSha256": "1bcd40cad6f5f1f84ec3240e62e8f40f9abd14604f2192eb3d58856359c51d7e",
+    "referenceCandidate": "ebefa80d677398214c883c4fbd8f0698a5b5d220ee3a5833586fd19378b9370f",
+    "packageSha256": "d6f7c25288db7b21cb1bb50ba107817bfefb5c9fa52fb1b9d8313a29546dec7c",
+    "methodBytes": 360,
+    "originalLiveTokenLoopPreserved": true,
+    "allocationsBytesPerOperation": 0,
+    "checksAndGuardsPassed": true,
+    "results": {
+      "OriginalClippedCopy8": {
+        "meanSavedNs": -46.70767402648926,
+        "perPlacementSavedNs": [
+          -41.72260665893555,
+          -51.70787048339844,
+          -49.44216537475586,
+          -43.95805358886719
+        ]
+      },
+      "DrawingCopy8": {
+        "meanSavedNs": -30.816125869750977,
+        "perPlacementSavedNs": [
+          -11.12459945678711,
+          -12.271461486816406,
+          -55.14232635498047,
+          -44.72611618041992
+        ]
+      }
+    },
+    "raw": {
+      "file": "default-token-copy-screen.tar.xz",
+      "bytes": 395168,
+      "sha256": "dd7ab69c75381f343749b95a348cae36482683c10228b9c8e1fac3e041614379",
+      "allMembersVerified": true,
+      "members": 27,
+      "mirrored": true,
+      "directory": "tmp/frp1432"
+    }
   }
 }

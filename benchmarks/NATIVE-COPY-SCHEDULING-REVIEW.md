@@ -263,3 +263,14 @@ loops and use explicit natural-GC orchestration for the final refresh.
 The current package and its embedded DLL hashes were checked. This step
 performed zero builds or workload runs.
 [Verified recipe archive](benchmark-refresh-runtime-preparation-evidence.json)
+
+The stored RGBA16 and predictable RGBA16 recipes also pass a generated-loop
+preflight on package `d52e53f2`. Each runs the frozen setup, one generated
+managed encode call and the original cleanup without entering the
+BenchmarkDotNet engine. Both preserve the original input, native preparation
+boundary, exact pixels, and independent output checks. Complete packets are
+1,066,552 and 573,041 bytes, respectively, with the original hashes. Runtime
+copies keep assembly resolution bound to the extracted package DLL. An
+initial symlink layout failed the assembly identity gate before encoding.
+One temporary tool build. All clocks were discarded.
+[Preflight and archive identities](benchmark-refresh-runtime-preparation-evidence.json)

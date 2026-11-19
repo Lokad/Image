@@ -612,5 +612,109 @@
       "mirrored": true,
       "directory": "tmp/frp1423"
     }
+  },
+  "pngGeneratedLoopPackagePreflights": {
+    "packageSha256": "d52e53f26295a8a807941b9d22aabde91c7d801169fcea2302cf729d0b108332",
+    "librarySha256": "6ac84ac61e98222b7fef7653a99bd45b30cf932a5dd8c54509cb68a3758c4a1e",
+    "toolSha256": "e134d521d69013cbc40785ae219bc7268b0caec9f89a1394e4a4e55d8759ffe0",
+    "cases": [
+      {
+        "case": "EncodeNoCompression16",
+        "command": [
+          "taskset",
+          "-c",
+          "0",
+          "dotnet",
+          "exec",
+          "--depsfile",
+          "tmp/frp1433/copied-runtime/EncodeNoCompression16/runtime/Lokad.Image.Benchmarks.deps.json",
+          "--runtimeconfig",
+          "tmp/frp1433/copied-runtime/EncodeNoCompression16/runtime/BatchedPredictablePngConfirm.runtimeconfig.json",
+          "tmp/frp1433/copied-runtime/EncodeNoCompression16/runtime/Inspect.dll",
+          "check-png",
+          "tmp/frp1433/copied-runtime/EncodeNoCompression16/runtime/BatchedPredictablePngConfirm.dll",
+          "EncodeNoCompression16",
+          "6ac84ac61e98222b7fef7653a99bd45b30cf932a5dd8c54509cb68a3758c4a1e",
+          "c85b1d4b67581ac57ea67084826317d3606cc3cd6ae801c068429ebb3d086f9b"
+        ],
+        "allOriginalGatesPassed": true,
+        "referenceCodecRetained": false,
+        "outputBytes": 1066552,
+        "packetSha256": "9b31604447d61d5ab7a30aad3cfde4cd73fef6d85ff506e74baeba807e54574d",
+        "workerSha256": "572dbc4ab61bb5f0a3a971de87ded792f16af9465d57851a1eae6f57eaad6cae",
+        "harnessSha256": "c85b1d4b67581ac57ea67084826317d3606cc3cd6ae801c068429ebb3d086f9b",
+        "toolInvocation": {
+          "mode": "untimed-png-binding-check",
+          "caseId": "EncodeNoCompression16",
+          "librarySha256": "6ac84ac61e98222b7fef7653a99bd45b30cf932a5dd8c54509cb68a3758c4a1e",
+          "harnessSha256": "c85b1d4b67581ac57ea67084826317d3606cc3cd6ae801c068429ebb3d086f9b",
+          "explicitGeneratedSingleOperationCalls": 1,
+          "generatedEntryPointInvoked": false,
+          "forceGcOrchestrationUsed": false,
+          "originalSetupAndCleanupInvoked": true,
+          "scoredCaptures": 0,
+          "allClocksDiscarded": true
+        },
+        "frozenRuntimeFiles": 70,
+        "validationSha256": "97cb9ba4ab0784b62afb714beaaa0b2890c75da43f7d69199407b8143b2ba682"
+      },
+      {
+        "case": "EncodePredictable16",
+        "command": [
+          "taskset",
+          "-c",
+          "0",
+          "dotnet",
+          "exec",
+          "--depsfile",
+          "tmp/frp1433/copied-runtime/EncodePredictable16/runtime/Lokad.Image.Benchmarks.deps.json",
+          "--runtimeconfig",
+          "tmp/frp1433/copied-runtime/EncodePredictable16/runtime/BatchedPredictablePngConfirm.runtimeconfig.json",
+          "tmp/frp1433/copied-runtime/EncodePredictable16/runtime/Inspect.dll",
+          "check-png",
+          "tmp/frp1433/copied-runtime/EncodePredictable16/runtime/BatchedPredictablePngConfirm.dll",
+          "EncodePredictable16",
+          "6ac84ac61e98222b7fef7653a99bd45b30cf932a5dd8c54509cb68a3758c4a1e",
+          "634bb1a4b89e9dc256bec5b3365d3c9fa7dc034fb57b90bddb870d969c1a4a9c"
+        ],
+        "allOriginalGatesPassed": true,
+        "referenceCodecRetained": true,
+        "outputBytes": 573041,
+        "packetSha256": "4b1794a8886a95c14a899be3e15418bf198e22fc0e59a3af7d15c33df4c8e205",
+        "workerSha256": "7faa82b1c5ecab331e3c7b8a32bb6e3aa5268145ab9d432fb9d3027b3f53f28d",
+        "harnessSha256": "634bb1a4b89e9dc256bec5b3365d3c9fa7dc034fb57b90bddb870d969c1a4a9c",
+        "toolInvocation": {
+          "mode": "untimed-png-binding-check",
+          "caseId": "EncodePredictable16",
+          "librarySha256": "6ac84ac61e98222b7fef7653a99bd45b30cf932a5dd8c54509cb68a3758c4a1e",
+          "harnessSha256": "634bb1a4b89e9dc256bec5b3365d3c9fa7dc034fb57b90bddb870d969c1a4a9c",
+          "explicitGeneratedSingleOperationCalls": 1,
+          "generatedEntryPointInvoked": false,
+          "forceGcOrchestrationUsed": false,
+          "originalSetupAndCleanupInvoked": true,
+          "scoredCaptures": 0,
+          "allClocksDiscarded": true
+        },
+        "frozenRuntimeFiles": 71,
+        "validationSha256": "65a7a4c52e4161f8705da6c3dd608cfe355b798de4f502763893e28abd221913"
+      }
+    ],
+    "scoredCaptures": 0,
+    "productionChanged": false,
+    "sourceIdentity": {
+      "sourceRevision": "63990308d823a336b619689327df87b626845093",
+      "sourceSha256": "099e33260f7057494e43260c60d190ff733a6e6916fdde0c99a3362d12668908"
+    },
+    "benchOrReferenceBuilds": 0,
+    "raw": {
+      "file": "png-generated-loop-package-preflights.tar.xz",
+      "bytes": 17620,
+      "sha256": "41ae70d800f8d326ecfa3f88b34f16f78b6106363409438f037371824179662f",
+      "allMembersVerified": true,
+      "members": 15,
+      "mirrored": true,
+      "directory": "tmp/frp1433"
+    },
+    "toolBuilds": 1
   }
 }
