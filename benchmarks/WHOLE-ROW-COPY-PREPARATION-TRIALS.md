@@ -1497,3 +1497,24 @@ comparisons uncertain. The single-group refinement removes the inner loop
 and saves another **6.0 ns** on average with mixed results across backings.
 Keep the full-group snapshot as the private lead, with the existing BCL
 mover in production. [Sources, timings and verified archive](copy-vector-width-trials-evidence.json)
+
+## Destination-aligned and two-row word snapshots
+
+The destination-aligned variant copies the final edge first, then snapshots
+the head and aligned middle in 32 vector registers. All 64 destination phases
+are in bounds. Six of the eight observed buffer assignments place the early
+store outside the source's low 12-bit address range. All six lose time, by
+**23.6 ns** on average. The overall screen loses **21.0 ns**, with an adverse
+mean on each of the four backings. The offset calculation describes the
+addresses accessed during the operation.
+
+The two-row variant snapshots 1 KiB from each of two rows before storing
+either half. Live-token operations keep the original word mover. An odd
+final row uses the runtime copy. The variant loses **98.3 ns** against the
+full single-row snapshot, with an adverse mean on each backing.
+
+Both variants preserve normal and scalar exactness, ownership and **0 B/op**
+at the original 65,536 complete calls per subject. The generated loops
+retain all 32 snapshot values in registers and both idle guards pass. Keep
+the existing private full-group lead and the unresolved standalone confidence.
+[Matched observations and verified archive](copy-vector-width-trials-evidence.json)

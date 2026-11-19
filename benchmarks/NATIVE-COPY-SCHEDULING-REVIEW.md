@@ -248,6 +248,14 @@ header alias still use their previously verified providers. The audit covers
 the evidence used by the summary. Final timing still requires the original
 operation boundaries on the final immutable package.
 
+The provider audit now binds package `3e09246f` and resolves all 165 rows.
+The two separate-buffer RGBA8 rows are the only changed providers since
+the marker-coalescing audit. Both map to their accepted release-package
+receipts with the original FFmpeg worker and operation counts. The three
+explicit aliases reuse their existing provider choices. This reconciliation
+uses the retained archive and adds zero benchmark operations.
+[Aligned-middle package evidence](aligned-middle-copy-evidence.json)
+
 ## PNG encoder refresh recipes
 
 All 17 displayed PNG encoder rows now resolve by case identity to their

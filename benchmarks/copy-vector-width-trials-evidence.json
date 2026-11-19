@@ -3544,5 +3544,128 @@
       "directory": "tmp/frp1456",
       "mirrored": true
     }
+  },
+  "wordSnapshotAlignmentAndPairing": {
+    "basePackageSha256": "14a8403050a3a0d753a410b255f3fc8e0b6098b08f367c285e6cbb8c03c1b852",
+    "baseLibrarySha256": "639e308dabfc7756a93fe448c75e236dd45e0667ec1b507be6ad48264b6fffcf",
+    "variants": {
+      "alignedMiddleWithEarlyTail": {
+        "candidateSha256": "a4417cabb52006bc0e6e14bf00ae346c2dee696e1b89f1c57995aaba00886415",
+        "machineCode": {
+          "codeSize": 812,
+          "oneEarlyEdgeLoadStore": true,
+          "headAndInteriorLoadsBeforeRemainingStores": 32,
+          "remainingStores": 32,
+          "noVectorStackTraffic": true,
+          "placementRoles": [
+            {
+              "placement": 0,
+              "swapped": false,
+              "distance": 2736,
+              "earlyEdgeOutsideSourceModuloPage": false,
+              "meanSavedNs": -35.6844482421875
+            },
+            {
+              "placement": 0,
+              "swapped": true,
+              "distance": 2960,
+              "earlyEdgeOutsideSourceModuloPage": false,
+              "meanSavedNs": 9.516700744628906
+            },
+            {
+              "placement": 1,
+              "swapped": false,
+              "distance": 880,
+              "earlyEdgeOutsideSourceModuloPage": true,
+              "meanSavedNs": -58.734336853027344
+            },
+            {
+              "placement": 1,
+              "swapped": true,
+              "distance": 720,
+              "earlyEdgeOutsideSourceModuloPage": true,
+              "meanSavedNs": -11.427978515625
+            },
+            {
+              "placement": 2,
+              "swapped": false,
+              "distance": 880,
+              "earlyEdgeOutsideSourceModuloPage": true,
+              "meanSavedNs": -1.378204345703125
+            },
+            {
+              "placement": 2,
+              "swapped": true,
+              "distance": 720,
+              "earlyEdgeOutsideSourceModuloPage": true,
+              "meanSavedNs": -25.259498596191406
+            },
+            {
+              "placement": 3,
+              "swapped": false,
+              "distance": 880,
+              "earlyEdgeOutsideSourceModuloPage": true,
+              "meanSavedNs": -32.569297790527344
+            },
+            {
+              "placement": 3,
+              "swapped": true,
+              "distance": 720,
+              "earlyEdgeOutsideSourceModuloPage": true,
+              "meanSavedNs": -12.144775390625
+            }
+          ],
+          "rolesWithoutModeledOverlap": 6,
+          "observedDistances": [
+            720,
+            880,
+            2736,
+            2960
+          ]
+        },
+        "meanSavedNs": -20.960229873657227,
+        "perPlacementSavedNs": [
+          -13.083873748779297,
+          -35.08115768432617,
+          -13.318851470947266,
+          -22.357036590576172
+        ],
+        "originalNormalAndScalarExact": true
+      },
+      "halfGroupsFromTwoRows": {
+        "candidateSha256": "8a9d6d6fe77792743245ff79a7adc4ffdd666e0beb60d96276bc29760b280355",
+        "machineCode": {
+          "codeSize": 806,
+          "loadsBeforeFirstStore": 32,
+          "storesAfterLastLoad": 32,
+          "noVectorStackTraffic": true
+        },
+        "meanSavedNs": -98.3259506225586,
+        "perPlacementSavedNs": [
+          -82.42725372314453,
+          -88.4627799987793,
+          -79.13249588012695,
+          -143.2812728881836
+        ],
+        "originalNormalAndScalarExact": true
+      }
+    },
+    "matchedBackings": 4,
+    "operationsPerSubject": 65536,
+    "rolesPerBacking": 2,
+    "ordersPerRole": 2,
+    "allQuietGuardsPassed": true,
+    "allocatedBytes": 0,
+    "scoredCaptures": 0,
+    "productionChanged": false,
+    "raw": {
+      "file": "word-snapshot-alignment-and-pairing-trials.tar.xz",
+      "bytes": 434220,
+      "sha256": "8083296c46b5b6bee713eee1332fe98d4829df08db75236c42f7fc7121c1b9b7",
+      "allMembersVerified": true,
+      "members": 46,
+      "directory": "tmp/frp1461",
+      "mirrored": true
+    }
   }
 }
