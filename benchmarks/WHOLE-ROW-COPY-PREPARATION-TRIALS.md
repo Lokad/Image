@@ -1244,3 +1244,11 @@ Linux covers AVX-512 and the portable route. The newer package remains
 private and leads both byte investigations. Independent confirmation must
 keep the existing confidence and complete-operation gates.
 [Replay archives and exact identities](copy-vector-width-trials-evidence.json)
+
+Keeping the alignment lead native-sized removes two sign extensions per row
+and yields a 398-byte body. The four-backing screen saves 9.4 ns clipped and
+12.6 ns separate against the 392-byte candidate at 0 B/op. Two clipped backing
+pairs are adverse and all four separate pairs improve. The screen preserves
+the original normal/scalar exactness and ownership checks. Both quiet guards
+passed. The separate result is a lead pending independent evidence. The
+392-byte private package remains the confirmed complete-operation candidate.
