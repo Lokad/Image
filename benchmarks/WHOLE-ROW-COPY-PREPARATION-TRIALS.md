@@ -1202,3 +1202,45 @@ A follow-up inlined the address phase calculation and used the original
 loop for cancelable calls. The clipped preflight passed. Its JIT emitted a
 948-byte MinOpts body with vector stack traffic, so the variant stopped before
 timing. [Exact identities, receipts and replay archive](copy-vector-width-trials-evidence.json)
+
+## Shared backing comparison and native-sized row steps
+
+The current package, checked-footprint candidate and frozen FFmpeg plane-copy
+adapter run on the same eight .NET-owned backing pairs. Each pair exercises
+both source/canvas assignments and all six execution orders. The capture
+retains all 288 observations at 65,536 operations each, with address pins and
+canvas resets outside timing. The candidate saves 52.7 ns clipped and 49.3 ns
+separate versus the current package. It still trails FFmpeg by 22.4 and
+21.6 ns, respectively. All eight pairs show a positive residual for each case.
+These paired diagnostics control placement and maintain the original operations.
+Standalone costs still come from the independently owned-buffer comparison.
+
+The first diagnostic passed exact-output checks but failed the post-run idle
+guard. The VM journal and system log were repeatedly reporting write failures
+on a full root filesystem. Moving 53 byte-verified duplicate transfer
+archives to temporary memory-backed storage recovered 1.61 GB, with persistent
+Windows copies and the original VM paths preserved. The accepted diagnostic
+passed both idle guards. The archive retains the rejected capture and all guard
+records.
+
+The follow-up advances the checked row references with native-sized signed
+steps. The footprint proof also establishes that rows of at least 512 bytes
+always enter the first middle transfer, so the loop enters directly. The JIT
+body shrinks from 419 to 392 bytes with no vector spills. The eight-pair screen
+saves a further 36.3 ns clipped and 26.7 ns separate against the earlier
+candidate. The paired 99.9% intervals are 0.968127–0.995271 and
+0.962911–1.011083. Both allocations remain 0 B/op.
+
+| Complete borrowed operation | Private package / FFmpeg | Conservative ratio interval | Status |
+| --- | ---: | ---: | --- |
+| Clipped RGBA8 | 1.875177 / 1.850992 µs | 1.002333–1.021830 | Gap |
+| Separate RGBA8 | 1.894560 / 1.918329 µs | 0.973344–1.001940 | Uncertain |
+
+The standalone runs use the actual private Release package `9c70d341`,
+the original reference, all original actuals and both passing idle guards.
+The same DLL passes 282 exact and canary checks and rejects nine invalid
+footprints per mode on Windows and Linux, with precancellation verified.
+Linux covers AVX-512 and the portable route. The newer package remains
+private and leads both byte investigations. Independent confirmation must
+keep the existing confidence and complete-operation gates.
+[Replay archives and exact identities](copy-vector-width-trials-evidence.json)
