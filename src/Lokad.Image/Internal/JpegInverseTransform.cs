@@ -20,6 +20,10 @@ internal static class JpegInverseTransform
     private static readonly Vector512<short> Column23 = BuildColumnPair(2);
     private static readonly Vector512<short> Column45 = BuildColumnPair(4);
     private static readonly Vector512<short> Column67 = BuildColumnPair(6);
+    private static readonly Vector512<int> EvenColumn01 = BuildEvenColumnPair(0);
+    private static readonly Vector512<int> EvenColumn23 = BuildEvenColumnPair(2);
+    private static readonly Vector512<int> EvenColumn45 = BuildEvenColumnPair(4);
+    private static readonly Vector512<int> EvenColumn67 = BuildEvenColumnPair(6);
 
     private static Vector512<short> BuildColumnPair(int row)
     {
@@ -27,6 +31,13 @@ internal static class JpegInverseTransform
         // explicitly negated odd-frequency weight in the lower half.
         int Odd(int y) => y < 4 ? Kernel[8 + y] : -Kernel[8 + 7 - y];
         return Vector512.Create(PairWeights(Kernel[0], Odd(row)), PairWeights(Kernel[0], Odd(row + 1)));
+    }
+
+    private static Vector512<int> BuildEvenColumnPair(int row)
+    {
+        // The second vertical frequency preserves its sign under reflection.
+        int Weight(int y) => Kernel[16 + (y < 4 ? y : 7 - y)];
+        return Vector512.Create(Vector256.Create(Weight(row)), Vector256.Create(Weight(row + 1)));
     }
 
     private static Vector256<short> BuildRowPair(int frequency)
@@ -71,9 +82,7 @@ internal static class JpegInverseTransform
         {
             // Both matrix passes are constant. Preserve the row word wrap
             // and the column's word bias before its widened multiplication.
-            var row = unchecked((short)(input[0] * 8));
-            var biased = unchecked((short)(row + 32));
-            pixels.Fill((byte)Math.Clamp((biased * Kernel[0]) >> 20, 0, 255));
+            pixels.Fill(ConstantSample(input[0]));
             return;
         }
         if (Avx2.IsSupported)
@@ -108,6 +117,16 @@ internal static class JpegInverseTransform
                 sum = unchecked(sum + rows[v * 8 + x] * Kernel[v * 8 + y]);
             pixels[y * 8 + x] = (byte)Math.Clamp(sum >> 20, 0, 255);
         }
+    }
+
+    internal static byte ConstantSample(int dc, ushort quantizer)
+        => ConstantSample((short)Math.Clamp((long)dc * quantizer + 1024, short.MinValue, short.MaxValue));
+
+    private static byte ConstantSample(short shiftedDc)
+    {
+        var row = unchecked((short)(shiftedDc * 8));
+        var biased = unchecked((short)(row + 32));
+        return (byte)Math.Clamp((biased * Kernel[0]) >> 20, 0, 255);
     }
 
     // The caller validates complete 64-sample blocks. AC only retains the low
@@ -196,9 +215,10 @@ internal static class JpegInverseTransform
     {
         var twoLowRows = (support >> 16) == 0;
         var horizontal = (support >> 8) == 0;
+        var threeLowRows = Avx512BW.IsSupported && (support >> 24) == 0;
         // With only horizontal support, every later row transforms to zero.
         // Do not materialize/read an all-zero second row just to rediscover it.
-        var rowCount = horizontal ? 1 : twoLowRows ? 2 : 8;
+        var rowCount = horizontal ? 1 : twoLowRows ? 2 : threeLowRows ? 3 : 8;
         for (var y = 0; y < rowCount; y++)
         {
             var row = input.Slice(y * 8, 8);
@@ -253,6 +273,12 @@ internal static class JpegInverseTransform
             }
             return;
         }
+        if (threeLowRows)
+        {
+            var second = MemoryMarshal.Read<Vector128<short>>(MemoryMarshal.AsBytes(rows.Slice(8, 8)));
+            StoreThreeRowColumnsAvx512(first, second, WidenRow(rows, 2), pixels);
+            return;
+        }
         var r0 = Avx2.ConvertToVector256Int32(Sse2.Add(first, Vector128.Create((short)32)));
         var r4 = WidenRow(rows, 4);
         var p26 = PairRows(rows, 2, 6);
@@ -289,6 +315,36 @@ internal static class JpegInverseTransform
         var b = Avx512F.ShiftRightArithmetic(Avx512BW.MultiplyAddAdjacent(pairs, Column23), 20);
         var c = Avx512F.ShiftRightArithmetic(Avx512BW.MultiplyAddAdjacent(pairs, Column45), 20);
         var d = Avx512F.ShiftRightArithmetic(Avx512BW.MultiplyAddAdjacent(pairs, Column67), 20);
+        StoreColumnPairs(a, b, c, d, pixels);
+    }
+
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static void StoreThreeRowColumnsAvx512(Vector128<short> first, Vector128<short> second,
+        Vector256<int> third, Span<byte> pixels)
+    {
+        first = Sse2.Add(first, Vector128.Create((short)32));
+        var pair = Vector256.Create(Sse2.UnpackLow(first, second), Sse2.UnpackHigh(first, second));
+        var pairs = Vector512.Create(pair, pair);
+        var even = Vector512.Create(third, third);
+        // Reflected first-frequency weights are already in Column01 through
+        // Column67. The third row adds only an even term before the shift.
+        var a = Sum(pairs, Column01, even, EvenColumn01);
+        var b = Sum(pairs, Column23, even, EvenColumn23);
+        var c = Sum(pairs, Column45, even, EvenColumn45);
+        var d = Sum(pairs, Column67, even, EvenColumn67);
+        StoreColumnPairs(a, b, c, d, pixels);
+    }
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static Vector512<int> Sum(Vector512<short> pairs, Vector512<short> weights,
+        Vector512<int> even, Vector512<int> evenWeights)
+        => Avx512F.ShiftRightArithmetic(Avx512F.Add(Avx512BW.MultiplyAddAdjacent(pairs, weights),
+            Avx512F.MultiplyLow(even, evenWeights)), 20);
+
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private static void StoreColumnPairs(Vector512<int> a, Vector512<int> b, Vector512<int> c, Vector512<int> d,
+        Span<byte> pixels)
+    {
         // Shifted Int32 values are within [-2048,2047], so narrowing to words
         // is exact. The unsigned saturating pack performs final byte clipping.
         var top = Vector512.Narrow(a, b);

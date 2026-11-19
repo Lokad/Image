@@ -264,8 +264,8 @@ public sealed partial class JpegBaselineBlockTests
             var reader = new JpegEntropyReader(input, 0, context); var reference = new JpegEntropyReader(input, 0, context);
             if (phase != 0) { reader.ReadBits(phase); reference.ReadBits(phase); }
             var predictor = 777; var expectedPredictor = predictor; var coefficient = 1;
-            if (tables.Dc.TryReadPlainBaselineBlock(ref reader, tables.Ac, actual.AsSpan(1, 64), ref predictor, ref coefficient))
-            { fused++; Assert.Equal(64, coefficient); }
+            if (tables.Dc.TryReadPlainBaselineBlock(ref reader, tables.Ac, actual.AsSpan(1, 64), ref predictor, ref coefficient, out var dcOnly))
+            { fused++; Assert.Equal(64, coefficient); Assert.True(dcOnly); }
             else JpegDecoder.ReadBaselineBlock(ref reader, actual.AsSpan(1, 64), ref predictor, tables.Dc, tables.Ac, context);
             ScalarBaseline(ref reference, expected.AsSpan(1, 64), ref expectedPredictor, tables.Dc, tables.Ac, context);
             Assert.Equal(expected, actual); Assert.Equal(expectedPredictor, predictor); Assert.Equal(reference.Position, reader.Position);
@@ -284,7 +284,8 @@ public sealed partial class JpegBaselineBlockTests
         var input = Stuff("001100000000" + new string('0', 64)); var original = input.ToArray();
         var reader = new JpegEntropyReader(input, 0, context); var storage = Enumerable.Repeat(12345, 66).ToArray();
         var predictor = 17; var coefficient = 1;
-        Assert.True(dc.TryReadPlainBaselineBlock(ref reader, ac, storage.AsSpan(1, 64), ref predictor, ref coefficient));
+        Assert.True(dc.TryReadPlainBaselineBlock(ref reader, ac, storage.AsSpan(1, 64), ref predictor, ref coefficient, out var dcOnly));
+        Assert.False(dcOnly);
         Assert.Equal(2, coefficient); Assert.Equal(17, predictor); Assert.Equal(1, reader.Position);
         Assert.Equal(17, storage[1]); Assert.Equal(1, storage[1 + JpegTransform.Zigzag[1]]);
         for (var i = 0; i < storage.Length; i++)
@@ -310,7 +311,7 @@ public sealed partial class JpegBaselineBlockTests
             using var context = new OperationContext(ImageLimits.Default, cancelable ? cancellation.Token : default);
             var reader = new JpegEntropyReader(input, 0, context); var reference = new JpegEntropyReader(input, 0, context);
             var storage = Enumerable.Repeat(12345, 66).ToArray(); var predictor = initialPredictor; var coefficient = 1;
-            Assert.False(dc.TryReadPlainBaselineBlock(ref reader, tables.Ac, storage.AsSpan(1, 64), ref predictor, ref coefficient));
+            Assert.False(dc.TryReadPlainBaselineBlock(ref reader, tables.Ac, storage.AsSpan(1, 64), ref predictor, ref coefficient, out _));
             Assert.Equal(initialPredictor, predictor); Assert.Equal(1, coefficient); Assert.Equal(0, reader.Position);
             Assert.All(storage, value => Assert.Equal(12345, value));
             Assert.Equal(reference.ReadBits(4), reader.ReadBits(4)); Assert.Equal(reference.Position, reader.Position);
@@ -360,13 +361,13 @@ public sealed partial class JpegBaselineBlockTests
         for (var i = 0; i < 16; i++)
         {
             var warm = new JpegEntropyReader(input, 0, context); coefficient = 1;
-            Assert.True(tables.Dc.TryReadPlainBaselineBlock(ref warm, tables.Ac, block, ref predictor, ref coefficient));
+            Assert.True(tables.Dc.TryReadPlainBaselineBlock(ref warm, tables.Ac, block, ref predictor, ref coefficient, out _));
         }
         var allocated = GC.GetAllocatedBytesForCurrentThread(); var complete = 0;
         for (var i = 0; i < 1000; i++)
         {
             var reader = new JpegEntropyReader(input, 0, context); coefficient = 1;
-            if (tables.Dc.TryReadPlainBaselineBlock(ref reader, tables.Ac, block, ref predictor, ref coefficient) && coefficient == 64) complete++;
+            if (tables.Dc.TryReadPlainBaselineBlock(ref reader, tables.Ac, block, ref predictor, ref coefficient, out _) && coefficient == 64) complete++;
         }
         allocated = GC.GetAllocatedBytesForCurrentThread() - allocated;
         Assert.Equal(1000, complete); Assert.Equal(0, allocated); Assert.Equal(0, predictor);
@@ -458,7 +459,7 @@ public sealed partial class JpegBaselineBlockTests
                     if (fast)
                     {
                         var coefficient = 1;
-                        Assert.True(tables.Dc.TryReadPlainBaselineBlock(ref reader, tables.Ac, block.AsSpan(1, 64), ref predictor, ref coefficient));
+                        Assert.True(tables.Dc.TryReadPlainBaselineBlock(ref reader, tables.Ac, block.AsSpan(1, 64), ref predictor, ref coefficient, out _));
                         Assert.Equal(64, coefficient);
                     }
                     else ScalarBaseline(ref reader, block.AsSpan(1, 64), ref predictor, tables.Dc, tables.Ac, context);

@@ -20,7 +20,7 @@ public sealed partial class JpegBaselineBlockTests
             if (phase != 0) { reader.ReadBits(phase); original.ReadBits(phase); }
             var predictor = 17; var expectedPredictor = 17; var coefficient = 1;
             ScalarBaseline(ref original, expected.AsSpan(1, 64), ref expectedPredictor, dc, ac, context);
-            Assert.True(dc.TryReadPlainBaselineBlock(ref reader, ac, actual.AsSpan(1, 64), ref predictor, ref coefficient));
+            Assert.True(dc.TryReadPlainBaselineBlock(ref reader, ac, actual.AsSpan(1, 64), ref predictor, ref coefficient, out _));
             Assert.Equal(64, coefficient); Assert.Equal(expected, actual);
             Assert.Equal(expectedPredictor, predictor); Assert.Equal(original.Position, reader.Position);
             for (var count = 1; count <= 16; count++)

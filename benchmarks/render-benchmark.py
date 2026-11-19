@@ -3808,6 +3808,11 @@ costs. The complete final-package refresh remains outstanding."""
         ('allActualsRetained', 'allOriginalGatesPassed', 'quietGuardsPassed', 'originalGeneratedLoopsAndConsumer'))
     assert not sparse_adjacent['forceGcBetweenIterations']
     jpeg_overrides = {'CmykAdobeAc': horizontal_adjacent, 'CmykAdobeSparse2D': sparse_adjacent}
+    jpeg_reconstruction = json.loads((ROOT / 'benchmarks/jpeg-cmyk-caller-output-evidence.json').read_text(encoding='utf-8'))
+    assert jpeg_reconstruction['archiveMembersVerifiedOnBothOs']
+    assert jpeg_reconstruction['qualification']['sameActualPackageBothOs']
+    reconstruction_cases = jpeg_reconstruction['cases']
+    assert len(reconstruction_cases) == 16 and all(c['upper'] <= 1 for c in reconstruction_cases.values())
     for name, label in (('CmykAdobeAc', 'JPEG horizontal-only CMYK, resident decode'),
                         ('CmykAdobeSparse2D', 'JPEG CMYK sparse-2D, resident decode'),
                         ('ProgressiveGray', 'JPEG progressive grayscale, resident decode'),
@@ -3819,18 +3824,18 @@ costs. The complete final-package refresh remains outstanding."""
                         ('Decode410', 'JPEG 4:1:0, resident decode'),
                         ('CmykAdobeGeneral', 'JPEG dense CMYK, resident decode'),
                         ('Progressive420', 'JPEG progressive420, resident decode'),
-                        ('Progressive422', 'JPEG progressive422, resident decode')):
-        c = jpeg_cases[name]
+                        ('Progressive422', 'JPEG progressive422, resident decode'),
+                        ('CmykCaller', 'JPEG DC-only, caller CMYK decode'),
+                        ('Ycck420CallerRgb', 'JPEG YCCK420, caller RGB24 decode')):
         if name in jpeg_overrides:
             current = jpeg_overrides[name]
-            assert current['inputSha256'] == c['inputSha256']
-            assert current['managedOutputSha256'] == c['outputSha256']
-            assert current['nativeOutputSha256'] == c['referenceOutputSha256']
-            c = current
+            assert current['inputSha256'] == jpeg_cases[name]['inputSha256']
+            assert current['managedOutputSha256'] == jpeg_cases[name]['outputSha256']
+            assert current['nativeOutputSha256'] == jpeg_cases[name]['referenceOutputSha256']
+        c = reconstruction_cases[name]
         heading = f'| {label} † |'
         old, = (line for line in codecs.splitlines() if line.startswith(heading))
-        status = f' ({png_status[c["status"]]})' if c['status'] != 'pass' else ''
-        result = (f'| {label}{status} † | {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | '
+        result = (f'{heading} {c["managedUs"]:,.2f} | {c["nativeUs"]:,.2f} | '
                   f'{c["ratio"]:.3f} / {c["upper"]:.6f} | {c["allocatedBytes"]:,} | — |')
         codecs = codecs.replace(old, result)
     label = 'JPEG Adobe CMYK horizontal AC / FFmpeg fresh contexts †'
@@ -3841,7 +3846,13 @@ costs. The complete final-package refresh remains outstanding."""
               f'{fresh_cmyk["ratio"]:.3f} / {fresh_cmyk["upper"]:.6f} | '
               f'{fresh_cmyk["allocatedBytes"]:,} | {fresh_status[fresh_cmyk["status"]]} |')
     read_table = read_table.replace(old, result)
-    jpeg_passes = sum(c['status'] == 'pass' for c in (jpeg_cases | jpeg_overrides).values())
+    for case, label in (('ValidateJpegBaseline420', 'Validate JPEG baseline420, span'),
+                        ('ValidateJpegProgressive420', 'Validate JPEG progressive420, span')):
+        c = reconstruction_cases[case]
+        heading = f'| {label} † |'
+        old, = (line for line in read_table.splitlines() if line.startswith(heading))
+        read_table = read_table.replace(old, f'{heading} {c["managedUs"]:,.3f} | {c["nativeUs"]:,.3f} | '
+                                        f'{c["ratio"]:.3f} / {c["upper"]:.6f} | {c["allocatedBytes"]:,} | Confirmed pass |')
     displayed_count = sum(len(table.splitlines()) - 2 for table in (codecs, editing, read_table))
     return f"""# Lokad.Image benchmarks
 
@@ -4064,15 +4075,13 @@ Windows/Linux each pass **6,742 full/live**, **163 internal/15 public** focused
 normal/scalar/AVX512-disabled checks, the three named resize-storage suites and
 the SAME actual package/all three examples, including one-axis asynchronous
 survivors. Allocation, retained admission and physical peaks stay distinct.
-[Horizontal JPEG preparation](../benchmarks/JPEG-HORIZONTAL-PREPARATION.md) saves
-**4.03% / 16.92 µs** in controlled complete-decode pairs, with unchanged **20,944 B/op**.
-The [current-package JPEG measurements](../benchmarks/JPEG-DECODE-CURRENT-PACKAGE.md)
-cover all **{len(jpeg_cases)}** original owned-output cases affected by the shared
-output pool. **{jpeg_passes}** pass the conservative gate. Adjacent native sampling
-confirms horizontal and sparse-2D CMYK. Their earlier adverse and uncertain
-captures remain available.
-The 13 displayed comparisons use these timings and allocations. Caller-buffer
-and coding-only paths keep their source-valid evidence.
+[Current JPEG reconstruction](../benchmarks/JPEG-CMYK-CALLER-OUTPUT.md) closes
+the original DC-only caller and resident sparse CMYK gaps. Fourteen original
+decode comparisons and both JPEG coding validators pass on the same actual
+package. Caller CMYK allocates **{reconstruction_cases['CmykCaller']['allocatedBytes']:,} B/op**.
+The supplemental nonconstant control saves about **549 KB/op**. The remaining
+owned JPEG views retain their [historical timings](../benchmarks/JPEG-DECODE-CURRENT-PACKAGE.md)
+pending the final immutable-package refresh.
 
 Every operation runs sequentially on the dedicated quiet VM, pinned to one CPU,
 with .NET 10, optimized JIT and nonconcurrent workstation GC. Startup, transport,

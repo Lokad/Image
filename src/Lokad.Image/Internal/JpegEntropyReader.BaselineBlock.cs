@@ -9,8 +9,9 @@ internal ref partial struct JpegEntropyReader
         => ReadCancelableBaselineWindow(dcCodes, ac, block, ref predictor, ref coefficient);
 
     internal bool TryReadPlainBaselineBlock(ReadOnlySpan<ushort> dcCodes, JpegHuffman ac,
-        scoped Span<int> block, ref int predictor, ref int coefficient)
+        scoped Span<int> block, ref int predictor, ref int coefficient, out bool dcOnly)
     {
+        dcOnly = false;
         if (context.Cancellation.CanBeCanceled || data.Length - position < 4) return false;
         var word = BinaryPrimitives.ReadUInt32BigEndian(data.Slice(position, 4));
         if ((unchecked(~word - 0x01010101u) & word & 0x80808080u) != 0) return false;
@@ -61,6 +62,7 @@ internal ref partial struct JpegEntropyReader
                     var consumed = (int)(pair & 15);
                     if ((pair & 0x4000) != 0)
                     {
+                        dcOnly = k == 1;
                         cache <<= consumed; pending -= consumed; k = 64; break;
                     }
                     var index = k + (int)((pair >> 4) & 15);
@@ -73,7 +75,11 @@ internal ref partial struct JpegEntropyReader
             var packed = ac.LookupBaselinePrefix(cache, pending); var count = packed & 15;
             var symbol = packed >> 4; var size = symbol & 15; var run = symbol >> 4;
             if (count == 0) break;
-            if (symbol == 0) { cache <<= count; pending -= count; k = 64; break; }
+            if (symbol == 0)
+            {
+                dcOnly = k == 1;
+                cache <<= count; pending -= count; k = 64; break;
+            }
             // T.81 F.2.2: leave zero runs, long codes and syntax failures
             // to the original traversal before consuming their prefix.
             if (size is < 1 or > 10 || run >= 64 - k) break;

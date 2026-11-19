@@ -6,9 +6,14 @@ internal static class ContainerHeaders
 {
     public static ImageInfo Jpeg(ReadOnlySpan<byte> data, OperationContext context,
         ImageMetadataPolicy metadataPolicy = ImageMetadataPolicy.Strict)
+        => Jpeg(data, context, metadataPolicy, out _);
+
+    internal static ImageInfo Jpeg(ReadOnlySpan<byte> data, OperationContext context,
+        ImageMetadataPolicy metadataPolicy, out bool singleRawCmykScan)
     {
         int position = 2, items = 0, metadata = 0, width = 0, height = 0;
         bool frame = false, scan = false, exif = false, scanSeen = false;
+        var rawBaseline = true;
         var orientation = ImageOrientation.Normal;
         var source = new JpegSourceMetadata();
         while (position < data.Length)
@@ -38,8 +43,12 @@ internal static class ContainerHeaders
             if (marker == 0xD9)
             {
                 if (!frame || !scanSeen || position != data.Length) throw new ImageDataException("Invalid JPEG end or trailing bytes.");
+                singleRawCmykScan = rawBaseline;
                 return source.Info(width, height, orientation);
             }
+            // A caller destination can hold completed MCUs from a single
+            // final scan whose raw bytes already represent canonical ink.
+            if (scanSeen || marker == 0xEE) rawBaseline = false;
             if (marker is 0 or 0xD8 or 0x01 || position > data.Length - 2)
                 throw new ImageDataException("Invalid JPEG marker sequence.");
             var length = BinaryPrimitives.ReadUInt16BigEndian(data[position..]);
@@ -57,6 +66,7 @@ internal static class ContainerHeaders
                 if (components is not (1 or 3 or 4)) throw new UnsupportedImageException(UnsupportedImageFeature.ComponentLayout, "JPEG component layout is not supported.", ImageFormat.Jpeg);
                 if (payload.Length != 6 + components * 3 || width == 0 || height == 0)
                     throw new ImageDataException("Invalid JPEG frame dimensions or components.");
+                rawBaseline &= marker == 0xC0 && components == 4;
                 source.Frame(components, payload[6..]);
                 context.PixelBytes(width, height, 8); frame = true;
             }
@@ -64,6 +74,7 @@ internal static class ContainerHeaders
             {
                 if (!frame || payload.Length < 4 || payload[0] == 0 || payload.Length != 4 + 2 * payload[0])
                     throw new ImageDataException("Invalid JPEG scan header.");
+                rawBaseline &= payload[0] == 4;
                 scan = true; scanSeen = true;
             }
             else if (marker is >= 0xE0 and <= 0xEF || marker == 0xFE)

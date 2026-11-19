@@ -114,8 +114,8 @@ internal sealed partial class JpegHuffman
         => reader.ReadSpectralAcWindow(shortCodes, block, ref coefficient, end, low);
 
     internal bool TryReadPlainBaselineBlock(ref JpegEntropyReader reader, JpegHuffman ac,
-        scoped Span<int> block, ref int predictor, ref int coefficient)
-        => reader.TryReadPlainBaselineBlock(shortCodes, ac, block, ref predictor, ref coefficient);
+        scoped Span<int> block, ref int predictor, ref int coefficient, out bool dcOnly)
+        => reader.TryReadPlainBaselineBlock(shortCodes, ac, block, ref predictor, ref coefficient, out dcOnly);
 
     internal bool TryReadCancelableBaselineBlock(ref JpegEntropyReader reader, JpegHuffman ac,
         scoped Span<int> block, ref int predictor, ref int coefficient)

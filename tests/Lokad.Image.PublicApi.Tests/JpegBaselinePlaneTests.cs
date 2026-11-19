@@ -8,16 +8,17 @@ public sealed class JpegBaselinePlaneTests
     private static byte[] Packet() => AuthoredJpegCompatibility.Create(Width, Height, [20, 40, 60, 80]);
 
     [Fact]
-    public void CallerBaselineFitsBytePlanesAndBorrowsItsInputDestinationAndRoot()
+    public void CallerBaselineFitsBoundedScratchAndBorrowsItsInputDestinationAndRoot()
     {
         var data = Packet(); var source = data.ToArray(); var output = new byte[Width * Height * 4];
-        using var root = new TestMemoryBudget(768 * 1024);
-        var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = 1400 * 1024 };
+        const int scratch = 64 * 1024;
+        using var root = new TestMemoryBudget(scratch);
+        var limits = new ImageLimits { MemoryBudget = root, MaxWorkingBytes = data.Length + output.Length + scratch };
         var info = ImageCodec.DecodeJpeg(data, output, JpegSampleFormat.Cmyk, options: new() { Limits = limits });
         Assert.Equal((Width, Height), (info.Width, info.Height));
         for (var i = 0; i < output.Length; i += 4) Assert.Equal(new byte[] { 20, 40, 60, 80 }, output.AsSpan(i, 4).ToArray());
-        // Four padded byte planes fit; four full int planes alone need2196480B.
-        Assert.InRange(root.Peak, 549120, 768 * 1024);
+        // The caller owns the destination and four padded planes would need 549,120 bytes.
+        Assert.InRange(root.Peak, 1, scratch);
         Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed); Assert.Equal(source, data);
     }
 
@@ -40,19 +41,20 @@ public sealed class JpegBaselinePlaneTests
 
     [Theory]
     [InlineData(false)] [InlineData(true)]
-    public void PlaneAdmissionRefusalOrCancellationCleansUpBeforeCallerPublication(bool cancel)
+    public void ScratchAdmissionRefusalOrCancellationCleansUpBeforeCallerPublication(bool cancel)
     {
         var data = Packet(); var source = data.ToArray();
         var output = Enumerable.Repeat((byte)165, Width * Height * 4).ToArray();
-        using var root = new TestMemoryBudget(768 * 1024);
-        using var token = new CancellationTokenSource(); var armed = false;
-        root.Admitted = bytes =>
-        {
-            if (armed || bytes < 100000) return;
-            armed = true;
-            if (cancel) token.Cancel();
-            else root.RefuseAtGrowth = root.GrowthAttempts + 1;
-        };
+        using var token = new CancellationTokenSource();
+        using var reference = new TestMemoryBudget(64 * 1024);
+        var referenceOptions = new JpegDecodeOptions { Limits = new() { MemoryBudget = reference } };
+        ImageCodec.DecodeJpeg(data, new byte[output.Length], JpegSampleFormat.Cmyk, options: referenceOptions,
+            cancellationToken: cancel ? token.Token : default);
+        var admission = reference.GrowthAttempts;
+        Assert.True(admission > 1);
+        using var root = new TestMemoryBudget(64 * 1024);
+        if (cancel) root.Admitted = _ => { if (root.GrowthAttempts == admission) token.Cancel(); };
+        else root.RefuseAtGrowth = admission;
         var options = new JpegDecodeOptions { Limits = new() { MemoryBudget = root } };
         if (cancel)
         {
@@ -65,7 +67,7 @@ public sealed class JpegBaselinePlaneTests
             Assert.Equal((ImageLimitKind.WorkingBytes, ImageLimitScope.SharedBudget), (error.Limit, error.Scope));
             Assert.Equal(1, root.Refusals);
         }
-        Assert.True(armed); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+        Assert.Equal(admission, root.GrowthAttempts); Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
         Assert.All(output, value => Assert.Equal(165, value)); Assert.Equal(source, data);
         root.Admitted = null; root.RefuseAtGrowth = 0;
         ImageCodec.DecodeJpeg(data, output, JpegSampleFormat.Cmyk, options: options);
@@ -87,6 +89,58 @@ public sealed class JpegBaselinePlaneTests
             options: new() { Limits = new() { MemoryBudget = root } }));
         Assert.InRange(root.Peak, 549120, 768 * 1024); Assert.Equal(0, root.Bytes);
         Assert.All(output, value => Assert.Equal(165, value)); Assert.False(root.IsDisposed);
+    }
+
+    [Fact]
+    public void TruncatedCallerScanOnlyWritesCompletedPixelsInsideTheDestination()
+    {
+        const int width = 17, height = 9, stride = width * 4 + 3;
+        byte[] ink = [20, 40, 60, 80];
+        var full = AuthoredJpegCompatibility.Create(width, height, ink, restart: 1);
+        var firstRestart = full.AsSpan().IndexOf(new byte[] { 255, 208 });
+        Assert.True(firstRestart > 0);
+        var data = full[..firstRestart].Concat(new byte[] { 255, 217 }).ToArray();
+        var output = Enumerable.Repeat((byte)165, stride * height + 7).ToArray();
+        using var root = new TestMemoryBudget(64 * 1024);
+        Assert.Throws<ImageDataException>(() => ImageCodec.DecodeJpeg(data, output, JpegSampleFormat.Cmyk,
+            stride, new() { Limits = new() { MemoryBudget = root } }));
+        for (var y = 0; y < height; y++)
+        {
+            var row = output.AsSpan(y * stride, stride);
+            for (var x = 0; x < width; x++)
+            {
+                var pixel = row.Slice(x * 4, 4);
+                Assert.True(pixel.SequenceEqual(ink) && x < 8 && y < 8 || !pixel.ContainsAnyExcept((byte)165));
+            }
+            Assert.False(row[(width * 4)..].ContainsAnyExcept((byte)165));
+        }
+        Assert.False(output.AsSpan(stride * height).ContainsAnyExcept((byte)165));
+        Assert.Equal(0, root.Bytes); Assert.False(root.IsDisposed);
+    }
+
+    [Fact]
+    public void CallerMcuPackingMatchesSeparatePlanesForNonconstantBlocks()
+    {
+        const int width = 67, height = 35, stride = width * 4 + 3;
+        byte[] ink = [80, 170, 90, 200];
+        var planarInput = AuthoredJpegCompatibility.Create(width, height, ink, adobe: 0, vary: true, nonzeroAc: true, acTerms: 7);
+        var packedInput = AuthoredJpegCompatibility.Create(width, height, ink, vary: true, nonzeroAc: true, acTerms: 7);
+        var expected = new byte[width * height * 4];
+        ImageCodec.DecodeJpeg(planarInput, expected, JpegSampleFormat.Cmyk,
+            options: new() { CmykInversion = JpegCmykInversion.None });
+        Assert.True(expected[0] != expected[4] || expected[0] != expected[width * 4]);
+        var result = Enumerable.Repeat((byte)165, stride * height + 7).ToArray();
+        using var root = new TestMemoryBudget(64 * 1024);
+        ImageCodec.DecodeJpeg(packedInput, result, JpegSampleFormat.Cmyk, stride,
+            new() { Limits = new() { MemoryBudget = root } });
+        for (var y = 0; y < height; y++)
+        {
+            var row = result.AsSpan(y * stride, stride);
+            Assert.True(row[..(width * 4)].SequenceEqual(expected.AsSpan(y * width * 4, width * 4)));
+            Assert.False(row[(width * 4)..].ContainsAnyExcept((byte)165));
+        }
+        Assert.False(result.AsSpan(stride * height).ContainsAnyExcept((byte)165));
+        Assert.Equal(0, root.Bytes);
     }
 
     [Theory]

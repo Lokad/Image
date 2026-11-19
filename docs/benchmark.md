@@ -281,15 +281,13 @@ Windows/Linux each pass **6,742 full/live**, **163 internal/15 public** focused
 normal/scalar/AVX512-disabled checks, the three named resize-storage suites and
 the SAME actual package/all three examples, including one-axis asynchronous
 survivors. Allocation, retained admission and physical peaks stay distinct.
-[Horizontal JPEG preparation](../benchmarks/JPEG-HORIZONTAL-PREPARATION.md) saves
-**4.03% / 16.92 µs** in controlled complete-decode pairs, with unchanged **20,944 B/op**.
-The [current-package JPEG measurements](../benchmarks/JPEG-DECODE-CURRENT-PACKAGE.md)
-cover all **24** original owned-output cases affected by the shared
-output pool. **24** pass the conservative gate. Adjacent native sampling
-confirms horizontal and sparse-2D CMYK. Their earlier adverse and uncertain
-captures remain available.
-The 13 displayed comparisons use these timings and allocations. Caller-buffer
-and coding-only paths keep their source-valid evidence.
+[Current JPEG reconstruction](../benchmarks/JPEG-CMYK-CALLER-OUTPUT.md) closes
+the original DC-only caller and resident sparse CMYK gaps. Fourteen original
+decode comparisons and both JPEG coding validators pass on the same actual
+package. Caller CMYK allocates **536,377 B/op**.
+The supplemental nonconstant control saves about **549 KB/op**. The remaining
+owned JPEG views retain their [historical timings](../benchmarks/JPEG-DECODE-CURRENT-PACKAGE.md)
+pending the final immutable-package refresh.
 
 Every operation runs sequentially on the dedicated quiet VM, pinned to one CPU,
 with .NET 10, optimized JIT and nonconcurrent workstation GC. Startup, transport,
@@ -450,29 +448,29 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | PNG RGBA16, one-shot Fastest1, live cancelable token † | 17,573.86 | 18,607.98 | 0.944 / 0.954 | 2,432,924 | 968,216 / 968,216 |
 | PNG RGBA16, one-shot Fastest1, forward-only output † | 17,196.47 | 18,607.32 | 0.924 / 0.929 | 2,432,956 | 968,216 / 968,216 |
 | PNG RGBA8 async, one-shot Optimal6, nonseekable output † | 17,544.42 | 18,428.84 | 0.952 / 0.978328 | 877,476 | 210,973 / 210,973 |
-| JPEG baseline420, resident decode † | 718.85 | 1,088.64 | 0.660 / 0.671216 | 258,456 | — |
-| JPEG DC-only, caller CMYK decode † | 322.49 | 331.83 | 0.972 / 0.994 | 1,085,981 | — |
+| JPEG baseline420, resident decode † | 717.11 | 1,014.19 | 0.707 / 0.717551 | 258,479 | — |
+| JPEG DC-only, caller CMYK decode † | 301.99 | 354.79 | 0.851 / 0.864556 | 536,377 | — |
 | VP8L RGBA8, resident decode † | 2,951.16 | 3,269.16 | 0.903 / 0.907616 | 152,728 | — |
 | VP8L RGBA8, fresh seekable Stream decode † | 2,942.95 | 3,283.26 | 0.896 / 0.902094 | 152,824 | — |
 | VP8L palette16 RGBA8, resident decode † | 408.78 | 544.44 | 0.751 / 0.761869 | 288,464 | — |
-| JPEG CMYK sparse-2D, resident decode † | 460.73 | 471.84 | 0.976 / 0.987805 | 20,944 | — |
-| JPEG YCCK420, resident decode † | 460.94 | 778.26 | 0.592 / 0.600071 | 895,562 | — |
-| JPEG 4:1:1, resident decode † | 410.15 | 489.45 | 0.838 / 0.849040 | 219,551 | — |
-| JPEG 4:1:0, resident decode † | 364.25 | 553.58 | 0.658 / 0.669676 | 189,090 | — |
+| JPEG CMYK sparse-2D, resident decode † | 411.77 | 433.60 | 0.950 / 0.963860 | 20,948 | — |
+| JPEG YCCK420, resident decode † | 423.18 | 710.21 | 0.596 / 0.600757 | 895,573 | — |
+| JPEG 4:1:1, resident decode † | 375.82 | 448.42 | 0.838 / 0.850249 | 219,573 | — |
+| JPEG 4:1:0, resident decode † | 336.02 | 508.00 | 0.661 / 0.666266 | 189,110 | — |
 | VP8L RGBA16, including normalization / libwebp exact=1 † | 114,600.56 | 131,281.45 | 0.873 / 0.887 | 5,948,664 | 183,812 / 183,812 |
 | VP8L async, fresh nonseekable output / libwebp exact=1 † | 113,899.00 | 129,908.55 | 0.877 / 0.889992 | 5,949,048 | 183,812 / 183,812 |
 | JPEG caller RGB24 async nonseekable, 420 (parity confirmed) † | 1,469.27 | 1,628.99 | 0.902 / 0.921474 | 309,523 | 52,091 / 52,093 |
 | JPEG RGBA8 async nonseekable, 444 (parity confirmed) † | 3,173.59 | 3,998.09 | 0.794 / 0.829650 | 820,502 | 133,039 / 133,041 |
 | PNG8 decode, two retained images / shared caller root † | 2,652.54 | 2,849.73 | 0.931 / 0.972152 | 1,638,214 | — |
 | JPEG RGBA8 4:2:0, row restart33 (parity confirmed) † | 1,339.28 | 1,609.15 | 0.832 / 0.841 | 151,180 | 58,010 / 58,012 |
-| JPEG dense CMYK, resident decode † | 1,310.33 | 3,113.11 | 0.421 / 0.433833 | 20,944 | — |
-| JPEG horizontal-only CMYK, resident decode † | 412.52 | 425.40 | 0.970 / 0.980020 | 20,948 | — |
-| JPEG YCCK420, caller RGB24 decode † | 438.99 | 604.73 | 0.726 / 0.742 | 762,720 | — |
-| JPEG progressive grayscale, resident decode † | 1,714.69 | 1,845.30 | 0.929 / 0.935937 | 151,432 | — |
-| JPEG progressive420, resident decode † | 1,428.34 | 1,964.55 | 0.727 / 0.744485 | 243,676 | — |
-| JPEG progressive422, resident decode † | 1,817.00 | 2,246.36 | 0.809 / 0.820470 | 315,496 | — |
-| JPEG ordinary progressive444, resident decode † | 2,896.31 | 3,361.26 | 0.862 / 0.868653 | 169,664 | — |
-| JPEG progressive444, live-token resident decode † | 3,276.96 | 3,644.66 | 0.899 / 0.905322 | 169,664 | — |
+| JPEG dense CMYK, resident decode † | 1,270.37 | 3,113.90 | 0.408 / 0.420605 | 20,944 | — |
+| JPEG horizontal-only CMYK, resident decode † | 408.56 | 423.32 | 0.965 / 0.975314 | 20,948 | — |
+| JPEG YCCK420, caller RGB24 decode † | 413.78 | 652.26 | 0.634 / 0.640384 | 762,734 | — |
+| JPEG progressive grayscale, resident decode † | 1,740.75 | 1,851.56 | 0.940 / 0.947429 | 151,471 | — |
+| JPEG progressive420, resident decode † | 1,538.35 | 2,102.63 | 0.732 / 0.741114 | 243,710 | — |
+| JPEG progressive422, resident decode † | 1,948.97 | 2,426.93 | 0.803 / 0.807254 | 315,526 | — |
+| JPEG ordinary progressive444, resident decode † | 3,176.49 | 3,583.19 | 0.886 / 0.895558 | 169,664 | — |
+| JPEG progressive444, live-token resident decode † | 3,048.45 | 3,358.46 | 0.908 / 0.910521 | 169,664 | — |
 
 **Editing**
 
@@ -572,8 +570,8 @@ their [declared scope](codec-parity.md); equal quality numbers are not quality m
 | Validate PNG8, span † | 1,259.842 | 1,507.479 | 0.836 / 0.845441 | 240 | Confirmed pass |
 | Validate PNG16, span † | 2,931.938 | 3,250.048 | 0.902 / 0.910041 | 240 | Confirmed pass |
 | Validate indexed Adam7 19×17, span † | 1.986 | 4.310 | 0.461 / 0.474500 | 792 | Confirmed pass |
-| Validate JPEG baseline420, span † | 483.057 | 674.268 | 0.716 / 0.720 | 10,016 | Confirmed pass |
-| Validate JPEG progressive420, span † | 288.749 | 297.280 | 0.971 / 0.984 | 4,088 | Confirmed pass |
+| Validate JPEG baseline420, span † | 517.549 | 728.596 | 0.710 / 0.718190 | 10,016 | Confirmed pass |
+| Validate JPEG progressive420, span † | 280.533 | 290.355 | 0.966 / 0.971580 | 4,088 | Confirmed pass |
 | Validate VP8L+alpha, span † | 2,314.233 | 3,046.809 | 0.760 / 0.767 | 297,070 | Confirmed pass |
 | Validate VP8+alpha, span † | 4,570.023 | 5,882.986 | 0.777 / 0.787 | 15,600 | Confirmed pass |
 | Validate PNG16, async nonseekable † | 3,007.609 | 3,922.893 | 0.767 / 0.778735 | 360 | Confirmed pass |

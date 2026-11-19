@@ -12,6 +12,7 @@ internal ref partial struct JpegDecoder
     private readonly ReadOnlySpan<byte> data;
     private readonly OperationContext context;
     private readonly ImageInfo info;
+    private readonly bool singleRawCmykScan;
     private readonly ushort[]?[] quantization;
     private readonly byte[] quantizationPrecision;
     private readonly JpegHuffman?[] dcTables;
@@ -36,7 +37,7 @@ internal ref partial struct JpegDecoder
         ImageMetadataPolicy metadataPolicy = ImageMetadataPolicy.Strict)
     {
         this.data = data; this.context = context;
-        info = ContainerHeaders.Jpeg(data, context, metadataPolicy);
+        info = ContainerHeaders.Jpeg(data, context, metadataPolicy, out singleRawCmykScan);
         context.Reserve(1024); // Fixed parser references and component descriptors.
         quantization = new ushort[4][]; quantizationPrecision = new byte[4];
         dcTables = new JpegHuffman[4]; acTables = new JpegHuffman[4];
@@ -143,7 +144,7 @@ internal ref partial struct JpegDecoder
         return payload;
     }
 
-    private void ReadFrame(ReadOnlySpan<byte> payload, bool isProgressive)
+    private bool ReadFrame(ReadOnlySpan<byte> payload, bool isProgressive, bool allowCallerCmyk = false)
     {
         if (frameSeen || payload.Length < 6) throw new ImageDataException("Invalid JPEG frame.");
         progressive = isProgressive; frameSeen = true;
@@ -178,17 +179,18 @@ internal ref partial struct JpegDecoder
         if (count == 3 && components[0].Id == 'R' && components[1].Id == 'G' && components[2].Id == 'B') rgb = true;
         mcuColumns = (info.Width + 8 * maxH - 1) / (8 * maxH);
         mcuRows = (info.Height + 8 * maxV - 1) / (8 * maxV);
-        // Equal-grid raw components can occupy the private result even when
-        // source metadata is unspecified. Complete scans and final Adobe
-        // interpretation precede publication. Caller samples and validation
-        // keep their independent storage.
-        if (allowInterleavedResult && !progressive && (count == 3
-            || count == 4 && info.SourceColor is SourceColorModel.Cmyk or SourceColorModel.Ycck))
+        // Packed output can hold raw equal-grid components. The caller CMYK
+        // destination is already admitted as borrowed storage.
+        var outputCanHoldComponents = allowInterleavedResult && (count == 3
+            || count == 4 && info.SourceColor is SourceColorModel.Cmyk or SourceColorModel.Ycck);
+        var callerCanHoldComponents = allowCallerCmyk && count == 4;
+        var packed = false;
+        if (!progressive && (outputCanHoldComponents || callerCanHoldComponents))
         {
-            var fullResolution = true;
+            packed = true;
             foreach (var component in components)
-                fullResolution &= component.H == maxH && component.V == maxV;
-            if (fullResolution)
+                packed &= component.H == maxH && component.V == maxV;
+            if (packed && outputCanHoldComponents)
             {
                 interleavedResult = ImageBuffer.AllocateForOverwrite(info.Width, info.Height, 8, context);
                 interleavedResult.Orientation = info.Orientation;
@@ -203,8 +205,8 @@ internal ref partial struct JpegDecoder
             if (countValues > Array.MaxLength) throw new ImageLimitException(ImageLimitKind.BufferLength, "JPEG coefficient plane is too large.");
             if (!progressive && (directBaseline || validateBaseline))
             {
-                context.Reserve((directBaseline && interleavedResult is null ? countValues : 0) + 64 * 4);
-                if (directBaseline && interleavedResult is null) component.Plane = new byte[(int)countValues];
+                context.Reserve((directBaseline && !packed ? countValues : 0) + 64 * 4);
+                if (directBaseline && !packed) component.Plane = new byte[(int)countValues];
             }
             else
             {
@@ -213,6 +215,7 @@ internal ref partial struct JpegDecoder
             }
             component.Approximation = new int[64]; Array.Fill(component.Approximation, -1);
         }
+        return packed && callerCanHoldComponents;
     }
 
     private void ReadQuantization(ReadOnlySpan<byte> payload)
@@ -253,7 +256,7 @@ internal ref partial struct JpegDecoder
         }
     }
 
-    private void ReadScan(ReadOnlySpan<byte> payload)
+    private void ReadScan(ReadOnlySpan<byte> payload, scoped Span<byte> callerPixels = default, int callerStride = 0)
     {
         if (!frameSeen || payload.Length < 6 || payload[0] is < 1 or > 4 || payload.Length != 4 + payload[0] * 2)
             throw new ImageDataException("Invalid JPEG scan selectors.");
@@ -300,17 +303,19 @@ internal ref partial struct JpegDecoder
         var reader = new JpegEntropyReader(data, position, context);
         if (!progressive && (directBaseline || validateBaseline))
         {
-            var stagingBytes = directBaseline && interleaved && count == components.Length && interleavedResult is not null
+            var target = interleavedResult is { } owned ? owned.Pixels : callerPixels;
+            var stride = interleavedResult?.Stride ?? callerStride;
+            var stagingBytes = directBaseline && interleaved && count == components.Length && !target.IsEmpty
                 ? count * maxH * maxV * 64 : 0;
-            if (stagingBytes != 0 && context.RemainingWorkingBytes >= stagingBytes)
+            if (stagingBytes != 0 && (!callerPixels.IsEmpty || context.RemainingWorkingBytes >= stagingBytes))
             {
                 // Local workspace selection precedes shared admission. Refusal
                 // terminates the operation; the private result never escapes.
                 context.Reserve(stagingBytes);
-                ReadComponentMcuBlocks(ref reader, indexes[..count], dc[..count], ac[..count], columns, rows, stagingBytes);
+                ReadComponentMcuBlocks(ref reader, indexes[..count], dc[..count], ac[..count], columns, rows, stagingBytes, target, stride);
                 context.Release(stagingBytes);
             }
-            else ReadBaselineBlocks(ref reader, indexes[..count], dc[..count], ac[..count], columns, rows, interleaved, directBaseline, default);
+            else ReadBaselineBlocks(ref reader, indexes[..count], dc[..count], ac[..count], columns, rows, interleaved, directBaseline, default, target, stride);
             reader.Align(); position = reader.Position;
             return;
         }
@@ -353,7 +358,7 @@ internal ref partial struct JpegDecoder
         reader.Align(); position = reader.Position;
     }
 
-    internal static void ReadBaselineBlock(ref JpegEntropyReader reader, scoped Span<int> block, ref int predictor,
+    internal static bool ReadBaselineBlock(ref JpegEntropyReader reader, scoped Span<int> block, ref int predictor,
         JpegHuffman dc, JpegHuffman ac, OperationContext context)
     {
         if (block.Length != 64) throw new ArgumentException("JPEG coefficient blocks have 64 entries.", nameof(block));
@@ -362,10 +367,11 @@ internal ref partial struct JpegDecoder
         // while removing progressive/refinement state from this hot loop.
         context.Cancellation.ThrowIfCancellationRequested();
         var k = 1;
+        var dcOnly = false;
         var cancelable = context.Cancellation.CanBeCanceled;
         var prepared = cancelable
             ? dc.TryReadCancelableBaselineBlock(ref reader, ac, block, ref predictor, ref k)
-            : dc.TryReadPlainBaselineBlock(ref reader, ac, block, ref predictor, ref k);
+            : dc.TryReadPlainBaselineBlock(ref reader, ac, block, ref predictor, ref k, out dcOnly);
         if (!prepared)
         {
             var category = dc.Read(ref reader);
@@ -377,12 +383,12 @@ internal ref partial struct JpegDecoder
         if (cancelable)
         {
             ReadCancelableBaselineAc(ref reader, block, ac, k, prepared);
-            return;
+            return false;
         }
         while (k <= 63)
         {
             ac.ReadPlainBaselineAc(ref reader, block, ref k);
-            if (k > 63) return;
+            if (k > 63) return false;
             if (ac.TryReadBaselineAc(ref reader, 64 - k, out var fastSymbol, out var amplitude))
             {
                 k += fastSymbol >> 4;
@@ -394,13 +400,14 @@ internal ref partial struct JpegDecoder
             {
                 if (run == 15) { k += 16; if (k > 64) throw new ImageDataException("JPEG zero run exceeds band."); continue; }
                 if (run != 0) throw new ImageDataException("Invalid baseline JPEG end-of-block symbol.");
-                return;
+                return k == 1;
             }
             if (size > 10) throw new ImageDataException("Invalid JPEG AC coefficient category.");
             k += run;
             if (k > 63) throw new ImageDataException("JPEG coefficient run exceeds band.");
             block[JpegTransform.Zigzag[k++]] = reader.ReadSigned(size);
         }
+        return dcOnly;
     }
 
     private static void ReadCancelableBaselineAc(ref JpegEntropyReader reader, scoped Span<int> block, JpegHuffman ac,

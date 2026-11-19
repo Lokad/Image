@@ -9,10 +9,10 @@ internal ref partial struct JpegDecoder
     [MethodImpl(MethodImplOptions.NoInlining)]
     private void ReadComponentMcuBlocks(scoped ref JpegEntropyReader reader,
         scoped ReadOnlySpan<int> indexes, scoped ReadOnlySpan<int> dc,
-        scoped ReadOnlySpan<int> ac, int columns, int rows, int stagingBytes)
+        scoped ReadOnlySpan<int> ac, int columns, int rows, int stagingBytes, scoped Span<byte> target, int targetStride)
     {
         Span<byte> staged = stackalloc byte[stagingBytes];
-        ReadBaselineBlocks(ref reader, indexes, dc, ac, columns, rows, true, true, staged);
+        ReadBaselineBlocks(ref reader, indexes, dc, ac, columns, rows, true, true, staged, target, targetStride);
     }
 
     // Sequential scans have final coefficients after each block. Reconstruct
@@ -20,7 +20,8 @@ internal ref partial struct JpegDecoder
     // for complete container and component validation at EOI.
     private void ReadBaselineBlocks(scoped ref JpegEntropyReader reader,
         scoped ReadOnlySpan<int> indexes, scoped ReadOnlySpan<int> dc,
-        scoped ReadOnlySpan<int> ac, int columns, int rows, bool interleaved, bool writePixels, scoped Span<byte> staged)
+        scoped ReadOnlySpan<int> ac, int columns, int rows, bool interleaved, bool writePixels, scoped Span<byte> staged,
+        scoped Span<byte> target, int targetStride)
     {
         var tables = 0;
         if (writePixels && (long)columns * rows >= 64)
@@ -39,7 +40,7 @@ internal ref partial struct JpegDecoder
             if (prepare)
                 for (var i = 0; i < acTables.Length; i++)
                     if ((tables & (1 << i)) != 0) acTables[i]!.PrepareBaselinePairs(context);
-            ReadBaselineBlockCore(ref reader, indexes, dc, ac, columns, rows, interleaved, writePixels, staged);
+            ReadBaselineBlockCore(ref reader, indexes, dc, ac, columns, rows, interleaved, writePixels, staged, target, targetStride);
         }
         finally
         {
@@ -51,9 +52,10 @@ internal ref partial struct JpegDecoder
 
     private void ReadBaselineBlockCore(scoped ref JpegEntropyReader reader,
         scoped ReadOnlySpan<int> indexes, scoped ReadOnlySpan<int> dc,
-        scoped ReadOnlySpan<int> ac, int columns, int rows, bool interleaved, bool writePixels, scoped Span<byte> staged)
+        scoped ReadOnlySpan<int> ac, int columns, int rows, bool interleaved, bool writePixels, scoped Span<byte> staged,
+        scoped Span<byte> target, int targetStride)
     {
-        if (writePixels && !interleaved && interleavedResult is null) FillUncodedBaselinePadding(components[indexes[0]], columns, rows);
+        if (writePixels && !interleaved && target.IsEmpty) FillUncodedBaselinePadding(components[indexes[0]], columns, rows);
         Span<int> coefficients = stackalloc int[64];
         Span<byte> pixels = stackalloc byte[64];
         var blocksPerComponent = staged.Length / (components.Length * 64);
@@ -81,19 +83,24 @@ internal ref partial struct JpegDecoder
                     // Baseline syntax validation only writes coefficients;
                     // it never reads previous values or reconstructs pixels.
                     if (writePixels) coefficients.Clear();
-                    ReadBaselineBlock(ref reader, coefficients, ref component.Predictor, dcTables[dc[i]]!, acTables[ac[i]]!, context);
+                    var dcOnly = ReadBaselineBlock(ref reader, coefficients, ref component.Predictor, dcTables[dc[i]]!, acTables[ac[i]]!, context);
                     if (!writePixels) continue;
                     var block = staged.IsEmpty ? pixels
                         : staged.Slice((indexes[i] * blocksPerComponent + by * horizontal + bx) * 64, 64);
-                    JpegInverseTransform.Inverse(coefficients, component.FrozenQuantization!, block, context);
+                    if (dcOnly)
+                    {
+                        context.Cancellation.ThrowIfCancellationRequested();
+                        block.Fill(JpegInverseTransform.ConstantSample(coefficients[0], component.FrozenQuantization![0]));
+                    }
+                    else JpegInverseTransform.Inverse(coefficients, component.FrozenQuantization!, block, context);
                     if (!staged.IsEmpty) continue;
-                    if (interleavedResult is { } target)
+                    if (!target.IsEmpty)
                     {
                         var left = x * 8; var top = y * 8;
                         var width = Math.Min(8, info.Width - left); var height = Math.Min(8, info.Height - top);
                         if (width > 0 && height > 0)
-                            StoreComponentBlock(pixels, target.Pixels.Slice(top * target.Stride + left * 4,
-                                (height - 1) * target.Stride + width * 4), target.Stride, width, height, indexes[i], components.Length);
+                            StoreComponentBlock(pixels, target.Slice(top * targetStride + left * 4,
+                                (height - 1) * targetStride + width * 4), targetStride, width, height, indexes[i], components.Length);
                     }
                     else
                         for (var line = 0; line < 8; line++)
@@ -102,12 +109,11 @@ internal ref partial struct JpegDecoder
             }
             if (!staged.IsEmpty)
             {
-                var target = interleavedResult!;
                 var left = mcuX * maxH * 8; var top = mcuY * maxV * 8;
                 var width = Math.Min(maxH * 8, info.Width - left); var height = Math.Min(maxV * 8, info.Height - top);
                 if (width > 0 && height > 0)
-                    StoreComponentMcu(staged, target.Pixels.Slice(top * target.Stride + left * 4,
-                        (height - 1) * target.Stride + width * 4), target.Stride, width, height, maxH, maxV, components.Length);
+                    StoreComponentMcu(staged, target.Slice(top * targetStride + left * 4,
+                        (height - 1) * targetStride + width * 4), targetStride, width, height, maxH, maxV, components.Length);
             }
         }
     }

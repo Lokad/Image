@@ -29,6 +29,10 @@ public sealed class JpegLowFrequencyRowsTests
             if (sample % 4 == 0) coefficients[2] = 0;
             if (sample % 4 <= 1) coefficients[10] = 0;
             if (sample % 8 == 0) coefficients[9] = 0;
+            if ((sample & 7) is 1 or 2 or 3)
+                for (var column = 0; column < 8; column++)
+                    coefficients[17 + column] = sample < 2048 ? edges[(sample + column * 3) % edges.Length]
+                        : random.Next(int.MinValue, int.MaxValue);
             if (sample % 7 == 0) coefficients[1 + 2 + sample % 62] = edges[(sample + 3) % edges.Length];
             var original = coefficients.ToArray(); var originalQuantizers = quantizers.ToArray();
             for (var k = 0; k < 64; k++) scan[k] = coefficients[1 + JpegTransform.Zigzag[k]];

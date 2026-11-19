@@ -20,6 +20,10 @@ internal ref partial struct JpegDecoder
         if (stride < rowBytes) throw new ArgumentOutOfRangeException(nameof(stride), "Stride must cover a complete sample row.");
         if ((long)(height - 1) * stride + rowBytes > destination.Length)
             throw new ArgumentException("Destination does not cover all JPEG sample rows.", nameof(destination));
+        var allowPackedCmyk = singleRawCmykScan && format == JpegSampleFormat.Cmyk
+            && orientation == ImageOrientation.Normal && options.CmykInversion != JpegCmykInversion.Invert
+            && options.SourceColorSpace is JpegColorSpace.Auto or JpegColorSpace.Cmyk;
+        var packedCmyk = false;
 
         // This entry point shares the original marker/entropy/IDCT primitives.
         // It keeps its own top-level walk so ordinary RGBA decoding retains its
@@ -40,23 +44,26 @@ internal ref partial struct JpegDecoder
                     if (components.Length != sourceComponents || (format == JpegSampleFormat.Cmyk && sourceComponents != 4))
                         throw new UnsupportedImageException(UnsupportedImageFeature.ComponentLayout,
                             "JPEG components do not match the requested source color space.", ImageFormat.Jpeg);
-                    MaterializeSamplePlanes();
-                    if (sourceComponents == 4)
-                        WriteCmykSamples(destination, format, stride, source, ResolveCmykInversion(options.CmykInversion, adobeTransform), orientation);
-                    else WriteSamples(destination, format, stride, source, orientation);
+                    if (!packedCmyk)
+                    {
+                        MaterializeSamplePlanes();
+                        if (sourceComponents == 4)
+                            WriteCmykSamples(destination, format, stride, source, ResolveCmykInversion(options.CmykInversion, adobeTransform), orientation);
+                        else WriteSamples(destination, format, stride, source, orientation);
+                    }
                     return options.ApplyOrientation
                         ? info with { Width = width, Height = height, Orientation = ImageOrientation.Normal } : info;
                 }
                 var payload = ReadSegment();
                 switch (marker)
                 {
-                    case 0xC0 or 0xC2: ReadFrame(payload, marker == 0xC2); break;
+                    case 0xC0 or 0xC2: packedCmyk = ReadFrame(payload, marker == 0xC2, allowPackedCmyk); break;
                     case 0xDB: ReadQuantization(payload); break;
                     case 0xC4: ReadHuffman(payload); break;
                     case 0xDD:
                         if (payload.Length != 2) throw new ImageDataException("Invalid JPEG restart interval.");
                         restartInterval = BinaryPrimitives.ReadUInt16BigEndian(payload); break;
-                    case 0xDA: ReadScan(payload); scanSeen = true; break;
+                    case 0xDA: ReadScan(payload, packedCmyk ? destination : default, stride); scanSeen = true; break;
                     case 0xEE when payload.StartsWith("Adobe"u8):
                         if (payload.Length < 12) throw new ImageDataException("Truncated Adobe JPEG marker.");
                         if (payload[11] > 2) throw UnsupportedColorTransform();
