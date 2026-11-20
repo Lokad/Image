@@ -46,9 +46,11 @@ proofs were not rebuilt/repeated. Encoding/editing paths are unchanged. The
 mirrored, member-verified raw archive named in the evidence retains workers,
 selectors, inputs, sources, manifests, logs, guards and all receipts.
 
-Build the worker with `tools/WarmReference/build-image-read-linux.sh`. Run
-`taskset -c 0 dotnet benchmarks/Lokad.Image.Benchmarks/bin/Release/net10.0/Lokad.Image.Benchmarks.dll --prepare-warm-image-read`
-on an allowed CPU. Use
-`./bench.ps1 -Warm -DedicatedVm -WarmFamily Read -WarmCases CASE` on the
-quiet VM, adding `-WarmConfirm` for independent confirmation. Preparation
-validates all twelve cases. Select one to three named controls per run.
+Build the worker with `tools/WarmReference/build-image-read-linux.sh`. Use the
+[binary-reference harness recipe](../tools/WarmReference/README.md#prepare-once-screen-confirm)
+so preparation and the BenchmarkDotNet child use the same library DLL. Capture
+the source identity and run `taskset -c 0 dotnet HARNESS_DLL --prepare-warm-image-read`
+on an allowed CPU. Preparation validates all twelve cases.
+Use `./bench.ps1 -Warm -DedicatedVm -WarmFamily Read -WarmCases CASE` on the
+quiet VM with the pinned harness project configured. Select one to three named
+controls per run and add `-WarmConfirm` for independent confirmation.
