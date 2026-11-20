@@ -1,6 +1,6 @@
 param([switch]$Smoke, [switch]$DedicatedVm, [string]$Filter, [switch]$NoBuild, [switch]$HorizontalFlip,
     [switch]$Warm, [ValidateRange(0, 62)][int]$Cpu = 0, [switch]$WarmConfirm, [switch]$PrepareWarmConfirm, [switch]$PrepareWarm,
-    [ValidateSet('Flip', 'RetainedFlip', 'StreamDecode', 'Png', 'Jpeg', 'JpegDecode', 'Webp', 'WebpLossless', 'Compression', 'WebpDecode', 'Vp8Decode', 'Nearest', 'Bilinear', 'Bicubic', 'Lanczos3', 'Crop', 'VerticalFlip', 'HalfTurn', 'Clockwise', 'NormalOrientation', 'Counterclockwise', 'Transpose', 'Transverse', 'Clone', 'Identify', 'StreamIdentify')][string]$WarmFamily = 'Flip', [string]$WarmCases)
+    [ValidateNotNullOrEmpty()][string]$WarmFamily = 'Flip', [string]$WarmCases)
 $ErrorActionPreference = 'Stop'
 if ($WarmConfirm -and (-not $Warm -or $Smoke)) { throw '-WarmConfirm requires -Warm with -DedicatedVm.' }
 if ($PrepareWarmConfirm -and -not $WarmConfirm) { throw '-PrepareWarmConfirm requires -WarmConfirm.' }
@@ -17,7 +17,7 @@ try {
     $env:LOKAD_IMAGE_BENCHMARK_RUN_ID = [Guid]::NewGuid().ToString('N')
     Write-Host "Benchmark validation run: $env:LOKAD_IMAGE_BENCHMARK_RUN_ID"
     if (-not $NoBuild) {
-        dotnet build Lokad.Image.slnx -c Release --no-restore --tl:off --nologo -v minimal -m:1 -nr:false -p:UseSharedCompilation=false
+        dotnet build benchmarks/Lokad.Image.Benchmarks -c Release --no-restore --tl:off --nologo -v minimal -m:1 -nr:false -p:UseSharedCompilation=false
         if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
     }
     $job = if ($Smoke) { 'Dry' } else { 'Short' }

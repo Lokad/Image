@@ -193,31 +193,6 @@ if (args.SequenceEqual(["--validate-nearest-resize-full"]))
     return;
 }
 
-if (args.SequenceEqual(["--validate-matched-content-batch-cleanup"]))
-{
-    Environment.SetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID", "matched-content-cleanup-" + Guid.NewGuid().ToString("N"));
-    MatchedQualityContentBatch.ValidateCleanupControls();
-    return;
-}
-
-if (args.SequenceEqual(["--validate-matched-content-batches"]))
-{
-    Environment.SetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID", "matched-content-preflight-" + Guid.NewGuid().ToString("N"));
-    using var identity = new JpegBenchmarkCase();
-    var (_, catalog) = MatchedQualityEncodeInvocation.ReadCatalog(identity);
-    var groups = MatchedQualityContentBatch.Groups(catalog);
-    var cases = new MatchedQualityContentBatch().Cases.ToArray();
-    if (cases.Length == 0) throw new InvalidOperationException("Calibration contains no fully matched content groups; excluded groups cannot be benchmarked.");
-    foreach (var profile in cases)
-    {
-        var workload = new MatchedQualityContentBatch { Workload = profile };
-        try { workload.Setup(); }
-        finally { workload.Cleanup(); }
-    }
-    Console.WriteLine($"All {cases.Length} calibrated content batches validated; {groups.Count(group => !group.Accepted)} groups excluded; {MatchedQualityContentBatch.FrameCount} still files per subject, no timing measurement.");
-    return;
-}
-
 if (args.SequenceEqual(["--validate-encode-batch-cleanup"]))
 {
     Environment.SetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID", "encode-batch-cleanup-" + Guid.NewGuid().ToString("N"));
@@ -238,49 +213,6 @@ if (args.SequenceEqual(["--validate-encode-batches"]))
         finally { workload.Cleanup(); }
     }
     Console.WriteLine($"All {profiles} encode batch profiles validated; {EncodeBatch.FrameCount} independent still files per subject, no timing measurement.");
-    return;
-}
-
-if (args.SequenceEqual(["--validate-quality-calibration-controls"]))
-{
-    EncoderQualityCalibration.ValidateControls();
-    Console.WriteLine("Quality calibration numeric, bounded-sampling and representative-coverage controls passed; no benchmark executed.");
-    return;
-}
-
-if (args.Length is 1 or 2 && args[0] == "--calibrate-encoder-quality")
-{
-    EncoderQualityCalibration.Generate(args.Length == 2 ? args[1] : "representative");
-    return;
-}
-
-if (args.SequenceEqual(["--validate-matched-encoder-quality"]))
-{
-    Environment.SetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID", "matched-quality-preflight-" + Guid.NewGuid().ToString("N"));
-    var cases = new MatchedQualityEncodeInvocation().Cases.ToArray();
-    if (cases.Length == 0) throw new InvalidOperationException("Calibration contains no matched encoder profiles.");
-    foreach (var profile in cases)
-    {
-        var workload = new MatchedQualityEncodeInvocation { Workload = profile };
-        try { workload.Setup(); }
-        finally { workload.Cleanup(); }
-    }
-    Console.WriteLine($"All {cases.Length} calibrated matched-quality encoder pairs validated; no timing measurement.");
-    return;
-}
-
-if (args.SequenceEqual(["--validate-matched-encoder-quality-batch"]))
-{
-    Environment.SetEnvironmentVariable("LOKAD_IMAGE_BENCHMARK_RUN_ID", "matched-quality-batch-preflight-" + Guid.NewGuid().ToString("N"));
-    var cases = new MatchedQualityEncodeBatch().Cases.ToArray();
-    if (cases.Length == 0) throw new InvalidOperationException("Calibration contains no matched encoder profiles.");
-    foreach (var profile in cases)
-    {
-        var workload = new MatchedQualityEncodeBatch { Workload = profile };
-        try { workload.Setup(); }
-        finally { workload.Cleanup(); }
-    }
-    Console.WriteLine($"All {cases.Length} calibrated matched-quality encoder batches validated; {MatchedQualityEncodeBatch.FrameCount} still files per subject, no timing measurement.");
     return;
 }
 

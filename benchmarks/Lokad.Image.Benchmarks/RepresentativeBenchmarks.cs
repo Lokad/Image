@@ -20,7 +20,6 @@ internal sealed class RepresentativeBenchmarks : IFilter
     public bool Predicate(BenchmarkCase benchmark)
     {
         var type = benchmark.Descriptor.Type;
-        if (type == typeof(MatchedQualityEncodeInvocation)) return true;
         var width = (int)Value("Width");
         var depth = (int)Value("Depth");
         var frames = (int)Value("Frames");
@@ -43,10 +42,7 @@ internal sealed class RepresentativeBenchmarks : IFilter
             || runId.Any(character => !char.IsAsciiLetterOrDigit(character) && character != '-')))
             throw new InvalidOperationException("Set a simple unique LOKAD_IMAGE_BENCHMARK_RUN_ID before representative execution.");
         using var identity = new JpegBenchmarkCase();
-        var (path, catalog) = MatchedQualityEncodeInvocation.ReadCatalog(identity);
-        if (catalog.Scope != "representative")
-            throw new InvalidOperationException("Routine benchmarks require the completed twelve-profile representative calibration.");
-        var expectedCases = checked(2 * (catalog.Profiles.Sum(row => row.Matches.Count(match => match.Matched)) + 5));
+        const int expectedCases = 2 * 5;
         var job = (smoke ? Job.Dry : Job.ShortRun).WithId(smoke ? "SerialDry" : "SerialShort")
             .WithToolchain(new Toolchain("RepresentativeNet10", new BenchmarkProjectGenerator(identity.Root),
                 new DotNetCliBuilder("net10.0"), new DotNetCliExecutor(null!)))
@@ -54,11 +50,11 @@ internal sealed class RepresentativeBenchmarks : IFilter
                 new MsBuildArgument("/p:NuGetAudit=false"), new MsBuildArgument("/p:RestoreIgnoreFailedSources=true")]);
         var config = ManualConfig.Create(DefaultConfig.Instance).AddJob(job).AddExporter(JsonExporter.Full).AddFilter(new RepresentativeBenchmarks())
             .WithOptions(ConfigOptions.KeepBenchmarkFiles);
-        var summaries = BenchmarkSwitcher.FromTypes([typeof(MatchedQualityEncodeInvocation), typeof(PngCropResizePipeline),
+        var summaries = BenchmarkSwitcher.FromTypes([typeof(PngCropResizePipeline),
             typeof(GeometryRawFile), typeof(NearestResizeRawFile)]).Run(["--filter", "*", .. args], config).ToArray();
         if (inspection) return summaries;
         var reports = summaries.SelectMany(summary => summary.Reports).ToArray();
-        var complete = summaries.Length == 4 && summaries.All(summary => !summary.HasCriticalValidationErrors)
+        var complete = summaries.Length == 3 && summaries.All(summary => !summary.HasCriticalValidationErrors)
             && reports.Length == expectedCases && reports.All(report => report.Success);
         var directory = Path.Combine(identity.Root, "artifacts", "benchmark-runs", runId!);
         Directory.CreateDirectory(directory);
@@ -66,7 +62,7 @@ internal sealed class RepresentativeBenchmarks : IFilter
         {
             project = "Lokad.Image", runId, complete, smoke, expectedCases, actualCases = reports.Length,
             runtime = RuntimeInformation.FrameworkDescription, platform = RuntimeInformation.RuntimeIdentifier,
-            calibrationSha256 = Hash(path), benchmarkAssemblySha256 = Hash(typeof(RepresentativeBenchmarks).Assembly.Location),
+            benchmarkAssemblySha256 = Hash(typeof(RepresentativeBenchmarks).Assembly.Location),
             librarySha256 = Hash(typeof(Lokad.Image.ImageCodec).Assembly.Location),
             probeSha256 = Hash(identity.Probe), ffmpegSha256 = Hash(identity.Ffmpeg),
             cases = reports.Select(report => new

@@ -27,6 +27,10 @@ jobs:
       - name: Offline correctness
         shell: pwsh
         run: ./test.ps1
+      - name: Build benchmark harness
+        run: dotnet build benchmarks/Lokad.Image.Benchmarks -c Release --no-restore --tl:off
+      - name: Build fixture generator
+        run: dotnet build tools/Fixtures -c Release --no-restore --tl:off
       - name: Exact Release package consumer
         shell: pwsh
         run: ./tools/PackageSmokeTest/verify-package.ps1

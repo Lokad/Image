@@ -45,3 +45,10 @@ actual package/three examples are reused; production, full suites and package
 proofs were not rebuilt/repeated. Encoding/editing paths are unchanged. The
 mirrored, member-verified raw archive named in the evidence retains workers,
 selectors, inputs, sources, manifests, logs, guards and all receipts.
+
+Build the worker with `tools/WarmReference/build-image-read-linux.sh`. Run
+`taskset -c 0 dotnet benchmarks/Lokad.Image.Benchmarks/bin/Release/net10.0/Lokad.Image.Benchmarks.dll --prepare-warm-image-read`
+on an allowed CPU. Use
+`./bench.ps1 -Warm -DedicatedVm -WarmFamily Read -WarmCases CASE` on the
+quiet VM, adding `-WarmConfirm` for independent confirmation. Preparation
+validates all twelve cases. Select one to three named controls per run.
