@@ -1,6 +1,6 @@
 # Lokad.Image
 
-Safe, dependency-free C# image codecs and editing for **.NET 10**.
+Safe, dependency-free C# image codecs and editing for **.NET 10 and .NET 11**.
 No unsafe code, native bindings, subprocess codecs or vendored sources.
 
 - PNG, JPEG and WebP encode/decode, including progressive/CMYK/YCCK JPEG decode.

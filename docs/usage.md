@@ -1,6 +1,6 @@
 # Using Lokad.Image
 
-These examples target .NET 10. See [SPEC.md](spec.md) for supported codec
+These examples run on .NET 10 and .NET 11. See [the supported contract](spec.md) for codec
 profiles and the exact pixel, metadata and failure contracts.
 
 ## Decode, crop and resize

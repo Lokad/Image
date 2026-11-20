@@ -22,6 +22,7 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           global-json-file: global.json
+          dotnet-version: '11.0.x'
       - name: Locked restore
         run: dotnet restore Lokad.Image.slnx --locked-mode --tl:off
       - name: Offline correctness
@@ -31,9 +32,14 @@ jobs:
         run: dotnet build benchmarks/Lokad.Image.Benchmarks -c Release --no-restore --tl:off
       - name: Build fixture generator
         run: dotnet build tools/Fixtures -c Release --no-restore --tl:off
-      - name: Exact Release package consumer
+      - name: Exact Release package consumer (.NET 10)
         shell: pwsh
         run: ./tools/PackageSmokeTest/verify-package.ps1
+      - name: Exact Release package consumer (.NET 11)
+        shell: pwsh
+        run: |
+          $version = ([xml](Get-Content src/Lokad.Image/Lokad.Image.csproj -Raw)).Project.PropertyGroup.Version
+          ./tools/PackageSmokeTest/verify-package.ps1 -TargetFramework net11.0 -PackagePath "artifacts/nugets/Lokad.Image.$version.nupkg"
   differential:
     runs-on: ubuntu-24.04
     timeout-minutes: 40

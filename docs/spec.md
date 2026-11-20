@@ -1,9 +1,10 @@
 # Lokad.Image supported contract
 
-Lokad.Image is an independently implemented, safe C#/.NET 10 still-image
-library. The production package has no dependencies, unsafe code, native bindings,
-subprocess codecs or vendored sources. Published 0.1.0/0.2.0 packages are immutable;
-development targets 0.2.1.
+Lokad.Image is an independently implemented, safe C# still-image library.
+The NuGet package targets `net10.0` and supports .NET 10 and .NET 11 applications.
+The production package has no dependencies, unsafe code, native bindings,
+subprocess codecs or vendored sources. Published 0.1.0 and 0.2.0 packages are
+immutable. Development targets 0.2.1.
 
 ## Formats
 

@@ -2,6 +2,7 @@
 
 ## 0.2.1 — Unreleased
 
+- Verify the Release package and usage examples on .NET 10 and .NET 11.
 - Add caller-owned bicubic, Lanczos3 and text render plans with admitted retained
   storage and independently owned results.
 - Add pixel-coding validation for span, synchronous and asynchronous inputs,

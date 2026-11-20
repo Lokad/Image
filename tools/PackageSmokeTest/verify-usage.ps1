@@ -11,6 +11,7 @@ $cache = Join-Path $ConsumerDirectory 'packages'
 $config = Join-Path $ConsumerDirectory 'NuGet.Config'
 [xml]$consumerProject = Get-Content -LiteralPath (Join-Path $ConsumerDirectory 'Consumer.csproj') -Raw
 $packageVersion = ($consumerProject.Project.ItemGroup.PackageReference | Where-Object { $_.Include -eq 'Lokad.Image' }).Version
+$targetFramework = $consumerProject.Project.PropertyGroup.TargetFramework
 
 # Keep each completed build from accumulating another extracted assembly.
 # Sources, inputs, the isolated package cache and the actual pack survive.
@@ -145,7 +146,7 @@ for ($index = 0; $index -lt $snippets.Count; $index++) {
     @"
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework>
+    <OutputType>Exe</OutputType><TargetFramework>$targetFramework</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable>
     <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
     <RestorePackagesWithLockFile>false</RestorePackagesWithLockFile>
@@ -161,16 +162,16 @@ for ($index = 0; $index -lt $snippets.Count; $index++) {
     $parts += $identityCheck
     if ($index -ne 1) { $parts += $sampleFunction }
     ($parts -join "`n") | Set-Content -LiteralPath (Join-Path $directory 'Program.cs') -Encoding utf8
-    dotnet restore $project --configfile $config --packages $cache --tl:off --nologo --disable-parallel -p:NuGetAudit=false -v minimal
-    if ($LASTEXITCODE -ne 0) { throw 'Usage example package-only restore failed.' }
-    $assets = Get-Content -LiteralPath (Join-Path $directory 'obj/project.assets.json') -Raw | ConvertFrom-Json
-    $libraries = @($assets.libraries.PSObject.Properties.Name)
-    if ($libraries.Count -ne 1 -or $libraries[0] -ne "Lokad.Image/$packageVersion") { throw 'Usage example package graph is not dependency-free.' }
-    dotnet build $project -c Release --no-restore --tl:off --nologo -v minimal -m:1 -nr:false -p:UseSharedCompilation=false
-    if ($LASTEXITCODE -ne 0) { throw 'Usage example Release build failed.' }
     Push-Location $directory
     try {
-        dotnet (Join-Path $directory 'bin/Release/net10.0/Example.dll') $LibrarySha256
+        dotnet restore $project --configfile $config --packages $cache --tl:off --nologo --disable-parallel -p:NuGetAudit=false -v minimal
+        if ($LASTEXITCODE -ne 0) { throw 'Usage example package-only restore failed.' }
+        $assets = Get-Content -LiteralPath (Join-Path $directory 'obj/project.assets.json') -Raw | ConvertFrom-Json
+        $libraries = @($assets.libraries.PSObject.Properties.Name)
+        if ($libraries.Count -ne 1 -or $libraries[0] -ne "Lokad.Image/$packageVersion") { throw 'Usage example package graph is not dependency-free.' }
+        dotnet build $project -c Release --no-restore --tl:off --nologo -v minimal -m:1 -nr:false -p:UseSharedCompilation=false
+        if ($LASTEXITCODE -ne 0) { throw 'Usage example Release build failed.' }
+        dotnet "bin/Release/$targetFramework/Example.dll" $LibrarySha256
         if ($LASTEXITCODE -ne 0) { throw 'Usage example package-only execution failed.' }
     } finally { Pop-Location }
     Remove-CompletedBuildOutputs $directory

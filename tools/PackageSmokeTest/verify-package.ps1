@@ -1,4 +1,8 @@
-param([switch]$NoBuild, [string]$PackagePath)
+param(
+    [switch]$NoBuild,
+    [string]$PackagePath,
+    [ValidateSet('net10.0', 'net11.0')][string]$TargetFramework = 'net10.0'
+)
 $ErrorActionPreference = 'Stop'
 $repoRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../..'))
 Push-Location $repoRoot
@@ -55,6 +59,10 @@ try {
     } finally { $archive.Dispose() }
     $consumer = Join-Path $repoRoot ('artifacts/package-smoke/' + [Guid]::NewGuid().ToString('N'))
     New-Item -ItemType Directory -Path $consumer -Force | Out-Null
+    if ($TargetFramework -eq 'net11.0') {
+        '{"sdk":{"version":"11.0.100","rollForward":"latestFeature","allowPrerelease":false}}' |
+            Set-Content -LiteralPath (Join-Path $consumer 'global.json') -Encoding utf8
+    }
     # The supplied directory may contain several builds with the same ID and
     # version. Give NuGet a feed containing only the explicitly selected pack.
     $feedDirectory = Join-Path $consumer 'feed'
@@ -81,7 +89,7 @@ try {
     @"
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework>
+    <OutputType>Exe</OutputType><TargetFramework>$TargetFramework</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable>
     <ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
     <RestorePackagesWithLockFile>false</RestorePackagesWithLockFile>
@@ -112,6 +120,9 @@ try {
     @'
 using System.IO.Compression;
 using Lokad.Image;
+#if NET11_0
+if (Environment.Version.Major != 11) throw new Exception("Expected the .NET 11 runtime.");
+#endif
 foreach (var control in Lokad.Image.Tooling.OriginalVp8Controls.Cases())
 {
     var name = (string)control[0]; var depth = (int)control[1]; var effort = (int)control[2]; var quality = (int)control[3];
@@ -1290,24 +1301,27 @@ foreach (var directSampling in new[] { 422, 420 })
     }
     if(directRoot.Bytes!=0||directRoot.IsDisposed)throw new Exception("Packaged direct-RGB admission cleanup differs.");
 }
-Console.WriteLine("Exact Release package consumer passed.");
+Console.WriteLine($"Exact Release package consumer passed. Runtime: {Environment.Version}.");
 '@ | Set-Content -LiteralPath (Join-Path $consumer 'Program.cs') -Encoding utf8
     $config = [xml]'<configuration><packageSources><clear /><add key="local" value="" /></packageSources></configuration>'
     $config.configuration.packageSources.add.value = $feedDirectory
     $config.Save((Join-Path $consumer 'NuGet.Config'))
-    # An isolated package cache proves this exact pack is used even when its
-    # prerelease version matches an older local build.
-    dotnet restore (Join-Path $consumer 'Consumer.csproj') --configfile (Join-Path $consumer 'NuGet.Config') --packages (Join-Path $consumer 'packages') --tl:off --nologo -v minimal
-    if ($LASTEXITCODE -ne 0) { throw 'Package-only consumer restore failed.' }
     $vp8Fixture = Join-Path $repoRoot 'tests/Fixtures/vp8-ffmpeg-31x23-effort6-quality75-alpha.webp'
     $vp8Expected = Join-Path $repoRoot 'tests/Fixtures/vp8-ffmpeg-31x23-effort6-quality75-alpha.rgba'
     $pngFixture = Join-Path $repoRoot 'tests/Fixtures/png-authored-c6-d16-adam7-all-filters.png'
     $pngExpected = Join-Path $repoRoot 'tests/Fixtures/png-authored-c6-d16-adam7-all-filters.rgba'
     $jpegExactFixture = Join-Path $repoRoot 'tests/Fixtures/jpeg-ffmpeg-YCbCr444-31x23.jpg'
     $jpegExactExpected = Join-Path $repoRoot 'tests/Fixtures/jpeg-ffmpeg-YCbCr444-31x23.rgba'
-    dotnet build (Join-Path $consumer 'Consumer.csproj') -c Release --no-restore --tl:off --nologo -v minimal -m:1 -nr:false -p:UseSharedCompilation=false
-    if ($LASTEXITCODE -ne 0) { throw 'Package-only consumer build failed.' }
-    dotnet (Join-Path $consumer 'bin/Release/net10.0/Consumer.dll') $vp8Fixture $vp8Expected $pngFixture $pngExpected $librarySha256 $jpegExactFixture $jpegExactExpected
-    if ($LASTEXITCODE -ne 0) { throw 'Package-only consumer failed.' }
-    & (Join-Path $PSScriptRoot 'verify-usage.ps1') -ConsumerDirectory $consumer -GuidePath (Join-Path $repoRoot 'docs/usage.md') -LibrarySha256 $librarySha256
+    # Resolve the SDK from the generated consumer directory. The isolated package
+    # cache ensures that all examples use the selected archive.
+    Push-Location $consumer
+    try {
+        dotnet restore Consumer.csproj --configfile NuGet.Config --packages packages --tl:off --nologo -v minimal
+        if ($LASTEXITCODE -ne 0) { throw 'Package-only consumer restore failed.' }
+        dotnet build Consumer.csproj -c Release --no-restore --tl:off --nologo -v minimal -m:1 -nr:false -p:UseSharedCompilation=false
+        if ($LASTEXITCODE -ne 0) { throw 'Package-only consumer build failed.' }
+        dotnet "bin/Release/$TargetFramework/Consumer.dll" $vp8Fixture $vp8Expected $pngFixture $pngExpected $librarySha256 $jpegExactFixture $jpegExactExpected
+        if ($LASTEXITCODE -ne 0) { throw 'Package-only consumer failed.' }
+        & (Join-Path $PSScriptRoot 'verify-usage.ps1') -ConsumerDirectory $consumer -GuidePath (Join-Path $repoRoot 'docs/usage.md') -LibrarySha256 $librarySha256
+    } finally { Pop-Location }
 } finally { Pop-Location }
