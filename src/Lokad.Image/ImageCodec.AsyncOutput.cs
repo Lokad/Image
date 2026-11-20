@@ -11,7 +11,7 @@ public static partial class ImageCodec
         ArgumentNullException.ThrowIfNull(image); ArgumentNullException.ThrowIfNull(output);
         options ??= new PngEncodeOptions();
         using var context = new OperationContext(options.Limits, cancellationToken);
-        using var staged = EncodedOutput.Segmented(context);
+        using var staged = new EncodedOutput(context);
         using var bounded = new LimitedWriteStream(staged.Target, context.Limits.MaxOutputBytes, cancellationToken);
         PngCodec.Encode(image, bounded, options, context);
         await staged.DeliverAsync(output).ConfigureAwait(false);
@@ -24,7 +24,8 @@ public static partial class ImageCodec
         ArgumentNullException.ThrowIfNull(image); ArgumentNullException.ThrowIfNull(output);
         options ??= new JpegEncodeOptions();
         using var context = new OperationContext(options.Limits, cancellationToken);
-        using var staged = JpegEncoder.AsyncOutput(image, options, context);
+        JpegEncoder.ValidateReferenceOptions(options, JpegSampleFormat.Rgb);
+        using var staged = new EncodedOutput(context);
         using var bounded = new LimitedWriteStream(staged.Target, context.Limits.MaxOutputBytes, cancellationToken);
         JpegEncoder.Encode(image, bounded, options, context);
         await staged.DeliverAsync(output).ConfigureAwait(false);
@@ -42,7 +43,7 @@ public static partial class ImageCodec
             await Vp8Encoder.EncodeAsync(image, output, options, context).ConfigureAwait(false);
             return;
         }
-        using var staged = EncodedOutput.Segmented(context);
+        using var staged = new EncodedOutput(context);
         using var bounded = new LimitedWriteStream(staged.Target, context.Limits.MaxOutputBytes, cancellationToken);
         WebpLosslessEncoder.Encode(image, bounded, options, context);
         await staged.DeliverAsync(output).ConfigureAwait(false);
@@ -67,7 +68,8 @@ public static partial class ImageCodec
                     throw new ArgumentOutOfRangeException(nameof(options));
                 var source = new JpegSampleInput(samples.Span, width, height, format, stride, context);
                 context.ReserveBorrowed(samples.Length); context.Reserve(8192);
-                staged = JpegEncoder.AsyncSampleOutput(source, options, context);
+                JpegEncoder.ValidateReferenceOptions(options, source.Format);
+                staged = new EncodedOutput(context);
                 using var bounded = new LimitedWriteStream(staged.Target, context.Limits.MaxOutputBytes, cancellationToken);
                 JpegEncoder.EncodeSamples(source, bounded, options, context);
             }

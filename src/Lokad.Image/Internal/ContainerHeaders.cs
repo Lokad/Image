@@ -4,10 +4,6 @@ namespace Lokad.Image.Internal;
 
 internal static class ContainerHeaders
 {
-    public static ImageInfo Jpeg(ReadOnlySpan<byte> data, OperationContext context,
-        ImageMetadataPolicy metadataPolicy = ImageMetadataPolicy.Strict)
-        => Jpeg(data, context, metadataPolicy, out _);
-
     internal static ImageInfo Jpeg(ReadOnlySpan<byte> data, OperationContext context,
         ImageMetadataPolicy metadataPolicy, out bool singleRawCmykScan)
     {

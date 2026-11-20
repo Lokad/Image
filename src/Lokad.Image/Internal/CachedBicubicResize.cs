@@ -238,11 +238,6 @@ internal static partial class CachedBicubicResize
             MemoryMarshal.Write(destination.Slice(x*8,16),in packed);
         }
     }
-    private static double ReciprocalLowerPower(double value)
-    {
-        var exponent=(int)((BitConverter.DoubleToUInt64Bits(value)>>52)&2047);
-        return BitConverter.UInt64BitsToDouble((ulong)(2046-exponent)<<52);
-    }
     private static void Original(ImageBuffer source,ImageBuffer result,int x,int y,ReadOnlySpan<double> weights,
         ReadOnlySpan<int> offsets,ReadOnlySpan<int> counts,ReadOnlySpan<double> vertical,int firstY,int capacity,OperationContext context)
     {

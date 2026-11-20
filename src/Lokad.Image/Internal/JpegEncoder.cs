@@ -1,6 +1,3 @@
-using System.Buffers.Binary;
-using System.Numerics;
-
 namespace Lokad.Image.Internal;
 
 internal static partial class JpegEncoder
@@ -40,19 +37,5 @@ internal static partial class JpegEncoder
         var numerator = value * (long)alpha * 255 + background * (long)(maximum - alpha) * maximum;
         var denominator = (long)maximum * maximum;
         return (int)((numerator + denominator / 2) / denominator);
-    }
-
-    // T.81 F.1.2.1 SIZE is the magnitude's binary width, with zero in category
-    // zero. Keep Math.Abs's full-Int32 overflow behavior; the BCL provides
-    // hardware leading-zero counting where available and a safe fallback.
-    internal static int Category(int value)
-        => 32 - BitOperations.LeadingZeroCount((uint)Math.Abs(value));
-
-    internal static void Segment(Stream output, byte marker, ReadOnlySpan<byte> payload)
-    {
-        if (payload.Length > 65533) throw new ArgumentOutOfRangeException(nameof(payload));
-        Span<byte> header = stackalloc byte[4]; header[0] = 255; header[1] = marker;
-        BinaryPrimitives.WriteUInt16BigEndian(header[2..], (ushort)(payload.Length + 2));
-        output.Write(header); output.Write(payload);
     }
 }

@@ -163,11 +163,4 @@ internal static partial class JpegEncoder
         }
     }
 
-    private static void ReferenceRgb(ImageBuffer? image, JpegSampleInput source, int x, int y, uint? background,
-        out int r, out int g, out int b)
-    {
-        if (image is not null) { ReadRgb(image, x, y, background, out r, out g, out b); return; }
-        Span<byte> rgb = stackalloc byte[3]; source.CopyRgbRow(x, y, rgb);
-        r = rgb[0]; g = rgb[1]; b = rgb[2];
-    }
 }

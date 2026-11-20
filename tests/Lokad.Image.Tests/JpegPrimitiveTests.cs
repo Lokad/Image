@@ -5,33 +5,32 @@ namespace Lokad.Image.Tests;
 public sealed class JpegPrimitiveTests
 {
     [Fact]
-    public void MagnitudeCategoriesCoverEveryJpegCoefficientAndDifference()
+    public void RecordedDcCategoriesCoverEveryJpegCoefficientDifference()
     {
-        // Independent T.81 category intervals: 2^(SIZE-1) through 2^SIZE-1.
-        // Cover both signs throughout the complete 16-bit magnitude domain.
-        Assert.Equal(0, JpegEncoder.Category(0));
+        var coefficients = new short[64];
+        var previous = new int[1];
+        var histograms = new[] { new int[256], new int[256], new int[256], new int[256] };
+        var records = new int[64];
+        Check(0, 0);
+        // T.81 category intervals cover both signs of all 16-bit differences.
         for (var category = 1; category <= 16; category++)
         for (var value = 1 << (category - 1); value < 1 << category; value++)
         {
-            Assert.Equal(category, JpegEncoder.Category(value));
-            Assert.Equal(category, JpegEncoder.Category(-value));
+            Check(value, category);
+            Check(-value, category);
         }
-    }
+        for (var category = 1; category <= 16; category++)
+            Assert.Equal(1 << category, histograms[0][category]);
+        Assert.Equal(1, histograms[0][0]);
 
-    [Fact]
-    public void MagnitudeCategoriesKeepFullIntegerBoundariesAndOverflow()
-    {
-        for (var category = 1; category <= 31; category++)
+        void Check(int difference, int category)
         {
-            var first = 1 << (category - 1); var last = (int)((1L << category) - 1);
-            Assert.Equal(category - 1, JpegEncoder.Category(first - 1));
-            Assert.Equal(category - 1, JpegEncoder.Category(1 - first));
-            Assert.Equal(category, JpegEncoder.Category(first));
-            Assert.Equal(category, JpegEncoder.Category(-first));
-            Assert.Equal(category, JpegEncoder.Category(last));
-            Assert.Equal(category, JpegEncoder.Category(-last));
+            coefficients[0] = difference < 0 ? short.MinValue : short.MaxValue;
+            previous[0] = coefficients[0] - difference;
+            Assert.Equal(2, JpegEntropyRecords.RecordBlock(coefficients, 0, previous, histograms, records));
+            Assert.Equal(category, (int)((uint)records[0] >> 27));
+            Assert.Equal(category, (records[0] >> 16) & 255);
         }
-        Assert.Throws<OverflowException>(() => JpegEncoder.Category(int.MinValue));
     }
 
     [Fact]

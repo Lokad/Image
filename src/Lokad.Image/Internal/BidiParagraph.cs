@@ -278,41 +278,6 @@ internal sealed class BidiParagraph : IDisposable
         { context.Cancellation.ThrowIfCancellationRequested(); items[sequence[i]].Type = type; }
     }
 
-    // Borrowed output storage. No mutation of paragraph levels: separate line
-    // requests remain independent, and a failed/cancelled request is disposable.
-    internal int ReorderLine(int start, int length, Span<int> order, Span<byte> levels)
-    {
-        Check(); context.Cancellation.ThrowIfCancellationRequested();
-        if (start < 0 || length < 0 || start > items.Length - length) throw new ArgumentOutOfRangeException(nameof(length));
-        if (order.Length < length || levels.Length < length) throw new ArgumentException("Line storage is too short.");
-        var count = 0; var trailing = 0;
-        for (var i = start; i < start + length; i++)
-        {
-            context.Cancellation.ThrowIfCancellationRequested(); var item = items[i]; if (Removed(item.Original)) continue;
-            order[count] = i; levels[count] = item.Level;
-            if (item.Original is BidiClass.B or BidiClass.S)
-            {
-                for (var j = trailing; j <= count; j++) { context.Cancellation.ThrowIfCancellationRequested(); levels[j] = BaseLevel; }
-                trailing = count + 1;
-            }
-            else if (item.Original != BidiClass.WS && !Isolate(item.Original) && item.Original != BidiClass.PDI) trailing = count + 1;
-            count++;
-        }
-        for (var i = trailing; i < count; i++) { context.Cancellation.ThrowIfCancellationRequested(); levels[i] = BaseLevel; }
-        var highest = 0; var lowestOdd = 127;
-        for (var i = 0; i < count; i++)
-        {
-            context.Cancellation.ThrowIfCancellationRequested(); highest = Math.Max(highest, levels[i]); if ((levels[i] & 1) != 0) lowestOdd = Math.Min(lowestOdd, levels[i]);
-        }
-        for (var level = highest; level >= lowestOdd; level--)
-            for (var i = 0; i < count; i++)
-            {
-                context.Cancellation.ThrowIfCancellationRequested(); if (levels[i] < level) continue;
-                var first = i; while (i + 1 < count && levels[i + 1] >= level) { context.Cancellation.ThrowIfCancellationRequested(); i++; }
-                order.Slice(first, i - first + 1).Reverse(); levels.Slice(first, i - first + 1).Reverse();
-            }
-        return count;
-    }
     public void Dispose()
     {
         if (disposed) return; disposed = true; items = [];

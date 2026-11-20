@@ -1984,12 +1984,6 @@ internal static class PngCodec
         Span<byte> tail = stackalloc byte[4]; BinaryPrimitives.WriteUInt32BigEndian(tail, crc); output.Write(tail);
     }
 
-    private static uint UpdateCrc(uint crc, byte value)
-    {
-        crc ^= value;
-        for (var i = 0; i < 8; i++) crc = (crc >> 1) ^ ((crc & 1) == 0 ? 0 : 0xEDB88320u);
-        return crc;
-    }
 
     // PngDeflater publishes full 4 KiB buffers and at most one final tail.
     // Each synchronous write is already one complete reference IDAT payload.

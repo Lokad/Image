@@ -106,7 +106,8 @@ public sealed class JpegIdentifierTests
         var context = new OperationContext(limits, cancellation); context.Reserve(bytes.Length);
         try
         {
-            var info = fast ? JpegIdentifier.Identify(bytes, context) : ContainerHeaders.Jpeg(bytes, context);
+            var info = fast ? JpegIdentifier.Identify(bytes, context)
+                : ContainerHeaders.Jpeg(bytes, context, ImageMetadataPolicy.Strict, out _);
             return new(info, null, context.RemainingWorkingBytes);
         }
         catch (Exception error) when (error is ImageDataException or ImageLimitException or UnsupportedImageException)

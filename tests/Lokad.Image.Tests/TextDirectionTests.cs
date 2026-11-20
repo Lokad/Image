@@ -9,61 +9,55 @@ public sealed class TextDirectionTests
     private static int[] Scalars(string text) => text.EnumerateRunes().Select(r => r.Value).ToArray();
     private static string Levels(BidiParagraph paragraph) => string.Join(",", Enumerable.Range(0, paragraph.Count)
         .Select(i => paragraph.IsRemoved(i) ? "x" : paragraph.Level(i).ToString()));
-    private static string Visual(BidiParagraph paragraph, int[] scalars, int start = 0, int length = -1)
-    {
-        length = length < 0 ? scalars.Length - start : length;
-        var order = new int[length]; var levels = new byte[length]; var count = paragraph.ReorderLine(start, length, order, levels);
-        return string.Concat(order.Take(count).Select(i => char.ConvertFromUtf32(scalars[i])));
-    }
 
     [Theory]
-    [InlineData("ABC אבג 123", 0, "0,0,0,0,1,1,1,1,2,2,2", "ABC 123 גבא")]
-    [InlineData("אבג 123", -1, "1,1,1,1,2,2,2", "123 גבא")]
-    [InlineData("ب 12,34", -1, "1,1,2,2,2,2,2", "12,34 ب")]
-    [InlineData("A 12+34", -1, "0,0,0,0,0,0,0", "A 12+34")]
-    [InlineData("א 12+34", 0, "1,1,2,2,2,2,2", "12+34 א")]
-    [InlineData("א $12", 0, "1,1,2,2,2", "$12 א")]
-    [InlineData("א 12 $", 0, "1,1,2,2,0,0", "12 א $")]
-    [InlineData("ب 12$", -1, "1,1,2,2,1", "$12 ب")]
-    [InlineData("א ١,٢", 0, "1,1,2,2,2", "١,٢ א")]
-    [InlineData("\u0301א", 0, "0,1", "\u0301א")]
-    [InlineData("א\u0301", 0, "1,1", "\u0301א")]
-    [InlineData("א A", 1, "1,1,2", "A א")]
-    [InlineData(" 12 ", -1, "0,0,0,0", " 12 ")]
-    public void WeakAndImplicitRulesHaveExactLogicalLevelsAndVisualOrder(string text, int direction, string expectedLevels, string expectedVisual)
+    [InlineData("ABC אבג 123", 0, "0,0,0,0,1,1,1,1,2,2,2")]
+    [InlineData("אבג 123", -1, "1,1,1,1,2,2,2")]
+    [InlineData("ب 12,34", -1, "1,1,2,2,2,2,2")]
+    [InlineData("A 12+34", -1, "0,0,0,0,0,0,0")]
+    [InlineData("א 12+34", 0, "1,1,2,2,2,2,2")]
+    [InlineData("א $12", 0, "1,1,2,2,2")]
+    [InlineData("א 12 $", 0, "1,1,2,2,0,0")]
+    [InlineData("ب 12$", -1, "1,1,2,2,1")]
+    [InlineData("א ١,٢", 0, "1,1,2,2,2")]
+    [InlineData("\u0301א", 0, "0,1")]
+    [InlineData("א\u0301", 0, "1,1")]
+    [InlineData("א A", 1, "1,1,2")]
+    [InlineData(" 12 ", -1, "0,0,0,0")]
+    public void WeakAndImplicitRulesHaveExactLogicalLevels(string text, int direction, string expectedLevels)
     {
         using var context = new OperationContext(ImageLimits.Default, default); var scalars = Scalars(text);
         using var paragraph = new BidiParagraph(scalars, context, direction);
-        Assert.Equal(expectedLevels, Levels(paragraph)); Assert.Equal(expectedVisual, Visual(paragraph, scalars));
+        Assert.Equal(expectedLevels, Levels(paragraph));
     }
 
     [Theory]
-    [InlineData("א (A)", 1, "1,1,1,2,1", ")A( א")]
-    [InlineData("א A(A)", 1, "1,1,2,2,2,2", "A(A) א")]
-    [InlineData("A (א)", 0, "0,0,0,1,0", "A (א)")]
-    [InlineData("א (A[ב])", 1, "1,1,1,2,1,1,1,1", ")]ב[A( א")]
-    [InlineData("א A(\u0301A)\u0301", 1, "1,1,2,2,2,2,2,2", "A(\u0301A)\u0301 א")]
-    [InlineData("א A\u2329A\u3009", 1, "1,1,2,2,2,2", "A\u2329A\u3009 א")]
-    public void PairedBracketsRespectEmbeddingContextNestingMarksAndCanonicalPairs(string text, int direction, string expectedLevels, string expectedVisual)
+    [InlineData("א (A)", 1, "1,1,1,2,1")]
+    [InlineData("א A(A)", 1, "1,1,2,2,2,2")]
+    [InlineData("A (א)", 0, "0,0,0,1,0")]
+    [InlineData("א (A[ב])", 1, "1,1,1,2,1,1,1,1")]
+    [InlineData("א A(\u0301A)\u0301", 1, "1,1,2,2,2,2,2,2")]
+    [InlineData("א A\u2329A\u3009", 1, "1,1,2,2,2,2")]
+    public void PairedBracketsRespectEmbeddingContextNestingMarksAndCanonicalPairs(string text, int direction, string expectedLevels)
     {
         using var context = new OperationContext(ImageLimits.Default, default); var scalars = Scalars(text);
         using var paragraph = new BidiParagraph(scalars, context, direction);
-        Assert.Equal(expectedLevels, Levels(paragraph)); Assert.Equal(expectedVisual, Visual(paragraph, scalars));
+        Assert.Equal(expectedLevels, Levels(paragraph));
     }
 
     [Theory]
-    [InlineData("A\u202Bב12\u202CZ", "0,x,1,2,2,x,0", "A12בZ")]
-    [InlineData("A\u202Eab12\u202CZ", "0,x,1,1,1,1,x,0", "A21baZ")]
-    [InlineData("א\u202Aab\u202Cב", "1,x,2,2,x,1", "בabא")]
-    [InlineData("A\u2067ב12\u2069Z", "0,0,1,2,2,0,0", "A\u206712ב\u2069Z")]
-    [InlineData("A\u2068ב12\u2069Z", "0,0,1,2,2,0,0", "A\u206812ב\u2069Z")]
-    [InlineData("A\u2068ab\u2069Z", "0,0,2,2,0,0", "A\u2068ab\u2069Z")]
-    [InlineData("A\u200Bב", "0,x,1", "Aב")]
-    public void ExplicitScopesAndRemovedControlsHaveDeterministicOrder(string text, string expectedLevels, string expectedVisual)
+    [InlineData("A\u202Bב12\u202CZ", "0,x,1,2,2,x,0")]
+    [InlineData("A\u202Eab12\u202CZ", "0,x,1,1,1,1,x,0")]
+    [InlineData("א\u202Aab\u202Cב", "1,x,2,2,x,1")]
+    [InlineData("A\u2067ב12\u2069Z", "0,0,1,2,2,0,0")]
+    [InlineData("A\u2068ב12\u2069Z", "0,0,1,2,2,0,0")]
+    [InlineData("A\u2068ab\u2069Z", "0,0,2,2,0,0")]
+    [InlineData("A\u200Bב", "0,x,1")]
+    public void ExplicitScopesAndRemovedControlsHaveExactLogicalLevels(string text, string expectedLevels)
     {
         using var context = new OperationContext(ImageLimits.Default, default); var scalars = Scalars(text);
         using var paragraph = new BidiParagraph(scalars, context);
-        Assert.Equal(expectedLevels, Levels(paragraph)); Assert.Equal(expectedVisual, Visual(paragraph, scalars));
+        Assert.Equal(expectedLevels, Levels(paragraph));
     }
 
     [Fact]
@@ -119,38 +113,14 @@ public sealed class TextDirectionTests
     }
 
     [Fact]
-    public void LineResetsUseOriginalTypesAndDoNotMutateTheParagraphOrOtherLines()
-    {
-        using var context = new OperationContext(ImageLimits.Default, default); var scalars = Scalars("אב  \tגד  ");
-        using var paragraph = new BidiParagraph(scalars, context, 0); var before = Levels(paragraph);
-        Assert.Equal("בא  \tדג  ", Visual(paragraph, scalars));
-        Assert.Equal("בא  ", Visual(paragraph, scalars, 0, 4));
-        Assert.Equal(before, Levels(paragraph)); Assert.Equal("  ", Visual(paragraph, scalars, 7, 2));
-    }
-
-    [Fact]
-    public void TrailingIsolatesResetEvenWhenTheirCurrentTypesWereOverridden()
-    {
-        using var context = new OperationContext(ImageLimits.Default, default);
-        var scalars = Scalars("\t2\u202E\u202E.A \u2067\u202B\u2066\u202D א");
-        using var paragraph = new BidiParagraph(scalars, context, 0);
-        var order = new int[12]; var levels = new byte[12];
-        var count = paragraph.ReorderLine(0, 12, order, levels);
-        Assert.Equal(new[] { 0, 1, 5, 4, 6, 7, 9, 11 }, order[..count]);
-        Assert.All(levels.AsSpan(4, count - 4).ToArray(), level => Assert.Equal(0, level));
-    }
-
-    [Fact]
-    public void ParagraphAndBorrowedLineArgumentsAreValidatedAndDisposedOwnersRejectUse()
+    public void ParagraphArgumentsAreValidatedAndDisposedOwnersRejectUse()
     {
         using var context = new OperationContext(ImageLimits.Default, default);
         Assert.Throws<ArgumentException>(() => new BidiParagraph(Scalars("A\nB"), context));
         Assert.Throws<ArgumentOutOfRangeException>(() => new BidiParagraph([-1], context));
         Assert.Throws<ArgumentOutOfRangeException>(() => new BidiParagraph([], context, 2));
-        using var empty = new BidiParagraph([], context, 1); Assert.Equal(0, empty.ReorderLine(0, 0, [], []));
+        using var empty = new BidiParagraph([], context, 1); Assert.Equal(0, empty.Count);
         var paragraph = new BidiParagraph(Scalars("A"), context);
-        Assert.Throws<ArgumentOutOfRangeException>(() => paragraph.ReorderLine(1, 1, new int[1], new byte[1]));
-        Assert.Throws<ArgumentException>(() => paragraph.ReorderLine(0, 1, [], new byte[1]));
         paragraph.Dispose(); paragraph.Dispose(); Assert.Throws<ObjectDisposedException>(() => paragraph.Level(0));
     }
 

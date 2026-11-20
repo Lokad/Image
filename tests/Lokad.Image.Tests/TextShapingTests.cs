@@ -65,6 +65,17 @@ public sealed class TextShapingTests
         Assert.Equal(TextDirection.RightToLeft, layout.GetLine(1).Direction);
     }
 
+    [Theory]
+    [InlineData("אב  \tאב  ", new[] { 1, 0, 2, 3, 6, 5, 7, 8 })]
+    [InlineData("A\u202EAV12\u202CZ", new[] { 0, 5, 4, 3, 2, 7 })]
+    public void VisibleSourceOrderRespectsLineWhitespaceAndExplicitDirection(string text, int[] expected)
+    {
+        using var font = Font(("cmap", Mapping()));
+        using var layout = TextLayout.Create(font, text, Options with { Direction = TextDirection.LeftToRight });
+        Assert.Equal(expected, Glyphs(layout).Select(g => g.SourceOffset));
+        Assert.Equal(TextDirection.LeftToRight, layout.GetLine(0).Direction);
+    }
+
     [Fact]
     public void EncodedMirrorsAndFontProvidedMirrorsAreAppliedOnlyToRightToLeftGlyphs()
     {

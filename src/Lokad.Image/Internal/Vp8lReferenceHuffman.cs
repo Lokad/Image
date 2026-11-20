@@ -79,27 +79,4 @@ internal static class Vp8lReferenceHuffman
         writer.Write((value - 1) & ((1 << prefix.Extra) - 1), prefix.Extra);
     }
 
-    // Cache-free transform subimages have five trees and no entropy image. The
-    // caller owns the output stream/writer, so several images can share bit state.
-    internal static void WriteAuxiliary(WebpBitWriter writer, ReadOnlySpan<Vp8lToken> tokens, int width, OperationContext context)
-    {
-        var layout = new Vp8lHistogramLayout(0); Vp8lHuffmanGroup? group = null;
-        try
-        {
-            var reserved = layout.Total * 4L; context.Reserve(reserved);
-            try
-            {
-                context.Cancellation.ThrowIfCancellationRequested(); var counts = new int[layout.Total]; layout.Fill(tokens, width, true, counts, context);
-                group = Vp8lHuffmanGroup.Build(counts, layout, context, out _);
-            }
-            finally { context.Release(reserved); }
-            writer.Write(0, 1);
-            group.WriteTrees(writer);
-            foreach (var token in tokens)
-            {
-                group.WriteToken(writer, token, width);
-            }
-        }
-        finally { group?.Dispose(); }
-    }
 }

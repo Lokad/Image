@@ -29,14 +29,20 @@ public sealed class Vp8lReferenceHuffmanTests
         return Convert.ToHexStringLower(hash.GetHashAndReset());
     }
 
-    private static void AssertBits(Vp8lTokenBuffer tokens, int width, int count, string expected, OperationContext context, TestMemoryBudget root)
+    private static void AssertBits(ReadOnlySpan<uint> pixels, int width, int quality, bool lowEffort,
+        int count, string expected, OperationContext context, TestMemoryBudget root)
     {
-        var baseline = root.Bytes; var original = tokens.Tokens.ToArray();
-        using var output = new MemoryStream(); var writer = new WebpBitWriter(output, context);
-        Vp8lReferenceHuffman.WriteAuxiliary(writer, tokens.Tokens, width, context);
-        Assert.Equal(count, output.Length * 8 + writer.PendingBits); writer.Finish();
-        Assert.Equal(expected, Hash(output.ToArray())); Assert.Equal(baseline, root.Bytes);
-        Assert.Equal(original, tokens.Tokens.ToArray());
+        var baseline = root.Bytes;
+        using (var auxiliary = Vp8lImageCode.Auxiliary(pixels, width, quality, lowEffort, context))
+        {
+            using var output = new MemoryStream();
+            var writer = new WebpBitWriter(output, context);
+            auxiliary.Write(writer);
+            Assert.Equal(count, output.Length * 8 + writer.PendingBits);
+            writer.Finish();
+            Assert.Equal(expected, Hash(output.ToArray()));
+        }
+        Assert.Equal(baseline, root.Bytes);
     }
 
     // Native goldens are from the two transform images of the original
@@ -52,7 +58,7 @@ public sealed class Vp8lReferenceHuffmanTests
         using var matches = Vp8lReferenceMatcher.Build(pixels, 65, 75, false, context);
         using var parsed = Vp8lReferenceLz.Encode(pixels, matches.Values, 65, true, context);
         var baseline = root.Bytes; Assert.Equal(trees, TreeHash(parsed, 65, context)); Assert.Equal(baseline, root.Bytes);
-        AssertBits(parsed, 65, bits, encoded, context, root);
+        AssertBits(pixels, 65, 75, false, bits, encoded, context, root);
     }
 
     [Theory]
@@ -67,7 +73,7 @@ public sealed class Vp8lReferenceHuffmanTests
         using var matches = Vp8lReferenceMatcher.Build(palette.EncodedDeltas, palette.EncodedColorCount, 20, !greedy, context);
         using var parsed = Vp8lReferenceLz.Encode(palette.EncodedDeltas, matches.Values, palette.EncodedColorCount, false, context);
         Assert.Equal(trees, TreeHash(parsed, palette.EncodedColorCount, context));
-        AssertBits(parsed, palette.EncodedColorCount, bits, encoded, context, root);
+        AssertBits(palette.EncodedDeltas, palette.EncodedColorCount, 20, !greedy, bits, encoded, context, root);
     }
 
     [Fact]

@@ -26,7 +26,6 @@ internal readonly ref struct Vp8QuantizationCosts
     internal int Mode => values[3];
     internal int Luma4Trellis => values[4];
     internal int Luma16Trellis => values[5];
-    internal int ChromaTrellis => values[6];
     internal int Texture => values[7];
     internal int MinimumDistortion => values[8];
     internal int Intra4Penalty => values[9];

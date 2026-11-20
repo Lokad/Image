@@ -3,79 +3,35 @@ namespace Lokad.Image.Internal;
 /// <summary>Private encoded bytes, admitted until asynchronous delivery completes.</summary>
 internal sealed class EncodedOutput : IDisposable
 {
-    internal const int Overhead = 256;
+    private const int Overhead = 256;
     private const int BlockBytes = 65536;
     private const int NodeBytes = 64;
     private static readonly PixelStoragePool storage = new();
     private readonly OperationContext context;
     private ChunkStream? chunks;
-    private MemoryStream? memory;
-    private byte[]? contiguous;
-    internal Stream Target => (Stream?)memory ?? chunks ?? throw new ObjectDisposedException(nameof(EncodedOutput));
+    internal Stream Target => chunks ?? throw new ObjectDisposedException(nameof(EncodedOutput));
 
-    private EncodedOutput(OperationContext context) => this.context = context;
-
-    internal static EncodedOutput Segmented(OperationContext context)
+    internal EncodedOutput(OperationContext context)
     {
-        var result = new EncodedOutput(context);
-        result.chunks = new ChunkStream(context);
-        return result;
-    }
-
-    internal static EncodedOutput Contiguous(OperationContext context, int capacity)
-    {
-        context.Reserve((long)capacity + Overhead);
-        byte[]? bytes = null;
-        try
-        {
-            bytes = context.RentPixels(storage, capacity);
-            var memory = new MemoryStream(bytes, 0, capacity, writable: true, publiclyVisible: true);
-            memory.SetLength(0);
-            return new EncodedOutput(context) { memory = memory, contiguous = bytes };
-        }
-        catch
-        {
-            if (bytes is not null) context.ReturnPixels(storage, bytes);
-            context.Release((long)capacity + Overhead); throw;
-        }
+        this.context = context;
+        chunks = new ChunkStream(context);
     }
 
     internal async ValueTask DeliverAsync(Stream output)
     {
-        if (memory is { } encoded && contiguous is { } bytes)
+        for (var chunk = chunks?.Head; chunk is not null; chunk = chunk.Next)
         {
-            // Stock MemoryStream writes bypass the chunk stream. Charge that
-            // completed staging pass once, as well as each delivery attempt.
-            var length = checked((int)encoded.Length);
-            // A caller can recover an array from ReadOnlyMemory. Never expose
-            // an earlier private packet through the unused backing capacity.
-            context.Cancellation.ThrowIfCancellationRequested(); bytes.AsSpan(length).Clear();
             context.Cancellation.ThrowIfCancellationRequested();
-            for (var offset = 0; offset < length;)
-            {
-                var count = Math.Min(BlockBytes, length - offset);
-                context.Cancellation.ThrowIfCancellationRequested();
-                await output.WriteAsync(bytes.AsMemory(offset, count), context.Cancellation).ConfigureAwait(false);
-                context.Cancellation.ThrowIfCancellationRequested(); offset += count;
-            }
-        }
-        else
-        {
-            for (var chunk = chunks?.Head; chunk is not null; chunk = chunk.Next)
-            {
-                context.Cancellation.ThrowIfCancellationRequested(); chunk.Bytes.AsSpan(chunk.Length).Clear();
-                context.Cancellation.ThrowIfCancellationRequested();
-                await output.WriteAsync(chunk.Bytes.AsMemory(0, chunk.Length), context.Cancellation).ConfigureAwait(false);
-                context.Cancellation.ThrowIfCancellationRequested();
-            }
+            // A caller can recover the rented array from ReadOnlyMemory.
+            chunk.Bytes.AsSpan(chunk.Length).Clear();
+            context.Cancellation.ThrowIfCancellationRequested();
+            await output.WriteAsync(chunk.Bytes.AsMemory(0, chunk.Length), context.Cancellation).ConfigureAwait(false);
+            context.Cancellation.ThrowIfCancellationRequested();
         }
     }
 
     public void Dispose()
     {
-        var bytes = Interlocked.Exchange(ref contiguous, null);
-        memory?.Dispose(); memory = null;
-        if (bytes is not null) { context.ReturnPixels(storage, bytes); context.Release((long)bytes.Length + Overhead); }
         chunks?.Dispose(); chunks = null;
     }
 
