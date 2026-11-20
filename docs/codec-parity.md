@@ -31,6 +31,7 @@ PNG/WebP have no metadata exception. [Packet comparison](../tools/WarmReference/
 enforces this boundary. New content/settings need explicit evidence; numerical
 quality equality, PSNR alone or IDAT-only size comparisons do not establish parity.
 
-[Supported contract](spec.md) defines API/format limits. [Benchmarks](benchmark.md)
-report the separately measured CPU/allocation scope; complete performance parity
-and general replacement readiness remain open.
+[Supported contract](spec.md) defines API and format limits. The qualified 0.2.1
+package passed the declared warm single-CPU gate on all 165 displayed comparisons.
+The [benchmark snapshot](https://github.com/lokad/image/blob/master/docs/benchmark.md)
+records the workload boundaries and allocation evidence.

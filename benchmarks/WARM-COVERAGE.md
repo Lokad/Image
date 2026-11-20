@@ -21,8 +21,9 @@ setup and confidence investigations, and the individual family reports remain in
 ## Finite required inventory
 
 The [original planned-case reconciliation](ORIGINAL-PLANNED-COVERAGE-RECONCILIATION.md)
-retains all 17 inherited names outside the numeric snapshot. All are measured:
-16 passes and one copy gap. [Five authored-font comparisons](AUTHORED-FONT-COMPARISONS.md)
+retains all 17 inherited names outside the original numeric snapshot. All 17
+now pass, including the original clipped RGBA8 copy (evidence index `case136`).
+[Five authored-font comparisons](AUTHORED-FONT-COMPARISONS.md)
 now pass/stop after independent confirmation on the unchanged actual package.
 Their explicitly source-corrected Fonts/Drawing public integration includes all
 nine layout calls/tab adaptation, owned outputs, optional drawing and disposal;

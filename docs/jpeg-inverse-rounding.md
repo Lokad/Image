@@ -25,12 +25,12 @@ cache or per-block owned heap buffer is introduced.
 Full-resolution color conversion separately derives BT.601 coefficients from
 rational Kr=299/1000 and Kb=114/1000, preserving Q16/range/Q13 rounding. Complete
 RGB/RGBA bytes, destination padding and opt-in orientation are checked through
-public APIs. The evidence ledger records the exact tested scope and remaining
-other decoder confirmation work. Quarter-width color uses dimension-aware Q16
+public APIs. Quarter-width color uses dimension-aware Q16
 positions, Q14/Q12 weights and Q7/Q9 chroma, with final Q13 color rounding. The
 recorded original controls include near-zero leading-tap reduction. CMYK/YCCK RGB/grayscale use
 separate fixed-point black adjustment and shared integer color conversion.
 Their named constant, varying, saturated, AC and progressive controls have exact
-native sample gates. Canonical CMYK is an explicitly requested ink representation. Broader decoder equality and current
-CPU/allocation parity remain open; the previous floating inverse certificate and
-its alternate implementations are removed.
+native sample gates. Canonical CMYK is an explicitly requested ink representation.
+The [codec parity table](codec-parity.md) records the qualified decode scope.
+The [0.2.1 benchmark snapshot](https://github.com/lokad/image/blob/master/docs/benchmark.md)
+reports complete decoder operations, including elapsed time and allocations.

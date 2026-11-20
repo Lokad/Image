@@ -35,9 +35,12 @@ for compact encoding of gradients and other predictable content. JPEG/WebP encod
 GIF, animation, ICC conversion and metadata round-tripping are deferred. Font
 support has explicit table/script boundaries. See the [supported contract](docs/spec.md),
 [usage](docs/usage.md) and [0.2.0 migration notes](docs/migration.md).
-The [codec parity table](docs/codec-parity.md) and [benchmark snapshot](docs/benchmark.md)
-state tested scope; full CPU parity and general replacement readiness remain open.
-Development 0.2.1 also adds caller-owned bicubic/Lanczos3 plans for repeated resizing.
+The [codec parity table](docs/codec-parity.md) records tested packet and pixel
+scope. The qualified 0.2.1 package passed all 165 displayed warm single-CPU
+comparisons, with passing evidence for all 289 named paths. These results cover
+the recorded inputs, settings and operation boundaries. 0.2.1 also adds
+caller-owned bicubic and Lanczos3 plans for repeated resizing.
+[Benchmark snapshot](https://github.com/lokad/image/blob/master/docs/benchmark.md)
 
 For development, install the SDK in `global.json`, restore, then run:
 
@@ -47,5 +50,6 @@ For development, install the SDK in `global.json`, restore, then run:
 ./tools/PackageSmokeTest/verify-package.ps1
 ```
 
-[Linux setup](tools/setup-linux.sh) · [Benchmark instructions](benchmarks/README.md) ·
+[Linux setup](https://github.com/lokad/image/blob/master/tools/setup-linux.sh) ·
+[Benchmark instructions](https://github.com/lokad/image/blob/master/benchmarks/README.md) ·
 [MIT license](LICENSE.txt)

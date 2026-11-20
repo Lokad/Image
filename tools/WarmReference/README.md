@@ -144,7 +144,7 @@ linked case report to preserve exact input, packing and ownership boundaries.
   retaining alpha≤1 and both RMSE≤0.25. Managed samples stay exact.
 - Exact crop/clone/orientations and nearest resize retain original pixel placement,
   full sample depth, hidden RGB and independent owners. Build/verify scripts use
-  the named operation; the [fixed inventory](../../docs/benchmark-pre-cleanup.md)
+  the named operation. The [fixed inventory](https://github.com/lokad/image/blob/27fc0425be9e21d913e7bd049fe3ce629bf28955/docs/benchmark-pre-cleanup.md)
   retains their exact source and precision boundaries.
 - Metadata references use PNG parser/CRC, MJPEG discard-all with canonical SOF2
   projection, or WebP parser, plus original complete structural/EXIF validation
